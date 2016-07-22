@@ -48,7 +48,6 @@
 - (NSMutableArray *)pops:(NSUInteger)count
 {
     NSAssert(self.stack.count>=count, @"获取栈内容时越界，stack.count=%@,yours=%@",@(self.stack.count),@(count));
-    
     NSArray* popObjs = [self.stack objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange((self.stack.count-count),count)]];
     [self.stack removeObjectsInArray:popObjs];
     return [popObjs.reverseObjectEnumerator.allObjects mutableCopy];

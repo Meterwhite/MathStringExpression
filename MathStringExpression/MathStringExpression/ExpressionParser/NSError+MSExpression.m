@@ -13,13 +13,17 @@
 @implementation NSError(MSExpression)
 + (NSError*)errorWithReason:(EnumMSErrorReasonType)reason description:(NSString*)description
 {
-    return [NSError errorWithDomain:@"MSExpression" code:reason userInfo:@{NSLocalizedFailureReasonErrorKey:[self errorDescriptionFromReason:reason],
+    return [NSError errorWithDomain:@"MSExpression"
+                               code:reason
+                           userInfo:@{NSLocalizedFailureReasonErrorKey:[self errorDescriptionFromReason:reason],
                                                                            NSLocalizedDescriptionKey:_NotNil(description)}];
 }
 
 + (NSError*)errorWithReason:(EnumMSErrorReasonType)reason
 {
-    return [NSError errorWithDomain:@"MSExpression" code:reason userInfo:@{NSLocalizedFailureReasonErrorKey:[self errorDescriptionFromReason:reason]}];
+    return [NSError errorWithDomain:@"MSExpression"
+                               code:reason
+                           userInfo:@{NSLocalizedFailureReasonErrorKey:[self errorDescriptionFromReason:reason]}];
 }
 
 + (NSString*)errorDescriptionFromReason:(EnumMSErrorReasonType)reason
@@ -43,8 +47,11 @@
         case EnumMSErrorUnkownElement:
             return @"未知的元素";
             break;
+        case EnumMSErrorUnclearMeaning:
+            return @"不明确的含义";
+            break;
         default:
-            return @"错误";
+            return @"异常";
             break;
     }
 }

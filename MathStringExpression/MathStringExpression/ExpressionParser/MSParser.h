@@ -11,6 +11,6 @@
 
 @interface MSParser : NSObject
 
-+ (NSNumber*)parserComputeString:(NSString*)string error:(NSError**)error;
++ (NSNumber*)parserComputeString:(NSString*)string error:(NSError*__strong*)error;
 
 @end

@@ -17,10 +17,18 @@
 @interface MSElementTable ()
 @property (nonatomic,strong) NSMutableDictionary<NSString*,MSOperator*>* operatorTable;
 @property (nonatomic,strong) NSMutableDictionary<NSString*,MSConstant*>* constantTable;
+@property (nonatomic,strong) NSMutableDictionary* conflictOperatorDict;
 @end
 
 @implementation MSElementTable
 
+
+- (void)handleConflictOperator:(NSString *)opName usingBlock:(MSOperator *(^)(NSMutableArray<MSOperator *> *, NSUInteger, NSMutableArray<MSElement *> *))block
+{
+    if(!block)  return;
+    NSAssert(opName, @"运算符名opName不能为nil");
+    self.conflictOperatorDict[opName] = block;
+}
 
 - (void)setElement:(MSElement *)element
 {
@@ -63,7 +71,7 @@
         }
     }];
     if(re.count){
-        
+        //按优先级从大到小排列
         [re sortUsingComparator:^NSComparisonResult(MSOperator* _Nonnull obj1, MSOperator* _Nonnull obj2) {
             if(obj1.level<obj2.level)
                 return NSOrderedAscending;
@@ -87,34 +95,6 @@
     unkownElement.stringValue = string;
     [re addObject:unkownElement];
     return re;
-}
-
-- (void)setOperator:(MSOperator*)aOperator
-{
-    self.operatorTable[@(aOperator.hash)] = aOperator;
-}
-
-- (void)removeOperator:(MSOperator*)aOperator
-{
-    [self.operatorTable removeObjectForKey:aOperator.uuid];
-}
-
-- (NSMutableDictionary<NSString *,MSOperator *> *)operatorTable
-{
-    if(!_operatorTable){
-        _operatorTable = [NSMutableDictionary new];
-        [self setDefauleOperatorTable];
-    }
-    return _operatorTable;
-}
-
-- (NSMutableDictionary<NSString *,MSConstant *> *)constantTable
-{
-    if(!_constantTable){
-        _constantTable = [NSMutableDictionary new];
-        [self setDefauleConstantTable];
-    }
-    return _constantTable;
 }
 
 /** 
@@ -211,6 +191,51 @@
     MSConstant* pi = [MSConstant constantWithKeyValue:@{@"name":@"PI" , @"numberValue":@(M_PI)}];
     [self setElement:pi];
 }
+/** 默认重名运算符处理 */
+- (void)setDefauleConflictOperator
+{
+    [self handleConflictOperator:@"-" usingBlock:^MSOperator *(NSMutableArray<MSOperator *> *conflictOps, NSUInteger idx, NSMutableArray<MSElement *> *beforeElements) {
+        if(idx == 0){
+            //前一个元素不存在或者是左括号则为负号
+            return conflictOps.firstObject;
+        }else if ([[beforeElements lastObject] isKindOfClass:[MSPairOperator class]]){
+            if([((MSPairOperator*)[beforeElements lastObject]).opName isEqualToString:@"("]){
+                return conflictOps.firstObject;
+            }
+        }
+        return conflictOps.lastObject;
+    }];
+}
+
+#pragma mark - 初始化
+
+- (NSMutableDictionary<NSString *,MSOperator *> *)operatorTable
+{
+    if(!_operatorTable){
+        _operatorTable = [NSMutableDictionary new];
+        [self setDefauleOperatorTable];
+    }
+    return _operatorTable;
+}
+
+- (NSMutableDictionary<NSString *,MSConstant *> *)constantTable
+{
+    if(!_constantTable){
+        _constantTable = [NSMutableDictionary new];
+        [self setDefauleConstantTable];
+    }
+    return _constantTable;
+}
+
+- (NSMutableDictionary *)conflictOperatorDict
+{
+    if(!_conflictOperatorDict){
+        _conflictOperatorDict = [NSMutableDictionary new];
+        [self setDefauleConflictOperator];
+    }
+    return _conflictOperatorDict;
+}
+
 
 static MSElementTable * _elementTable;
 +(instancetype)defaultTable

@@ -12,6 +12,7 @@
 #import "MSPairOperator.h"
 #import "MSFunctionOperator.h"
 #import "MSValueOperator.h"
+#import "NSError+MSExpression.h"
 
 typedef enum EnumCharType{
     EnumCharTypeNumber,
@@ -22,6 +23,7 @@ typedef enum EnumCharType{
 
 @implementation MSStringScaner
 + (void)scanString:(NSString*)string
+             error:(NSError*__strong*)error
                block:(void(^)(MSElement* value,NSUInteger idx,BOOL isEnd,BOOL* stop))block
 {
     if(!block) return;
@@ -37,26 +39,27 @@ typedef enum EnumCharType{
             //查询到多个元素，目前只有符号和减号需要在框架内处理，后将提供方法处理，分内部的和用户的
             if([elementInArr firstObject].elementType == EnumElementTypeOperator){
                 NSString* name = ((MSOperator*)[elementInArr firstObject]).opName;
-                if([name isEqualToString:@"-"]){
-                    //前一个元素不存在或者是左括号则为负号
-                    if(idx==0){
-                        [elementArr addObject:elementInArr.firstObject];
-                    }else if([[elementArr lastObject] isKindOfClass:[MSPairOperator class]]){
-                        if([((MSPairOperator*)[elementArr lastObject]).opName isEqualToString:@"("]){
-                            [elementArr addObject:elementInArr.firstObject];
-                        }else{
-                            [elementArr addObject:elementInArr.lastObject];
-                        }
-                    }else{
-                        [elementArr addObject:elementInArr.lastObject];
-                    }
+                MSOperator*(^conflictHandleBlock)(NSMutableArray<MSOperator*>* conflictOps, NSUInteger idx ,NSMutableArray<MSElement*>* beforeElements)
+                = [[MSElementTable defaultTable] valueForKey:@"conflictOperatorDict"][name];
+                if(!conflictHandleBlock){
+                    *error = [NSError errorWithReason:EnumMSErrorUnclearMeaning
+                                          description:[NSString stringWithFormat:@"未能提供'%@'含义的判定",name]];
+                    *stop = YES;
+                }
+                MSOperator* choosedOp = conflictHandleBlock((id)elementInArr,idx,elementArr);
+                if(choosedOp){
+                    [elementArr addObject:choosedOp];
+                }else{
+                    *error = [NSError errorWithReason:EnumMSErrorUnclearMeaning
+                                          description:[NSString stringWithFormat:@"不能判断'%@'的含义",name]];
+                    *stop = YES;
                 }
             }else{//未知情况
                 [elementArr addObject:elementInArr.lastObject];
             }
         }
     }];
-    
+    if(*error) return;
     [elementArr enumerateObjectsUsingBlock:^(MSElement * _Nonnull element, NSUInteger idx, BOOL * _Nonnull stop) {
         
         block(element , idx , (idx == elementArr.count-1) , stop);

@@ -18,14 +18,16 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    NSString* str = @"PI-pow(2,3)";
+    NSString* str = @"--pow(2,3)";
 //    str = @"-pow(1,2,3)";
     NSError* error;
     NSNumber* num = [MSParser parserComputeString:str error:&error];
     if(error){
+        NSLog(@"%@",error);
+    } else{
         
-    } 
-    NSLog(@"%@",num);
+        NSLog(@"%@",num);
+    }
 }
 
 - (void)didReceiveMemoryWarning {

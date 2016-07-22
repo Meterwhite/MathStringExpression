@@ -11,10 +11,11 @@
 typedef enum EnumMSErrorReasonType{
     EnumMSErrorLackArgs = 19890604,
     EnumMSErrorUnkownElement = 19080630,
+    EnumMSErrorUnclearMeaning = 9761114,
     EnumMSErrorUnexpectedElement = 19450806,
     EnumMSErrorComputeFaile = 19491025,
     EnumMSErrorNotFind = 13771205,
-    EnumMSErrorNotSupport = 17930121
+    EnumMSErrorNotSupport = 17930121,
 }EnumMSErrorReasonType;
 
 @interface NSError(MSExpression)

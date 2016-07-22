@@ -18,7 +18,7 @@
 
 @implementation MSParser
 
-+ (NSNumber*)parserComputeString:(NSString*)string error:(NSError**)error
++ (NSNumber*)parserComputeString:(NSString*)string error:(NSError*__strong*)error
 {
     //字符串转逆波兰式
     NSMutableArray<MSElement*>* reversePolishArr = [self parseToReversePolishFromString:string error:error];
@@ -28,7 +28,7 @@
 }
 
 /** 计算一个逆波兰式的结果 */
-+ (NSNumber*)parseComputeFromReversePolishArray:(NSMutableArray<MSElement*>*)reversePolishArray error:(NSError**)error
++ (NSNumber*)parseComputeFromReversePolishArray:(NSMutableArray<MSElement*>*)reversePolishArray error:(NSError*__strong*)error
 {
     MSStack* tempStack = [MSStack stack];//存储临时计算结果
     [reversePolishArray enumerateObjectsUsingBlock:^(MSElement * _Nonnull element, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -46,13 +46,21 @@
                     if(tempStack.count<valueOp.argsCount){
                         
                         *error = [NSError errorWithReason:EnumMSErrorLackArgs
-                                              description:[NSString stringWithFormat:@"计算逆波兰式时参数'%@'时没有足够的参数",valueOp.opName]];
+                                              description:[NSString stringWithFormat:@"计算逆波兰式时运算符'%@'时没有足够的参数",valueOp.opName]];
                         *stop = YES;
                     }
                 }else{
                     //将需要的操作数出栈，并按参数计算顺序排列
-                    NSArray* nums = [tempStack pops:valueOp.argsCount].reverseObjectEnumerator.allObjects;
-                    [tempStack push:[valueOp computeArgs:nums]];//将计算结果入栈
+                    if(valueOp.argsCount>tempStack.count){
+                        
+                        *error = [NSError errorWithReason:EnumMSErrorLackArgs
+                                              description:[NSString stringWithFormat:@"计算逆波兰式时运算符'%@'时没有足够的参数",valueOp.opName]];
+                        *stop = YES;
+                    }else{
+                        
+                        NSArray* nums = [tempStack pops:valueOp.argsCount].reverseObjectEnumerator.allObjects;
+                        [tempStack push:[valueOp computeArgs:nums]];//将计算结果入栈
+                    }
                 }
             }else if ([element isKindOfClass:[MSFunctionOperator class]]){
                 
@@ -72,11 +80,12 @@
             *stop = YES;
         }
     }];
+    if(*error){
+        return nil;
+    }
     if(tempStack.count!=1){
         *error = [NSError errorWithReason:EnumMSErrorComputeFaile
-                              description:[NSString stringWithFormat:@"计算逆波兰式时未能完成计算%@",[tempStack pop]]];
-    }
-    if(*error){
+                              description:[NSString stringWithFormat:@"计算逆波兰式时未能完成计算，剩余元素%@",[tempStack pop]]];
         return nil;
     }
     return [tempStack pop];
@@ -90,12 +99,14 @@
 
 
 /** 转逆波兰式 */
-+ (NSMutableArray<MSElement*>*)parseToReversePolishFromString:(NSString*)inputString error:(NSError**)error
++ (NSMutableArray<MSElement*>*)parseToReversePolishFromString:(NSString*)inputString error:(NSError*__strong*)error
 {
     MSStack* opStack = [MSStack stack];//运算符栈
     MSStack* tempStack = [MSStack stack];//临时栈
     
-    [MSStringScaner scanString:inputString block:^(MSElement *value, NSUInteger idx, BOOL isEnd, BOOL *stop) {
+    [MSStringScaner scanString:inputString
+                         error:error
+                         block:^(MSElement *value, NSUInteger idx, BOOL isEnd, BOOL *stop) {
         
         if(value.elementType==EnumElementTypeNumber){
             

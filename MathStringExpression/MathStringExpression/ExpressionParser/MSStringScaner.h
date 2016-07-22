@@ -12,6 +12,7 @@
 @interface MSStringScaner : NSObject
 
 + (void)scanString:(NSString*)string
+             error:(NSError*__strong*)error
              block:(void(^)(MSElement* value,NSUInteger idx,BOOL isEnd,BOOL* stop))block;
 
 + (NSMutableArray<NSString*>*)scanSplitString:(NSString*)string;
