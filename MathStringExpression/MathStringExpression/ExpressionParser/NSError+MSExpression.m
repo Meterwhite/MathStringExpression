@@ -2,7 +2,7 @@
 //  NSError+MSExpression.m
 //  MathStringProgram
 //
-//  Created by MDLK on 16/7/22.
+//  Created by NOVO on 16/7/22.
 //  Copyright © 2016年 NOVO. All rights reserved.
 //
 

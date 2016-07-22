@@ -24,7 +24,7 @@
     NSNumber* num = [MSParser parserComputeString:str error:&error];
     if(error){
         
-    }
+    } 
     NSLog(@"%@",num);
 }
 
