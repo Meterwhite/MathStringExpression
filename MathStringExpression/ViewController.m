@@ -1,12 +1,14 @@
 //
 //  ViewController.m
-//  MathStringExpression
+//  MathStringProgram
 //
-//  Created by NOVO on 16/7/22.
+//  Created by NOVO on 16/6/25.
 //  Copyright © 2016年 NOVO. All rights reserved.
 //
 
 #import "ViewController.h"
+#import "MSStringScaner.h"
+#import "MSParser.h"
 
 @interface ViewController ()
 
@@ -16,7 +18,14 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
+    NSString* str = @"PI-pow(2,3)";
+//    str = @"-pow(1,2,3)";
+    NSError* error;
+    NSNumber* num = [MSParser parserComputeString:str error:&error];
+    if(error){
+        
+    }
+    NSLog(@"%@",num);
 }
 
 - (void)didReceiveMemoryWarning {

@@ -13,6 +13,18 @@
 		9F331A2C1D425902009822C2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9F331A2A1D425902009822C2 /* Main.storyboard */; };
 		9F331A2E1D425902009822C2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9F331A2D1D425902009822C2 /* Assets.xcassets */; };
 		9F331A311D425902009822C2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9F331A2F1D425902009822C2 /* LaunchScreen.storyboard */; };
+		9F331A531D42592B009822C2 /* MSElementTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F331A3B1D42592B009822C2 /* MSElementTable.m */; };
+		9F331A541D42592B009822C2 /* MSParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F331A3D1D42592B009822C2 /* MSParser.m */; };
+		9F331A551D42592B009822C2 /* MSStack.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F331A3F1D42592B009822C2 /* MSStack.m */; };
+		9F331A561D42592B009822C2 /* MSStringScaner.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F331A411D42592B009822C2 /* MSStringScaner.m */; };
+		9F331A571D42592B009822C2 /* NSError+MSExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F331A431D42592B009822C2 /* NSError+MSExpression.m */; };
+		9F331A581D42592B009822C2 /* MSConstant.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F331A461D42592B009822C2 /* MSConstant.m */; };
+		9F331A591D42592B009822C2 /* MSElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F331A481D42592B009822C2 /* MSElement.m */; };
+		9F331A5A1D42592B009822C2 /* MSFunctionOperator.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F331A4A1D42592B009822C2 /* MSFunctionOperator.m */; };
+		9F331A5B1D42592B009822C2 /* MSNumber.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F331A4C1D42592B009822C2 /* MSNumber.m */; };
+		9F331A5C1D42592B009822C2 /* MSOperator.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F331A4E1D42592B009822C2 /* MSOperator.m */; };
+		9F331A5D1D42592B009822C2 /* MSPairOperator.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F331A501D42592B009822C2 /* MSPairOperator.m */; };
+		9F331A5E1D42592B009822C2 /* MSValueOperator.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F331A521D42592B009822C2 /* MSValueOperator.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +38,30 @@
 		9F331A2D1D425902009822C2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9F331A301D425902009822C2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9F331A321D425902009822C2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9F331A3A1D42592B009822C2 /* MSElementTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSElementTable.h; sourceTree = "<group>"; };
+		9F331A3B1D42592B009822C2 /* MSElementTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSElementTable.m; sourceTree = "<group>"; };
+		9F331A3C1D42592B009822C2 /* MSParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSParser.h; sourceTree = "<group>"; };
+		9F331A3D1D42592B009822C2 /* MSParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSParser.m; sourceTree = "<group>"; };
+		9F331A3E1D42592B009822C2 /* MSStack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSStack.h; sourceTree = "<group>"; };
+		9F331A3F1D42592B009822C2 /* MSStack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSStack.m; sourceTree = "<group>"; };
+		9F331A401D42592B009822C2 /* MSStringScaner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSStringScaner.h; sourceTree = "<group>"; };
+		9F331A411D42592B009822C2 /* MSStringScaner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSStringScaner.m; sourceTree = "<group>"; };
+		9F331A421D42592B009822C2 /* NSError+MSExpression.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError+MSExpression.h"; sourceTree = "<group>"; };
+		9F331A431D42592B009822C2 /* NSError+MSExpression.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError+MSExpression.m"; sourceTree = "<group>"; };
+		9F331A451D42592B009822C2 /* MSConstant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSConstant.h; sourceTree = "<group>"; };
+		9F331A461D42592B009822C2 /* MSConstant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSConstant.m; sourceTree = "<group>"; };
+		9F331A471D42592B009822C2 /* MSElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSElement.h; sourceTree = "<group>"; };
+		9F331A481D42592B009822C2 /* MSElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSElement.m; sourceTree = "<group>"; };
+		9F331A491D42592B009822C2 /* MSFunctionOperator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSFunctionOperator.h; sourceTree = "<group>"; };
+		9F331A4A1D42592B009822C2 /* MSFunctionOperator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSFunctionOperator.m; sourceTree = "<group>"; };
+		9F331A4B1D42592B009822C2 /* MSNumber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSNumber.h; sourceTree = "<group>"; };
+		9F331A4C1D42592B009822C2 /* MSNumber.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSNumber.m; sourceTree = "<group>"; };
+		9F331A4D1D42592B009822C2 /* MSOperator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSOperator.h; sourceTree = "<group>"; };
+		9F331A4E1D42592B009822C2 /* MSOperator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSOperator.m; sourceTree = "<group>"; };
+		9F331A4F1D42592B009822C2 /* MSPairOperator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSPairOperator.h; sourceTree = "<group>"; };
+		9F331A501D42592B009822C2 /* MSPairOperator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSPairOperator.m; sourceTree = "<group>"; };
+		9F331A511D42592B009822C2 /* MSValueOperator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSValueOperator.h; sourceTree = "<group>"; };
+		9F331A521D42592B009822C2 /* MSValueOperator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSValueOperator.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +94,7 @@
 		9F331A201D425902009822C2 /* MathStringExpression */ = {
 			isa = PBXGroup;
 			children = (
+				9F331A381D42592B009822C2 /* MathStringExpression */,
 				9F331A241D425902009822C2 /* AppDelegate.h */,
 				9F331A251D425902009822C2 /* AppDelegate.m */,
 				9F331A271D425902009822C2 /* ViewController.h */,
@@ -77,6 +114,53 @@
 				9F331A221D425902009822C2 /* main.m */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		9F331A381D42592B009822C2 /* MathStringExpression */ = {
+			isa = PBXGroup;
+			children = (
+				9F331A391D42592B009822C2 /* ExpressionParser */,
+				9F331A441D42592B009822C2 /* Operator */,
+			);
+			path = MathStringExpression;
+			sourceTree = "<group>";
+		};
+		9F331A391D42592B009822C2 /* ExpressionParser */ = {
+			isa = PBXGroup;
+			children = (
+				9F331A3A1D42592B009822C2 /* MSElementTable.h */,
+				9F331A3B1D42592B009822C2 /* MSElementTable.m */,
+				9F331A3C1D42592B009822C2 /* MSParser.h */,
+				9F331A3D1D42592B009822C2 /* MSParser.m */,
+				9F331A3E1D42592B009822C2 /* MSStack.h */,
+				9F331A3F1D42592B009822C2 /* MSStack.m */,
+				9F331A401D42592B009822C2 /* MSStringScaner.h */,
+				9F331A411D42592B009822C2 /* MSStringScaner.m */,
+				9F331A421D42592B009822C2 /* NSError+MSExpression.h */,
+				9F331A431D42592B009822C2 /* NSError+MSExpression.m */,
+			);
+			path = ExpressionParser;
+			sourceTree = "<group>";
+		};
+		9F331A441D42592B009822C2 /* Operator */ = {
+			isa = PBXGroup;
+			children = (
+				9F331A451D42592B009822C2 /* MSConstant.h */,
+				9F331A461D42592B009822C2 /* MSConstant.m */,
+				9F331A471D42592B009822C2 /* MSElement.h */,
+				9F331A481D42592B009822C2 /* MSElement.m */,
+				9F331A491D42592B009822C2 /* MSFunctionOperator.h */,
+				9F331A4A1D42592B009822C2 /* MSFunctionOperator.m */,
+				9F331A4B1D42592B009822C2 /* MSNumber.h */,
+				9F331A4C1D42592B009822C2 /* MSNumber.m */,
+				9F331A4D1D42592B009822C2 /* MSOperator.h */,
+				9F331A4E1D42592B009822C2 /* MSOperator.m */,
+				9F331A4F1D42592B009822C2 /* MSPairOperator.h */,
+				9F331A501D42592B009822C2 /* MSPairOperator.m */,
+				9F331A511D42592B009822C2 /* MSValueOperator.h */,
+				9F331A521D42592B009822C2 /* MSValueOperator.m */,
+			);
+			path = Operator;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -149,9 +233,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9F331A541D42592B009822C2 /* MSParser.m in Sources */,
+				9F331A581D42592B009822C2 /* MSConstant.m in Sources */,
+				9F331A591D42592B009822C2 /* MSElement.m in Sources */,
 				9F331A291D425902009822C2 /* ViewController.m in Sources */,
+				9F331A531D42592B009822C2 /* MSElementTable.m in Sources */,
 				9F331A261D425902009822C2 /* AppDelegate.m in Sources */,
+				9F331A5B1D42592B009822C2 /* MSNumber.m in Sources */,
+				9F331A5D1D42592B009822C2 /* MSPairOperator.m in Sources */,
+				9F331A5A1D42592B009822C2 /* MSFunctionOperator.m in Sources */,
+				9F331A561D42592B009822C2 /* MSStringScaner.m in Sources */,
+				9F331A551D42592B009822C2 /* MSStack.m in Sources */,
+				9F331A5C1D42592B009822C2 /* MSOperator.m in Sources */,
+				9F331A5E1D42592B009822C2 /* MSValueOperator.m in Sources */,
 				9F331A231D425902009822C2 /* main.m in Sources */,
+				9F331A571D42592B009822C2 /* NSError+MSExpression.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -266,6 +362,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = MathStringExpression/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = NOVO.MathStringExpression;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -277,6 +374,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = MathStringExpression/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = NOVO.MathStringExpression;
 				PRODUCT_NAME = "$(TARGET_NAME)";
