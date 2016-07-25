@@ -111,6 +111,7 @@
     //括号
     MSPairOperator* leftPari  = [MSPairOperator operatorWithKeyValue:@{@"opName":@"(",@"level":@(0)}];
     [self setElement:leftPari];
+    
     MSPairOperator* rightPari = [MSPairOperator operatorWithKeyValue:@{@"opName":@")",@"level":@(0)}];
     [self setElement:rightPari];
     

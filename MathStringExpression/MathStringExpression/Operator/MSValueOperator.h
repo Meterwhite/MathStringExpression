@@ -22,4 +22,6 @@ typedef enum EnumOperatorDirection
 
 - (NSNumber*)computeArgs:(NSArray*)args;
 - (void)computeWithBlock:(NSNumber* (^)(NSArray* args))block;
+
+- (instancetype)copy;
 @end

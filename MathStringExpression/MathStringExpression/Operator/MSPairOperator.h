@@ -12,4 +12,5 @@
  */
 @interface MSPairOperator : MSOperator
 
+- (instancetype)copy;
 @end

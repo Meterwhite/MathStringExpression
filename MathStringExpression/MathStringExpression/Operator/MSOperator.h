@@ -32,6 +32,7 @@ typedef enum EnumOperatorStyle {
 
 - (NSComparisonResult)compareOperator:(MSOperator*)op;
 
+- (instancetype)copy;
 - (BOOL)isEqual:(id)object;
 - (NSString *)description;
 - (NSString *)debugDescription;

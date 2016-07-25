@@ -127,8 +127,39 @@ typedef enum EnumCharType{
             [splitedArr addObject:[curString copy]];
         }
     }];
-    
+    [self scanCombineConstantAndFuncBySplited:splitedArr originString:string];
     return splitedArr;
 }
 
+/** 合并将初次切割的字符串中被切割的常数和函数名合并 */
++ (void)scanCombineConstantAndFuncBySplited:(NSMutableArray<NSString*>*)splitedArr
+                               originString:(NSString*)originString
+{
+    MSElementTable* elementTab = [MSElementTable defaultTable];
+    NSMutableDictionary<NSString*,MSOperator*>* operatorTable = [elementTab valueForKey:@"operatorTable"];
+    NSMutableDictionary<NSString*,MSConstant*>* constantTable = [elementTab valueForKey:@"constantTable"];
+    
+    [[operatorTable allValues] enumerateObjectsUsingBlock:^(MSOperator * _Nonnull operator, NSUInteger idx, BOOL * _Nonnull stop) {
+        
+        if(operator.opStyle == EnumOperatorStyleFunction && [originString containsString:operator.opName]){
+            __block NSRange rangeCombine = NSMakeRange(NSNotFound, 0);
+            NSMutableString* tempStr = [NSMutableString new];
+            [splitedArr enumerateObjectsUsingBlock:^(NSString * _Nonnull aString, NSUInteger idx, BOOL * _Nonnull stop) {
+                //区分完整的和部分的
+                if(![operator.opName isEqualToString:aString] && [operator.opName containsString:aString]){
+                    [tempStr appendString:aString];
+                }
+            }];
+        }
+    }];
+    
+    [[constantTable allValues] enumerateObjectsUsingBlock:^(MSConstant * _Nonnull constant, NSUInteger idx, BOOL * _Nonnull stop) {
+        
+    }];
+}
+
++ (void)toolCombineArr:(NSMutableArray<NSString*>*)arr inRange:(NSRange)range
+{
+    
+}
 @end

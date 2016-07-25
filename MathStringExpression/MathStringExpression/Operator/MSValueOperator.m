@@ -36,4 +36,17 @@
 {
     self.computeBlock = block;
 }
+
+- (instancetype)copy
+{
+    MSValueOperator* re = [MSValueOperator new];
+    if(re){
+        [re.opName setValue:self.opName forKey:@"opName"];;
+        re.showName = self.showName;
+        re.level = self.level;
+        re.opStyle = self.opStyle;
+        re.argsCount = self.argsCount;
+    }
+    return re;
+}
 @end

@@ -9,7 +9,7 @@
 #import "MSOperator.h"
 
 @interface MSOperator ()
-
+@property (nonatomic,copy) MSOperator* jsMathTransferOperator;
 @end
 
 @implementation MSOperator
@@ -32,6 +32,18 @@
     id re;
     if((re = [[self.class alloc] init])){
         [re setValuesForKeysWithDictionary:keyValue];
+    }
+    return re;
+}
+
+- (instancetype)copy
+{
+    MSOperator* re = [MSOperator new];
+    if(re){
+        [re.opName setValue:self.opName forKey:@"opName"];;
+        re.showName = self.showName;
+        re.level = self.level;
+        re.opStyle = self.opStyle;
     }
     return re;
 }

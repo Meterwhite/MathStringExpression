@@ -17,4 +17,16 @@
     }
     return self;
 }
+
+- (instancetype)copy
+{
+    MSPairOperator* re = [MSPairOperator new];
+    if(re){
+        [re.opName setValue:self.opName forKey:@"opName"];
+        re.showName = self.showName;
+        re.level = self.level;
+        re.opStyle = self.opStyle;
+    }
+    return re;
+}
 @end
