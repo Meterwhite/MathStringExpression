@@ -13,6 +13,7 @@
 #import "MSFunctionOperator.h"
 #import "MSValueOperator.h"
 #import "NSError+MSExpression.h"
+#import "MSConstant.h"
 
 typedef enum EnumCharType{
     EnumCharTypeNumber,
@@ -131,7 +132,7 @@ typedef enum EnumCharType{
     return splitedArr;
 }
 
-/** 合并将初次切割的字符串中被切割的常数和函数名合并 */
+/** 将被初次切割的字符串中被的常数和函数名合并（贪婪的） */
 + (void)scanCombineConstantAndFuncBySplited:(NSMutableArray<NSString*>*)splitedArr
                                originString:(NSString*)originString
 {
@@ -141,25 +142,96 @@ typedef enum EnumCharType{
     
     [[operatorTable allValues] enumerateObjectsUsingBlock:^(MSOperator * _Nonnull operator, NSUInteger idx, BOOL * _Nonnull stop) {
         
+        //需要合并的
         if(operator.opStyle == EnumOperatorStyleFunction && [originString containsString:operator.opName]){
+            
+            NSMutableArray<NSValue*>* rangs = [NSMutableArray new];
             __block NSRange rangeCombine = NSMakeRange(NSNotFound, 0);
             NSMutableString* tempStr = [NSMutableString new];
+            NSUInteger splitedArrLength = splitedArr.count;
             [splitedArr enumerateObjectsUsingBlock:^(NSString * _Nonnull aString, NSUInteger idx, BOOL * _Nonnull stop) {
-                //区分完整的和部分的
-                if(![operator.opName isEqualToString:aString] && [operator.opName containsString:aString]){
+                
+                if(rangeCombine.length==0){//寻头
+                    if([operator.opName containsString:aString]&&
+                       [operator.opName rangeOfString:aString].location==0){
+                        rangeCombine.location = idx;
+                        rangeCombine.length = 1;
+                        [tempStr appendString:aString];
+                    }
+                }else{//验证整体中
                     [tempStr appendString:aString];
+                    if ([operator.opName containsString:tempStr]){//确认部分
+                        rangeCombine.length++;
+                        if(idx == splitedArrLength-1){//如果是最后一个元素确认一次合并
+                            [rangs addObject:[NSValue valueWithRange:rangeCombine]];
+                        }
+                    }else{//不是该部分
+                        if(rangeCombine.length){
+                            //确认一次合并
+                            [rangs addObject:[NSValue valueWithRange:rangeCombine]];
+                        }
+                        rangeCombine.length=0;
+                        [tempStr setString:@""];
+                    }
                 }
             }];
+            [self toolCombineArr:splitedArr inRanges:rangs];
         }
     }];
     
     [[constantTable allValues] enumerateObjectsUsingBlock:^(MSConstant * _Nonnull constant, NSUInteger idx, BOOL * _Nonnull stop) {
         
+        //需要合并的
+        if([originString containsString:constant.name]){
+            
+            NSMutableArray<NSValue*>* rangs = [NSMutableArray new];
+            __block NSRange rangeCombine = NSMakeRange(NSNotFound, 0);
+            NSMutableString* tempStr = [NSMutableString new];
+            NSUInteger splitedArrLength = splitedArr.count;
+            [splitedArr enumerateObjectsUsingBlock:^(NSString * _Nonnull aString, NSUInteger idx, BOOL * _Nonnull stop) {
+                
+                if(rangeCombine.length==0){//寻头
+                    if([constant.name containsString:aString]&&
+                       [constant.name rangeOfString:aString].location==0){
+                        rangeCombine.location = idx;
+                        rangeCombine.length = 1;
+                        [tempStr appendString:aString];
+                    }
+                }else{//验证整体中
+                    [tempStr appendString:aString];
+                    if ([constant.name containsString:tempStr]){//确认部分
+                        rangeCombine.length++;
+                        if(idx == splitedArrLength-1){//如果是最后一个元素确认一次合并
+                            [rangs addObject:[NSValue valueWithRange:rangeCombine]];
+                        }
+                    }else{//不是该部分
+                        if(rangeCombine.length){
+                            //确认一次合并
+                            [rangs addObject:[NSValue valueWithRange:rangeCombine]];
+                        }
+                        rangeCombine.length=0;
+                        [tempStr setString:@""];
+                    }
+                }
+            }];
+            [self toolCombineArr:splitedArr inRanges:rangs];
+        }
     }];
 }
 
-+ (void)toolCombineArr:(NSMutableArray<NSString*>*)arr inRange:(NSRange)range
++ (void)toolCombineArr:(NSMutableArray<NSString*>*)arr inRanges:(NSArray<NSValue*>*)ranges
 {
-    
+    if(!ranges.count)   return;
+    //倒序替换防止越界
+    [ranges.reverseObjectEnumerator.allObjects enumerateObjectsUsingBlock:^(NSValue * _Nonnull rangeV, NSUInteger idx, BOOL * _Nonnull stop) {
+        
+        NSArray* strs = [arr subarrayWithRange:rangeV.rangeValue];
+        NSMutableString* tempStr = [NSMutableString new];
+        [strs enumerateObjectsUsingBlock:^(NSString*  _Nonnull str, NSUInteger idx, BOOL * _Nonnull stop) {
+            [tempStr appendString:str];
+        }];
+        
+        [arr replaceObjectsInRange:rangeV.rangeValue withObjectsFromArray:@[tempStr]];
+    }];
 }
 @end

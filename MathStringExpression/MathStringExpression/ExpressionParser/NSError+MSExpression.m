@@ -7,23 +7,39 @@
 //
 
 #import "NSError+MSExpression.h"
+#import "MSElement.h"
 
 #define _NotNil(val) (val?val:[NSNull null])
 
 @implementation NSError(MSExpression)
-+ (NSError*)errorWithReason:(EnumMSErrorReasonType)reason description:(NSString*)description
-{
-    return [NSError errorWithDomain:@"MSExpression"
-                               code:reason
-                           userInfo:@{NSLocalizedFailureReasonErrorKey:[self errorDescriptionFromReason:reason],
-                                                                           NSLocalizedDescriptionKey:_NotNil(description)}];
-}
 
 + (NSError*)errorWithReason:(EnumMSErrorReasonType)reason
 {
-    return [NSError errorWithDomain:@"MSExpression"
+    return [self errorWithReason:reason description:nil];
+}
+
++ (NSError*)errorWithReason:(EnumMSErrorReasonType)reason description:(NSString*)description
+{
+    return [self errorWithReason:reason description:description elementInfo:nil];
+}
+
++ (NSError*)errorWithReason:(EnumMSErrorReasonType)reason
+                description:(NSString*)description
+                elementInfo:(MSElement*)elementInfo
+{
+    NSString* domain = @"MSExpression";
+    if(elementInfo){
+        domain = elementInfo.stringValue;
+    }
+    NSMutableDictionary* userInfo = [NSMutableDictionary new];
+    userInfo[NSLocalizedFailureReasonErrorKey] = [self errorDescriptionFromReason:reason];
+    if(description){
+        userInfo[NSLocalizedDescriptionKey] = description;
+    }
+    
+    return [NSError errorWithDomain:domain
                                code:reason
-                           userInfo:@{NSLocalizedFailureReasonErrorKey:[self errorDescriptionFromReason:reason]}];
+                           userInfo:userInfo];
 }
 
 + (NSString*)errorDescriptionFromReason:(EnumMSErrorReasonType)reason
@@ -51,7 +67,7 @@
             return @"不明确的含义";
             break;
         default:
-            return @"异常";
+            return @"无法解析的表达式";
             break;
     }
 }

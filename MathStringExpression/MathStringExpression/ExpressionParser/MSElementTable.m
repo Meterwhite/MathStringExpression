@@ -108,39 +108,105 @@
  */
 - (void)setDefauleOperatorTable
 {
-    //括号
+    //..括号..//
     MSPairOperator* leftPari  = [MSPairOperator operatorWithKeyValue:@{@"opName":@"(",@"level":@(0)}];
     [self setElement:leftPari];
     
     MSPairOperator* rightPari = [MSPairOperator operatorWithKeyValue:@{@"opName":@")",@"level":@(0)}];
     [self setElement:rightPari];
     
-    //函数
-    MSFunctionOperator* sin =   [MSFunctionOperator operatorWithKeyValue:@{@"opName":@"sin",@"level":@(1),@"argsCount":@(1)}];
-    [sin computeWithBlock:^NSNumber *(NSArray *args) {
-        return @(sinh([args[0] doubleValue]));
-    }];
-    [self setElement:sin];
-    
-    MSFunctionOperator* cos =   [MSFunctionOperator operatorWithKeyValue:@{@"opName":@"cos",@"level":@(1),@"argsCount":@(1)}];
-    [cos computeWithBlock:^NSNumber *(NSArray *args) {
-        return @(cosh([args[0] doubleValue]));
-    }];
-    [self setElement:cos];
-    
-    MSFunctionOperator* abs =   [MSFunctionOperator operatorWithKeyValue:@{@"opName":@"abs",@"level":@(1),@"argsCount":@(1)}];
-    [abs computeWithBlock:^NSNumber *(NSArray *args) {
+    //..函数..//
+    MSFunctionOperator* _abs =   [MSFunctionOperator operatorWithKeyValue:@{@"opName":@"abs",@"level":@(1),@"argsCount":@(1)}];
+    [_abs computeWithBlock:^NSNumber *(NSArray *args) {
         return @(ABS([args[0] doubleValue]));
     }];
-    [self setElement:abs];
+    [self setElement:_abs];
     
-    MSFunctionOperator* pow =   [MSFunctionOperator operatorWithKeyValue:@{@"opName":@"pow",@"level":@(1),@"argsCount":@(2)}];
-    [pow computeWithBlock:^NSNumber *(NSArray *args) {
+    MSFunctionOperator* _acos =   [MSFunctionOperator operatorWithKeyValue:@{@"opName":@"acos",@"level":@(1),@"argsCount":@(1)}];
+    [_acos computeWithBlock:^NSNumber *(NSArray *args) {
+        return @(acosh([args[0] doubleValue]));
+    }];
+    [self setElement:_acos];
+    
+    MSFunctionOperator* _asin =   [MSFunctionOperator operatorWithKeyValue:@{@"opName":@"asin",@"level":@(1),@"argsCount":@(1)}];
+    [_asin computeWithBlock:^NSNumber *(NSArray *args) {
+        return @(asinh([args[0] doubleValue]));
+    }];
+    [self setElement:_asin];
+    
+    MSFunctionOperator* _atan =   [MSFunctionOperator operatorWithKeyValue:@{@"opName":@"atan",@"level":@(1),@"argsCount":@(1)}];
+    [_atan computeWithBlock:^NSNumber *(NSArray *args) {
+        return @(atanh([args[0] doubleValue]));
+    }];
+    [self setElement:_atan];
+    
+    MSFunctionOperator* _atan2 =   [MSFunctionOperator operatorWithKeyValue:@{@"opName":@"atan2",@"level":@(1),@"argsCount":@(2)}];
+    [_atan2 computeWithBlock:^NSNumber *(NSArray *args) {
+        return @(atan2([args[0] doubleValue], [args[1] doubleValue]));
+    }];
+    [self setElement:_atan2];
+    //上舍入
+    MSFunctionOperator* _ceil =   [MSFunctionOperator operatorWithKeyValue:@{@"opName":@"ceil",@"level":@(1),@"argsCount":@(1)}];
+    [_ceil computeWithBlock:^NSNumber *(NSArray *args) {
+        return @(ceil([args[0] doubleValue]));
+    }];
+    [self setElement:_ceil];
+    
+    MSFunctionOperator* _cos =   [MSFunctionOperator operatorWithKeyValue:@{@"opName":@"cos",@"level":@(1),@"argsCount":@(1)}];
+    [_cos computeWithBlock:^NSNumber *(NSArray *args) {
+        return @(cosh([args[0] doubleValue]));
+    }];
+    [self setElement:_cos];
+    
+    MSFunctionOperator* _exp =   [MSFunctionOperator operatorWithKeyValue:@{@"opName":@"exp",@"level":@(1),@"argsCount":@(1)}];
+    [_exp computeWithBlock:^NSNumber *(NSArray *args) {
+        return @(exp([args[0] doubleValue]));
+    }];
+    [self setElement:_exp];
+    
+    MSFunctionOperator* _floor =   [MSFunctionOperator operatorWithKeyValue:@{@"opName":@"floor",@"level":@(1),@"argsCount":@(1)}];
+    [_floor computeWithBlock:^NSNumber *(NSArray *args) {
+        return @(floor([args[0] doubleValue]));
+    }];
+    [self setElement:_floor];
+    
+    MSFunctionOperator* _log =   [MSFunctionOperator operatorWithKeyValue:@{@"opName":@"log",@"level":@(1),@"argsCount":@(1)}];
+    [_log computeWithBlock:^NSNumber *(NSArray *args) {
+        return @(log([args[0] doubleValue]));
+    }];
+    [self setElement:_log];
+    
+    MSFunctionOperator* _max =   [MSFunctionOperator operatorWithKeyValue:@{@"opName":@"max",@"level":@(1),@"argsCount":@(1)}];
+    [_max computeWithBlock:^NSNumber *(NSArray *args) {
+        return @(MAX([args[0] doubleValue] , [args[1] doubleValue]));
+    }];
+    [self setElement:_max];
+    
+    MSFunctionOperator* _min =   [MSFunctionOperator operatorWithKeyValue:@{@"opName":@"min",@"level":@(1),@"argsCount":@(1)}];
+    [_min computeWithBlock:^NSNumber *(NSArray *args) {
+        return @(MIN([args[0] doubleValue] , [args[1] doubleValue]));
+    }];
+    [self setElement:_min];
+    
+    MSFunctionOperator* _pow =   [MSFunctionOperator operatorWithKeyValue:@{@"opName":@"pow",@"level":@(1),@"argsCount":@(2)}];
+    [_pow computeWithBlock:^NSNumber *(NSArray *args) {
         return @(powf([args[0] floatValue], [args[1] floatValue]));
     }];
-    [self setElement:pow];
+    [self setElement:_pow];
     
-    //运算符
+    MSFunctionOperator* _random =   [MSFunctionOperator operatorWithKeyValue:@{@"opName":@"random",@"level":@(1),@"argsCount":@(0)}];
+    [_random computeWithBlock:^NSNumber *(NSArray *args) {
+        return @((double)(1+arc4random()%99)/100.0 );
+    }];
+    [self setElement:_random];
+    
+    MSFunctionOperator* _sin =   [MSFunctionOperator operatorWithKeyValue:@{@"opName":@"sin",@"level":@(1),@"argsCount":@(1)}];
+    [_sin computeWithBlock:^NSNumber *(NSArray *args) {
+        return @(sinh([args[0] doubleValue]));
+    }];
+    [self setElement:_sin];
+    
+    //..运算符1..//
     MSValueOperator* negative = [MSValueOperator operatorWithKeyValue:@{@"opName":@"-",@"level":@(2)
                                                                         ,@"argsCount":@(1)}];
     [negative computeWithBlock:^NSNumber *(NSArray *args) {
@@ -148,7 +214,7 @@
     }];
     [self setElement:negative];
     
-    //运算符
+    //..运算符2..//
     MSValueOperator* multiple = [MSValueOperator operatorWithKeyValue:@{@"opName":@"*",@"level":@(3)}];
     [multiple computeWithBlock:^NSNumber *(NSArray *args) {
         return @([args[0] doubleValue]*[args[1] doubleValue]);
@@ -186,11 +252,29 @@
 
 - (void)setDefauleConstantTable
 {
-    MSConstant* e = [MSConstant constantWithKeyValue:@{@"name":@"E",@"numberValue":@(M_E)}];
-    [self setElement:e];
+    MSConstant* E = [MSConstant constantWithKeyValue:@{@"name":@"E",@"numberValue":@(M_E)}];
+    [self setElement:E];
     
-    MSConstant* pi = [MSConstant constantWithKeyValue:@{@"name":@"PI" , @"numberValue":@(M_PI)}];
-    [self setElement:pi];
+    MSConstant* PI = [MSConstant constantWithKeyValue:@{@"name":@"PI" , @"numberValue":@(M_PI)}];
+    [self setElement:PI];
+    
+    MSConstant* LN2 = [MSConstant constantWithKeyValue:@{@"name":@"LN2" , @"numberValue":@(M_LN2)}];
+    [self setElement:LN2];
+    
+    MSConstant* LN10 = [MSConstant constantWithKeyValue:@{@"name":@"LN10" , @"numberValue":@(M_LN10)}];
+    [self setElement:LN10];
+    
+    MSConstant* LOG2E = [MSConstant constantWithKeyValue:@{@"name":@"LOG2E" , @"numberValue":@(M_LOG2E)}];
+    [self setElement:LOG2E];
+    
+    MSConstant* LOG10E = [MSConstant constantWithKeyValue:@{@"name":@"LOG10E" , @"numberValue":@(M_LOG10E)}];
+    [self setElement:LOG10E];
+    
+    MSConstant* SQRT1_2 = [MSConstant constantWithKeyValue:@{@"name":@"SQRT1_2" , @"numberValue":@(M_SQRT1_2)}];
+    [self setElement:SQRT1_2];
+    
+    MSConstant* SQRT2 = [MSConstant constantWithKeyValue:@{@"name":@"SQRT2" , @"numberValue":@(M_SQRT2)}];
+    [self setElement:SQRT2];
 }
 /** 默认重名运算符处理 */
 - (void)setDefauleConflictOperator

@@ -66,17 +66,28 @@
                 
                 MSFunctionOperator* funcOp = (id)element;
                 //将需要的操作数出栈，并按参数计算顺序排列
-                NSArray* nums = [tempStack pops:funcOp.argsCount].reverseObjectEnumerator.allObjects;
-                [tempStack push:[funcOp computeArgs:nums]];//将计算结果入栈
+                if(tempStack.count<funcOp.argsCount){
+                    
+                    *error = [NSError errorWithReason:EnumMSErrorLackArgs
+                                          description:[NSString stringWithFormat:@"计算'%@'时缺少必要的参数",element.stringValue]
+                                          elementInfo:funcOp];
+                    *stop = YES;
+                }else{
+                    
+                    NSArray* nums = [tempStack pops:funcOp.argsCount].reverseObjectEnumerator.allObjects;
+                    [tempStack push:[funcOp computeArgs:nums]];//将计算结果入栈
+                }
             }else if([element isKindOfClass:[MSPairOperator class]]){
                 
                 *error = [NSError errorWithReason:EnumMSErrorUnexpectedElement
-                                      description:[NSString stringWithFormat:@"计算逆波兰式时遇到元素%@",element.stringValue]];
+                                      description:[NSString stringWithFormat:@"计算逆波兰式时遇到元素%@",element.stringValue]
+                                      elementInfo:element];
                 *stop = YES;
             }
         }else if(element.elementType == EnumElementTypeUndefine){
             *error = [NSError errorWithReason:EnumMSErrorUnkownElement
-                                  description:[NSString stringWithFormat:@"计算逆波兰式时遇到元素%@",element.stringValue]];
+                                  description:[NSString stringWithFormat:@"计算逆波兰式时遇到元素%@",element.stringValue]
+                                  elementInfo:element];
             *stop = YES;
         }
     }];

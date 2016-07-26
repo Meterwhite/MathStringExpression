@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+@class MSElement;
 
 typedef enum EnumMSErrorReasonType{
     EnumMSErrorLackArgs = 19890604,
@@ -20,5 +21,9 @@ typedef enum EnumMSErrorReasonType{
 
 @interface NSError(MSExpression)
 + (NSError*)errorWithReason:(EnumMSErrorReasonType)reason;
-+ (NSError*)errorWithReason:(EnumMSErrorReasonType)reason description:(NSString*)description;
++ (NSError*)errorWithReason:(EnumMSErrorReasonType)reason
+                description:(NSString*)description;
++ (NSError*)errorWithReason:(EnumMSErrorReasonType)reason
+                description:(NSString*)description
+                elementInfo:(MSElement*)elementInfo;
 @end

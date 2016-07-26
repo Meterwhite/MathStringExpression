@@ -18,7 +18,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    NSString* str = @"--pow(2,3)";
+    NSString* str = @"sin()";
 //    str = @"-pow(1,2,3)";
     NSError* error;
     NSNumber* num = [MSParser parserComputeString:str error:&error];
