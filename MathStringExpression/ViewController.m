@@ -7,7 +7,7 @@
 //
 
 #import "ViewController.h"
-#import "MSStringScaner.h"
+#import "MSScaner.h"
 #import "MSParser.h"
 
 @interface ViewController ()
@@ -18,7 +18,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    NSString* str = @"sin()";
+    NSString* str = @"2(1+1)";
 //    str = @"-pow(1,2,3)";
     NSError* error;
     NSNumber* num = [MSParser parserComputeString:str error:&error];

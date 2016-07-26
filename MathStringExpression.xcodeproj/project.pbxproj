@@ -16,7 +16,7 @@
 		9F331A531D42592B009822C2 /* MSElementTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F331A3B1D42592B009822C2 /* MSElementTable.m */; };
 		9F331A541D42592B009822C2 /* MSParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F331A3D1D42592B009822C2 /* MSParser.m */; };
 		9F331A551D42592B009822C2 /* MSStack.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F331A3F1D42592B009822C2 /* MSStack.m */; };
-		9F331A561D42592B009822C2 /* MSStringScaner.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F331A411D42592B009822C2 /* MSStringScaner.m */; };
+		9F331A561D42592B009822C2 /* MSScaner.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F331A411D42592B009822C2 /* MSScaner.m */; };
 		9F331A571D42592B009822C2 /* NSError+MSExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F331A431D42592B009822C2 /* NSError+MSExpression.m */; };
 		9F331A581D42592B009822C2 /* MSConstant.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F331A461D42592B009822C2 /* MSConstant.m */; };
 		9F331A591D42592B009822C2 /* MSElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F331A481D42592B009822C2 /* MSElement.m */; };
@@ -44,8 +44,8 @@
 		9F331A3D1D42592B009822C2 /* MSParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSParser.m; sourceTree = "<group>"; };
 		9F331A3E1D42592B009822C2 /* MSStack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSStack.h; sourceTree = "<group>"; };
 		9F331A3F1D42592B009822C2 /* MSStack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSStack.m; sourceTree = "<group>"; };
-		9F331A401D42592B009822C2 /* MSStringScaner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSStringScaner.h; sourceTree = "<group>"; };
-		9F331A411D42592B009822C2 /* MSStringScaner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSStringScaner.m; sourceTree = "<group>"; };
+		9F331A401D42592B009822C2 /* MSScaner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSScaner.h; sourceTree = "<group>"; };
+		9F331A411D42592B009822C2 /* MSScaner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSScaner.m; sourceTree = "<group>"; };
 		9F331A421D42592B009822C2 /* NSError+MSExpression.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError+MSExpression.h"; sourceTree = "<group>"; };
 		9F331A431D42592B009822C2 /* NSError+MSExpression.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError+MSExpression.m"; sourceTree = "<group>"; };
 		9F331A451D42592B009822C2 /* MSConstant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSConstant.h; sourceTree = "<group>"; };
@@ -134,8 +134,8 @@
 				9F331A3D1D42592B009822C2 /* MSParser.m */,
 				9F331A3E1D42592B009822C2 /* MSStack.h */,
 				9F331A3F1D42592B009822C2 /* MSStack.m */,
-				9F331A401D42592B009822C2 /* MSStringScaner.h */,
-				9F331A411D42592B009822C2 /* MSStringScaner.m */,
+				9F331A401D42592B009822C2 /* MSScaner.h */,
+				9F331A411D42592B009822C2 /* MSScaner.m */,
 				9F331A421D42592B009822C2 /* NSError+MSExpression.h */,
 				9F331A431D42592B009822C2 /* NSError+MSExpression.m */,
 			);
@@ -242,7 +242,7 @@
 				9F331A5B1D42592B009822C2 /* MSNumber.m in Sources */,
 				9F331A5D1D42592B009822C2 /* MSPairOperator.m in Sources */,
 				9F331A5A1D42592B009822C2 /* MSFunctionOperator.m in Sources */,
-				9F331A561D42592B009822C2 /* MSStringScaner.m in Sources */,
+				9F331A561D42592B009822C2 /* MSScaner.m in Sources */,
 				9F331A551D42592B009822C2 /* MSStack.m in Sources */,
 				9F331A5C1D42592B009822C2 /* MSOperator.m in Sources */,
 				9F331A5E1D42592B009822C2 /* MSValueOperator.m in Sources */,
@@ -400,6 +400,7 @@
 				9F331A371D425902009822C2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

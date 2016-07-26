@@ -6,7 +6,7 @@
 //  Copyright © 2016年 NOVO. All rights reserved.
 //
 
-#import "MSStringScaner.h"
+#import "MSScaner.h"
 #import "MSElementTable.h"
 #import "MSOperator.h"
 #import "MSPairOperator.h"
@@ -22,7 +22,7 @@ typedef enum EnumCharType{
 }EnumCharType;
 
 
-@implementation MSStringScaner
+@implementation MSScaner
 + (void)scanString:(NSString*)string
              error:(NSError*__strong*)error
                block:(void(^)(MSElement* value,NSUInteger idx,BOOL isEnd,BOOL* stop))block
@@ -61,6 +61,7 @@ typedef enum EnumCharType{
         }
     }];
     if(*error) return;
+    [self scanRepairSpellByInElements:elementArr];
     [elementArr enumerateObjectsUsingBlock:^(MSElement * _Nonnull element, NSUInteger idx, BOOL * _Nonnull stop) {
         
         block(element , idx , (idx == elementArr.count-1) , stop);
@@ -217,6 +218,33 @@ typedef enum EnumCharType{
             [self toolCombineArr:splitedArr inRanges:rangs];
         }
     }];
+}
+
+/** 纠正语法错误 */
++ (void)scanRepairSpellByInElements:(NSMutableArray<MSElement*>*)elements
+{
+    //修复1：a(...)=>a*(...)
+    NSMutableIndexSet* set = [NSMutableIndexSet indexSet];
+    NSUInteger count = elements.count;
+    [elements enumerateObjectsUsingBlock:^(MSElement * _Nonnull element, NSUInteger idx, BOOL * _Nonnull stop) {
+        
+        if([element isKindOfClass:[MSPairOperator class]]&&
+           [[element valueForKey:@"opName"] isEqualToString:@"("]&&
+           idx>0){
+            MSElement* beforeElement = elements[idx-1];
+            if([beforeElement isKindOfClass:[MSNumber class]]){
+                [set addIndex:idx];
+            }
+        }
+    }];
+    if(set.count){
+        MSElementTable* elementTab = [MSElementTable defaultTable];
+        MSValueOperator* op = (id)[[elementTab elementsFromString:@"*"] firstObject];
+        //倒序插入防止越界
+        [set enumerateIndexesWithOptions:NSEnumerationReverse usingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
+            [elements insertObject:op atIndex:idx];
+        }];
+    }
 }
 
 + (void)toolCombineArr:(NSMutableArray<NSString*>*)arr inRanges:(NSArray<NSValue*>*)ranges

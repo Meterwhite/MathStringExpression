@@ -8,7 +8,7 @@
 
 #import "MSParser.h"
 #import "MSStack.h"
-#import "MSStringScaner.h"
+#import "MSScaner.h"
 #import "MSOperator.h"
 #import "MSPairOperator.h"
 #import "MSFunctionOperator.h"
@@ -28,7 +28,8 @@
 }
 
 /** 计算一个逆波兰式的结果 */
-+ (NSNumber*)parseComputeFromReversePolishArray:(NSMutableArray<MSElement*>*)reversePolishArray error:(NSError*__strong*)error
++ (NSNumber*)parseComputeFromReversePolishArray:(NSMutableArray<MSElement*>*)reversePolishArray
+                                          error:(NSError*__strong*)error
 {
     MSStack* tempStack = [MSStack stack];//存储临时计算结果
     [reversePolishArray enumerateObjectsUsingBlock:^(MSElement * _Nonnull element, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -115,7 +116,7 @@
     MSStack* opStack = [MSStack stack];//运算符栈
     MSStack* tempStack = [MSStack stack];//临时栈
     
-    [MSStringScaner scanString:inputString
+    [MSScaner scanString:inputString
                          error:error
                          block:^(MSElement *value, NSUInteger idx, BOOL isEnd, BOOL *stop) {
         
@@ -144,14 +145,15 @@
                     }];
                     if(!popedArr){
                         *error = [NSError errorWithReason:EnumMSErrorNotFind
-                                              description:@"运算栈中并没有找到对应的左括号"];
+                                              description:@"运算栈中缺少对应的左括号"];
                         *stop = YES;
                     }
                     [popedArr removeLastObject];//丢弃最后的左括号
                     [tempStack pushs:popedArr];
                 }else{
                     *error = [NSError errorWithReason:EnumMSErrorNotSupport
-                                          description:@"暂不支持处理的括号类型"];
+                                          description:@"暂不支持处理的括号类型"
+                                          elementInfo:value];
                     *stop = YES;
                 }
             }else{//遇到计算运算符
@@ -182,7 +184,8 @@
         }else if (value.elementType==EnumElementTypeUndefine){
             //处理未定义元素
             *error = [NSError errorWithReason:EnumMSErrorUnkownElement
-                                  description:[NSString stringWithFormat:@"转逆波兰式时遇到未定义的元素%@",value]];
+                                  description:[NSString stringWithFormat:@"转逆波兰式时遇到未定义的元素%@",value]
+                                  elementInfo:value];
             *stop = YES;
         }
     }];

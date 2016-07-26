@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "MSElement.h"
 
-@interface MSStringScaner : NSObject
+@interface MSScaner : NSObject
 
 + (void)scanString:(NSString*)string
              error:(NSError*__strong*)error

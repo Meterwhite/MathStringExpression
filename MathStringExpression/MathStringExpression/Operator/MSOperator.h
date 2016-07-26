@@ -19,7 +19,7 @@ typedef enum EnumOperatorStyle {
 @interface MSOperator : MSElement
 
 @property (nonatomic,copy,readonly) NSString* uuid;
-
+/** <#...#> */
 + (instancetype)operatorWithKeyValue:(NSDictionary*)keyValue;
 /** 操作符名 */
 @property (nonatomic,copy,readonly) NSString* opName;
