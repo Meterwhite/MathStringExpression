@@ -9,8 +9,7 @@
 #import "MSOperator.h"
 
 @interface MSOperator ()
-/** 对应JavaScript表达式运算符，默认无需设置 */
-@property (nonatomic,copy) MSOperator* jsMathTransferOperator;
+
 @end
 
 @implementation MSOperator

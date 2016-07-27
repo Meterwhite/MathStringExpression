@@ -15,7 +15,7 @@
  opName:原始运算符名
  showName:对应的表达式中的可替换成的运算符名
  level:运算符优先级
- jsMathTransferOperator:自定义运算符可设置对应的JavaScript表达式运算符，不设置时使用运算符本身
+ jsTransferOperator:自定义运算符可设置对应的JavaScript表达式运算符，不设置时使用运算符本身
  */
 
 /** 拷贝 */

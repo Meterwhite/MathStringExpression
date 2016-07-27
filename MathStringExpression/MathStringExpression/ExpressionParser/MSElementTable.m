@@ -342,6 +342,7 @@
     MSFunctionOperator* jsTransferOp = [funcOp copy];
     [jsTransferOp setValue:[NSString stringWithFormat:@"Math.%@",jsTransferOp.opName]
                     forKey:@"opName"];
+    funcOp.jsTransferOperator = jsTransferOp;
 }
 
 #pragma mark - 初始化
@@ -400,13 +401,19 @@ static MSElementTable * _elementTable;
 
 - (NSString *)description
 {
-#warning ...
-    return @"description";
+    NSMutableString* des = [NSMutableString new];
+    [des appendFormat:@"operatorTable=%@\nconstantTable=%@",
+     self.operatorTable.description,
+     self.constantTable.description];
+    return des;
 }
 
 - (NSString *)debugDescription
 {
-#warning ...
-    return @"debugDescription";
+    NSMutableString* des = [NSMutableString new];
+    [des appendFormat:@"operatorTable=%@\nconstantTable=%@",
+     self.operatorTable.description,
+     self.constantTable.description];
+    return des;
 }
 @end

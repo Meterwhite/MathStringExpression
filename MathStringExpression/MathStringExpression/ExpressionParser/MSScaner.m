@@ -223,9 +223,8 @@ typedef enum EnumCharType{
 /** 纠正语法错误 */
 + (void)scanRepairSpellByInElements:(NSMutableArray<MSElement*>*)elements
 {
-    //修复1：a(...)=>a*(...)
+    //修复1：...a(... => ...a*(...
     NSMutableIndexSet* set = [NSMutableIndexSet indexSet];
-    NSUInteger count = elements.count;
     [elements enumerateObjectsUsingBlock:^(MSElement * _Nonnull element, NSUInteger idx, BOOL * _Nonnull stop) {
         
         if([element isKindOfClass:[MSPairOperator class]]&&
