@@ -9,11 +9,13 @@
 #import "MSElement.h"
 
 @implementation MSElement
+@synthesize elementType = _elementType;
+
 - (instancetype)init
 {
     self = [super init];
     if (self) {
-        self.elementType = EnumElementTypeUndefine;
+        _elementType = EnumElementTypeUndefine;
     }
     return self;
 }

@@ -121,91 +121,129 @@
     [_abs computeWithBlock:^NSNumber *(NSArray *args) {
         return @(ABS([args[0] doubleValue]));
     }];
+    [self.class setDefaultJSFuncTransferOp:_abs];
     [self setElement:_abs];
     
     MSFunctionOperator* _acos =   [MSFunctionOperator operatorWithKeyValue:@{@"opName":@"acos",@"level":@(1),@"argsCount":@(1)}];
     [_acos computeWithBlock:^NSNumber *(NSArray *args) {
         return @(acosh([args[0] doubleValue]));
     }];
+    [self.class setDefaultJSFuncTransferOp:_acos];
     [self setElement:_acos];
     
     MSFunctionOperator* _asin =   [MSFunctionOperator operatorWithKeyValue:@{@"opName":@"asin",@"level":@(1),@"argsCount":@(1)}];
     [_asin computeWithBlock:^NSNumber *(NSArray *args) {
         return @(asinh([args[0] doubleValue]));
     }];
+    [self.class setDefaultJSFuncTransferOp:_asin];
     [self setElement:_asin];
     
     MSFunctionOperator* _atan =   [MSFunctionOperator operatorWithKeyValue:@{@"opName":@"atan",@"level":@(1),@"argsCount":@(1)}];
     [_atan computeWithBlock:^NSNumber *(NSArray *args) {
         return @(atanh([args[0] doubleValue]));
     }];
+    [self.class setDefaultJSFuncTransferOp:_atan];
     [self setElement:_atan];
     
     MSFunctionOperator* _atan2 =   [MSFunctionOperator operatorWithKeyValue:@{@"opName":@"atan2",@"level":@(1),@"argsCount":@(2)}];
     [_atan2 computeWithBlock:^NSNumber *(NSArray *args) {
         return @(atan2([args[0] doubleValue], [args[1] doubleValue]));
     }];
+    [self.class setDefaultJSFuncTransferOp:_atan2];
     [self setElement:_atan2];
+    
     //上舍入
     MSFunctionOperator* _ceil =   [MSFunctionOperator operatorWithKeyValue:@{@"opName":@"ceil",@"level":@(1),@"argsCount":@(1)}];
     [_ceil computeWithBlock:^NSNumber *(NSArray *args) {
         return @(ceil([args[0] doubleValue]));
     }];
+    [self.class setDefaultJSFuncTransferOp:_ceil];
     [self setElement:_ceil];
     
     MSFunctionOperator* _cos =   [MSFunctionOperator operatorWithKeyValue:@{@"opName":@"cos",@"level":@(1),@"argsCount":@(1)}];
     [_cos computeWithBlock:^NSNumber *(NSArray *args) {
         return @(cosh([args[0] doubleValue]));
     }];
+    [self.class setDefaultJSFuncTransferOp:_cos];
     [self setElement:_cos];
     
     MSFunctionOperator* _exp =   [MSFunctionOperator operatorWithKeyValue:@{@"opName":@"exp",@"level":@(1),@"argsCount":@(1)}];
     [_exp computeWithBlock:^NSNumber *(NSArray *args) {
         return @(exp([args[0] doubleValue]));
     }];
+    [self.class setDefaultJSFuncTransferOp:_exp];
     [self setElement:_exp];
     
+    //下舍入
     MSFunctionOperator* _floor =   [MSFunctionOperator operatorWithKeyValue:@{@"opName":@"floor",@"level":@(1),@"argsCount":@(1)}];
     [_floor computeWithBlock:^NSNumber *(NSArray *args) {
         return @(floor([args[0] doubleValue]));
     }];
+    [self.class setDefaultJSFuncTransferOp:_floor];
     [self setElement:_floor];
     
     MSFunctionOperator* _log =   [MSFunctionOperator operatorWithKeyValue:@{@"opName":@"log",@"level":@(1),@"argsCount":@(1)}];
     [_log computeWithBlock:^NSNumber *(NSArray *args) {
         return @(log([args[0] doubleValue]));
     }];
+    [self.class setDefaultJSFuncTransferOp:_log];
     [self setElement:_log];
     
     MSFunctionOperator* _max =   [MSFunctionOperator operatorWithKeyValue:@{@"opName":@"max",@"level":@(1),@"argsCount":@(1)}];
     [_max computeWithBlock:^NSNumber *(NSArray *args) {
         return @(MAX([args[0] doubleValue] , [args[1] doubleValue]));
     }];
+    [self.class setDefaultJSFuncTransferOp:_max];
     [self setElement:_max];
     
     MSFunctionOperator* _min =   [MSFunctionOperator operatorWithKeyValue:@{@"opName":@"min",@"level":@(1),@"argsCount":@(1)}];
     [_min computeWithBlock:^NSNumber *(NSArray *args) {
         return @(MIN([args[0] doubleValue] , [args[1] doubleValue]));
     }];
+    [self.class setDefaultJSFuncTransferOp:_min];
     [self setElement:_min];
     
     MSFunctionOperator* _pow =   [MSFunctionOperator operatorWithKeyValue:@{@"opName":@"pow",@"level":@(1),@"argsCount":@(2)}];
     [_pow computeWithBlock:^NSNumber *(NSArray *args) {
         return @(powf([args[0] floatValue], [args[1] floatValue]));
     }];
+    [self.class setDefaultJSFuncTransferOp:_pow];
     [self setElement:_pow];
     
     MSFunctionOperator* _random =   [MSFunctionOperator operatorWithKeyValue:@{@"opName":@"random",@"level":@(1),@"argsCount":@(0)}];
     [_random computeWithBlock:^NSNumber *(NSArray *args) {
         return @((double)(1+arc4random()%99)/100.0 );
     }];
+    [self.class setDefaultJSFuncTransferOp:_random];
     [self setElement:_random];
+    
+    MSFunctionOperator* _round =   [MSFunctionOperator operatorWithKeyValue:@{@"opName":@"round",@"level":@(1),@"argsCount":@(1)}];
+    [_round computeWithBlock:^NSNumber *(NSArray *args) {
+        return @(round([args[0] doubleValue]));
+    }];
+    [self.class setDefaultJSFuncTransferOp:_round];
+    [self setElement:_round];
     
     MSFunctionOperator* _sin =   [MSFunctionOperator operatorWithKeyValue:@{@"opName":@"sin",@"level":@(1),@"argsCount":@(1)}];
     [_sin computeWithBlock:^NSNumber *(NSArray *args) {
         return @(sinh([args[0] doubleValue]));
     }];
+    [self.class setDefaultJSFuncTransferOp:_sin];
     [self setElement:_sin];
+    
+    MSFunctionOperator* _sqrt =   [MSFunctionOperator operatorWithKeyValue:@{@"opName":@"sqrt",@"level":@(1),@"argsCount":@(1)}];
+    [_sqrt computeWithBlock:^NSNumber *(NSArray *args) {
+        return @(sqrt([args[0] doubleValue]));
+    }];
+    [self.class setDefaultJSFuncTransferOp:_sqrt];
+    [self setElement:_sqrt];
+    
+    MSFunctionOperator* _tan =   [MSFunctionOperator operatorWithKeyValue:@{@"opName":@"tan",@"level":@(1),@"argsCount":@(1)}];
+    [_tan computeWithBlock:^NSNumber *(NSArray *args) {
+        return @(tan([args[0] doubleValue]));
+    }];
+    [self.class setDefaultJSFuncTransferOp:_tan];
+    [self setElement:_tan];
     
     //..运算符1..//
     MSValueOperator* negative = [MSValueOperator operatorWithKeyValue:@{@"opName":@"-",@"level":@(2)
@@ -295,6 +333,15 @@
         }
         return conflictOps.lastObject;
     }];
+}
+
+#pragma mark - 工具
+
++ (void)setDefaultJSFuncTransferOp:(MSFunctionOperator*)funcOp
+{
+    MSFunctionOperator* jsTransferOp = [funcOp copy];
+    [jsTransferOp setValue:[NSString stringWithFormat:@"Math.%@",jsTransferOp.opName]
+                    forKey:@"opName"];
 }
 
 #pragma mark - 初始化

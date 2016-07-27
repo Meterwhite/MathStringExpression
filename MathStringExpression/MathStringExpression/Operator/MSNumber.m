@@ -10,12 +10,13 @@
 
 @implementation MSNumber
 @synthesize numberValue=_numberValue;
+@synthesize elementType = _elementType;
 
 - (instancetype)init
 {
     self = [super init];
     if (self) {
-        self.elementType = EnumElementTypeNumber;
+        _elementType = EnumElementTypeNumber;
     }
     return self;
 }

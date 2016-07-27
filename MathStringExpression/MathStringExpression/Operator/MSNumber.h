@@ -8,7 +8,9 @@
 
 #import <Foundation/Foundation.h>
 #import "MSElement.h"
-
+/**
+ *  数字
+ */
 @interface MSNumber : MSElement 
 @property (nonatomic,strong,readonly) NSNumber* numberValue;
 - (NSString *)description;

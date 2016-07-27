@@ -9,19 +9,22 @@
 #import "MSOperator.h"
 
 @interface MSOperator ()
+/** 对应JavaScript表达式运算符，默认无需设置 */
 @property (nonatomic,copy) MSOperator* jsMathTransferOperator;
 @end
 
 @implementation MSOperator
 @synthesize uuid=_uuid;
 @synthesize opName = _opName;
+@synthesize opStyle = _opStyle;
+@synthesize elementType = _elementType;
 
 - (instancetype)init
 {
     self = [super init];
     if (self) {
-        self.elementType = EnumElementTypeOperator;
-        self.opStyle = EnumOperatorStyleUndefine;
+        _elementType = EnumElementTypeOperator;
+        _opStyle = EnumOperatorStyleUndefine;
     }
     return self;
 }
@@ -40,10 +43,10 @@
 {
     MSOperator* re = [MSOperator new];
     if(re){
-        [re.opName setValue:self.opName forKey:@"opName"];;
+        [re setValue:self.opName forKey:@"opName"];;
+        [re setValue:@(self.opStyle) forKey:@"opStyle"];
         re.showName = self.showName;
         re.level = self.level;
-        re.opStyle = self.opStyle;
     }
     return re;
 }
