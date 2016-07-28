@@ -10,13 +10,12 @@
 
 @implementation MSNumber
 @synthesize numberValue=_numberValue;
-@synthesize elementType = _elementType;
 
 - (instancetype)init
 {
     self = [super init];
     if (self) {
-        _elementType = EnumElementTypeNumber;
+        [self setValue:@(EnumElementTypeNumber) forKey:@"elementType"];
     }
     return self;
 }
@@ -30,8 +29,23 @@
     return self.stringValue;
 }
 
+- (void)setStringValue:(NSString *)stringValue
+{
+    if(stringValue){
+        [super setStringValue:stringValue];
+        _numberValue = @([stringValue doubleValue]);
+    }
+}
+
 - (NSNumber *)numberValue
 {
-    return @([self.stringValue doubleValue]);
+    return _numberValue;
+}
+
+- (void)setNumberValue:(NSNumber *)numberValue
+{
+    if(_numberValue){
+        _numberValue = numberValue;
+    }
 }
 @end

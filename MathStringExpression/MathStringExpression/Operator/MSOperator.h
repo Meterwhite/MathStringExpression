@@ -40,7 +40,7 @@ typedef enum EnumOperatorStyle {
  该对象描述当作为JavaScript操作符时具有哪些信息。
  若该对象为nil时，默认用操作符自身来描述这些信息。
  */
-@property (nonatomic,copy)              MSOperator* jsTransferOperator;
+@property (nonatomic,strong)            MSOperator* jsTransferOperator;
 /** 操作符唯一标识 */
 @property (nonatomic,copy,readonly)     NSString* uuid;
 #pragma mark - 方法

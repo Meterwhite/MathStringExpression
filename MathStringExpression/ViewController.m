@@ -18,15 +18,19 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    NSString* str = @"2(1+1)";
-//    str = @"-pow(1,2,3)";
+    NSString* str = @"-sin(-PI)-abs(-1)";
     NSError* error;
     NSNumber* num = [MSParser parserComputeString:str error:&error];
+    NSString* jsExp = [MSParser parserJSExpressionFromString:str error:&error];
+    
     if(error){
+        
         NSLog(@"%@",error);
+        NSLog(@"%@",jsExp);
     } else{
         
         NSLog(@"%@",num);
+        NSLog(@"%@",jsExp);
     }
 }
 

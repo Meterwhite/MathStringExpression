@@ -50,7 +50,7 @@
     if(count==0)  return nil;
     NSAssert(self.stack.count>=count, @"获取栈内容时越界，stack.count=%@,yours=%@",@(self.stack.count),@(count));
     NSArray* popObjs = [self.stack objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange((self.stack.count-count),count)]];
-    [self.stack removeObjectsInArray:popObjs];
+    [self.stack removeObjectsInRange:NSMakeRange(self.stack.count-count, count)];
     return [popObjs.reverseObjectEnumerator.allObjects mutableCopy];
 }
 
@@ -106,5 +106,14 @@
     }];
     if(popIdx != -1) return [self pops:popIdx+1];
     return nil;
+}
+
+- (NSString *)description
+{
+    return self.stack.reverseObjectEnumerator.allObjects.description;
+}
+- (NSString *)debugDescription
+{
+    return self.stack.reverseObjectEnumerator.allObjects.description;
 }
 @end

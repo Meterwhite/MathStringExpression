@@ -12,5 +12,5 @@
 @interface MSParser : NSObject
 
 + (NSNumber*)parserComputeString:(NSString*)string error:(NSError*__strong*)error;
-
++ (NSString*)parserJSExpressionFromString:(NSString*)string error:(NSError*__strong*)error;
 @end

@@ -9,13 +9,11 @@
 #import "MSPairOperator.h"
 
 @implementation MSPairOperator
-@synthesize elementType=_elementType;
-@synthesize opStyle=_opStyle;
 - (instancetype)init
 {
     self = [super init];
     if (self) {
-        _opStyle = EnumOperatorStylePair;
+        [self setValue:@(EnumOperatorStylePair) forKey:@"opStyle"];
     }
     return self;
 }

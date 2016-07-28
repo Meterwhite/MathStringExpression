@@ -25,4 +25,7 @@
 - (void)stackEnumerateObjectsUsingBlock:(void(^)(id obj,NSUInteger idx,BOOL* stop))block;
 /** 在block中出栈，返回YES时pop当前元素及之前元素 */
 - (NSMutableArray*)stackPopObjectsUsingBlock:(BOOL(^)(id obj,NSUInteger idx,BOOL* stop))block;
+
+- (NSString *)description;
+- (NSString *)debugDescription;
 @end

@@ -13,14 +13,12 @@
 @end
 
 @implementation MSValueOperator
-@synthesize elementType=_elementType;
-@synthesize opStyle=_opStyle;
 
 - (instancetype)init
 {
     self = [super init];
     if (self) {
-        _opStyle = EnumOperatorStyleValue;
+        [self setValue:@(EnumOperatorStyleValue) forKey:@"opStyle"];
         self.direction = EnumOperatorDirectionLeftToRight;
         self.argsCount = 2;
     }

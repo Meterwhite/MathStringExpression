@@ -12,13 +12,12 @@
 @end
 
 @implementation MSFunctionOperator
-@synthesize opStyle = _opStyle;
 
 - (instancetype)init
 {
     self = [super init];
     if (self) {
-        _opStyle = EnumOperatorStyleFunction;
+        [self setValue:@(EnumOperatorStyleFunction) forKey:@"opStyle"];
         self.argsCount = 1;
     }
     return self;

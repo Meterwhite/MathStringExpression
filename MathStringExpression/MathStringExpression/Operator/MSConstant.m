@@ -9,8 +9,7 @@
 #import "MSConstant.h"
 
 @implementation MSConstant
-@synthesize numberValue=_numberValue;
-@synthesize name = _name;
+
 
 + (instancetype)constantWithKeyValue:(NSDictionary*)keyValue
 {
@@ -21,8 +20,4 @@
     return re;
 }
 
-- (NSNumber *)numberValue
-{
-    return _numberValue;
-}
 @end

@@ -14,15 +14,13 @@
 
 @implementation MSOperator
 @synthesize uuid=_uuid;
-@synthesize opName = _opName;
 @synthesize opStyle = _opStyle;
-@synthesize elementType = _elementType;
 
 - (instancetype)init
 {
     self = [super init];
     if (self) {
-        _elementType = EnumElementTypeOperator;
+        [self setValue:@(EnumElementTypeOperator) forKey:@"elementType"];
         _opStyle = EnumOperatorStyleUndefine;
     }
     return self;

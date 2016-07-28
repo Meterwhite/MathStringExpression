@@ -14,6 +14,7 @@
 /** 初始化可选：
  name:原始常量名
  showName:对应的表达式中的自定义的常量名
+ numberValue:常量值
  */
 + (instancetype)constantWithKeyValue:(NSDictionary*)keyValue;
 /** 常量名 */

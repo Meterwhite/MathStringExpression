@@ -7,7 +7,7 @@
 //
 
 #import "MSOperator.h"
-/** 计算方向 */
+/** 结合方向 */
 typedef enum EnumOperatorDirection
 {
     EnumOperatorDirectionLeftToRight = 0,//默认
