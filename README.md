@@ -1,5 +1,6 @@
 #MathStringExpression
-![MathStringExpression icon](http://img5.imgtn.bdimg.com/it/u=1799278720,627955741&fm=21&gp=0.jpg)
+
+![alt icon](http://pic.sucaibar.com/pic/201306/22/dbd48ae401_96.png)
 
 ## 简介
 * 为需要开发计算器的开发者提供的一个便捷
