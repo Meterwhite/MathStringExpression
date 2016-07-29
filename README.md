@@ -48,9 +48,9 @@ pi.showName = @"π";//设置表现名
 //可解析带有π的表达式
 ```
 
-##重名不同优先级运算符解决冲突
+##重名不同优先级运算符冲突的判定
 ```objc
-//例如解决负号和减号冲突的样例
+//例如解决负号和减号判定的样例
 [[MSElementTable defaultTable] handleConflictOperator:@"-"
                   usingBlock:^MSOperator *(NSArray<MSOperator*>* conflictOps,
                                           NSUInteger idx ,
