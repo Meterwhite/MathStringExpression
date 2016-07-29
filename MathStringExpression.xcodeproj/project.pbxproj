@@ -25,6 +25,7 @@
 		9F331A5C1D42592B009822C2 /* MSOperator.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F331A4E1D42592B009822C2 /* MSOperator.m */; };
 		9F331A5D1D42592B009822C2 /* MSPairOperator.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F331A501D42592B009822C2 /* MSPairOperator.m */; };
 		9F331A5E1D42592B009822C2 /* MSValueOperator.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F331A521D42592B009822C2 /* MSValueOperator.m */; };
+		9F4FFEDB1D4BD0680088D54A /* Class.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F4FFEDA1D4BD0680088D54A /* Class.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -63,6 +64,7 @@
 		9F331A501D42592B009822C2 /* MSPairOperator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = MSPairOperator.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		9F331A511D42592B009822C2 /* MSValueOperator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSValueOperator.h; sourceTree = "<group>"; };
 		9F331A521D42592B009822C2 /* MSValueOperator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSValueOperator.m; sourceTree = "<group>"; };
+		9F4FFEDA1D4BD0680088D54A /* Class.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Class.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,6 +114,7 @@
 		9F331A211D425902009822C2 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				9F4FFEDA1D4BD0680088D54A /* Class.png */,
 				9F331A221D425902009822C2 /* main.m */,
 			);
 			name = "Supporting Files";
@@ -224,6 +227,7 @@
 			files = (
 				9F331A311D425902009822C2 /* LaunchScreen.storyboard in Resources */,
 				9F331A2E1D425902009822C2 /* Assets.xcassets in Resources */,
+				9F4FFEDB1D4BD0680088D54A /* Class.png in Resources */,
 				9F331A2C1D425902009822C2 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
