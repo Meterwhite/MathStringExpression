@@ -21,10 +21,13 @@
 #import "MathStringExpression.h"
 ```
 
-##直接使用
+##计算表达式
 ```objc
 NSNumber* computeResult = [MSParser parserComputeString:@"2(-1*3)+random()" error:nil];
 ```
+##运算符类图
+![alt 类图](https://raw.githubusercontent.com/qddnovo/MathStringExpression/master/MathStringExpression/Class.png)
+
 ##自定义运算符
 ```objc
 //自定义次方算术运算符^，可知优先级与*号相同
