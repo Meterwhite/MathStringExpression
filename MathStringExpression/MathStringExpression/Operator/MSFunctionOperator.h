@@ -8,7 +8,7 @@
 
 #import "MSOperator.h"
 /**
- *  函数
+ *  函数运算符
  */
 @interface MSFunctionOperator : MSOperator
 /** 初始化可选项：

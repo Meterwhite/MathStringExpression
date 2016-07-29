@@ -8,7 +8,7 @@
 
 #import "MSOperator.h"
 /**
- *  括号
+ *  括号运算符
  */
 @interface MSPairOperator : MSOperator
 /** 初始化可选项：

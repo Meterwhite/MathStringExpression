@@ -18,7 +18,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    NSString* str = @"-sin(-PI)-abs(-1)";
+    NSString* str = @"-sin(-PI)-abs(-1)+pow(-1,-5)";
     NSError* error;
     NSNumber* num = [MSParser parserComputeString:str error:&error];
     NSString* jsExp = [MSParser parserJSExpressionFromString:str error:&error];

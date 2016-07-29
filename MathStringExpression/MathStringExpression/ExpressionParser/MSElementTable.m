@@ -24,7 +24,13 @@
 
 
 - (void)handleConflictOperator:(NSString *)opName
-                    usingBlock:(MSOperator *(^)(NSMutableArray<MSOperator *> *, NSUInteger, NSMutableArray<MSElement *> *))block
+                    usingBlock:(MSOperator *(^)
+                                (
+                                    NSArray<MSOperator*>* conflictOps,
+                                    NSUInteger idx ,
+                                    NSArray<MSElement*>* beforeElements,
+                                    NSArray<NSString*>* elementStrings)
+                                )block
 {
     if(!block)  return;
     NSAssert(opName, @"运算符名opName不能为nil");
@@ -318,21 +324,25 @@
 /** 默认重名运算符处理 */
 - (void)setDefauleConflictOperator
 {
-    [self handleConflictOperator:@"-" usingBlock:^MSOperator *(NSMutableArray<MSOperator *> *conflictOps, NSUInteger idx, NSMutableArray<MSElement *> *beforeElements) {
-        if(idx == 0){
-            //前一个元素不存在或者是左括号或优先级小于负号的则为负号
-            return conflictOps.firstObject;
-        }else if ([[beforeElements lastObject] isKindOfClass:[MSPairOperator class]]){
-            if([((MSPairOperator*)[beforeElements lastObject]).opName isEqualToString:@"("]){
-                return conflictOps.firstObject;
-            }
-        }else if([[beforeElements lastObject] isKindOfClass:[MSValueOperator class]]){
-            if(((MSValueOperator*)[beforeElements lastObject]).level >= 2){
-                return conflictOps.firstObject;
-            }
-        }
-        return conflictOps.lastObject;
-    }];
+    [self handleConflictOperator:@"-"
+                      usingBlock:^MSOperator *(NSArray<MSOperator*>* conflictOps,
+                                               NSUInteger idx ,
+                                               NSArray<MSElement*>* beforeElements,
+                                               NSArray<NSString*>* elementStrings) {
+                          if(idx == 0){
+                              //前一个元素不存在或者是左括号或优先级小于负号的则为负号
+                              return conflictOps.firstObject;
+                          }else if ([[beforeElements lastObject] isKindOfClass:[MSPairOperator class]]){
+                              if([((MSPairOperator*)[beforeElements lastObject]).opName isEqualToString:@"("]){
+                                  return conflictOps.firstObject;
+                              }
+                          }else if([[beforeElements lastObject] isKindOfClass:[MSValueOperator class]]){
+                              if(((MSValueOperator*)[beforeElements lastObject]).level >= 2){
+                                  return conflictOps.firstObject;
+                              }
+                          }
+                          return conflictOps.lastObject;
+                      }];
 }
 
 #pragma mark - 工具

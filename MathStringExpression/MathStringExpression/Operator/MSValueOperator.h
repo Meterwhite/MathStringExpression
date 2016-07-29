@@ -15,7 +15,7 @@ typedef enum EnumOperatorDirection
 }EnumOperatorDirection;
 
 /**
- *  运算符
+ *  算术运算符
  */
 @interface MSValueOperator : MSOperator
 /** 初始化可选项：

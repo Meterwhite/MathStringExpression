@@ -26,8 +26,8 @@
  *  处理运算符重名（opName）但优先级不同的冲突的判定。例如：负号和减号
  *
  *  @param opName 将判定冲突的运算符名
- *  @param block  conflictOps：重名运算符集合并按优先级由高至低排，idx：当前处索引，beforeElements：当前运算符之前所有元素
+ *  @param block  conflictOps：重名运算符集合并按优先级由高至低排，idx：当前处索引，beforeElements：当前运算符之前所有元素，elementStrings：所有切割的字符串元素
  */
 - (void)handleConflictOperator:(NSString*)opName
-                    usingBlock:(MSOperator*(^)(NSMutableArray<MSOperator*>* conflictOps, NSUInteger idx ,NSMutableArray<MSElement*>* beforeElements))block;
+                    usingBlock:(MSOperator*(^)(NSArray<MSOperator*>* conflictOps, NSUInteger idx ,NSArray<MSElement*>* beforeElements,NSArray<NSString*>* elementStrings))block;
 @end

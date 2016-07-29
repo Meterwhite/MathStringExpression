@@ -308,7 +308,7 @@
     if([operator isKindOfClass:[MSValueOperator class]]){
         
         if(numStrs.count == 1){
-            if(((MSValueOperator*)operator).direction){
+            if(((MSValueOperator*)operator).direction == EnumOperatorDirectionLeftToRight){
                 
                 [jsExpression appendString:[NSString stringWithFormat:@"(%@%@)",
                                             operator.opName,numStrs[0]]];

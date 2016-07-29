@@ -37,17 +37,17 @@ typedef enum EnumCharType{
             //查询到单个元素
             [elementArr addObject:elementInArr.firstObject];
         }else{
-            //查询到多个元素，目前只有符号和减号需要在框架内处理，后将提供方法处理，分内部的和用户的
+            
             if([elementInArr firstObject].elementType == EnumElementTypeOperator){
                 NSString* name = ((MSOperator*)[elementInArr firstObject]).opName;
-                MSOperator*(^conflictHandleBlock)(NSMutableArray<MSOperator*>* conflictOps, NSUInteger idx ,NSMutableArray<MSElement*>* beforeElements)
+                MSOperator*(^conflictHandleBlock)(NSArray<MSOperator*>* conflictOps, NSUInteger idx ,NSArray<MSElement*>* beforeElements,NSArray<NSString*>* elementStrings)
                 = [[MSElementTable defaultTable] valueForKey:@"conflictOperatorDict"][name];
                 if(!conflictHandleBlock){
                     *error = [NSError errorWithReason:EnumMSErrorUnclearMeaning
                                           description:[NSString stringWithFormat:@"未能提供'%@'含义的判定",name]];
                     *stop = YES;
                 }
-                MSOperator* choosedOp = conflictHandleBlock((id)elementInArr,idx,elementArr);
+                MSOperator* choosedOp = conflictHandleBlock((id)elementInArr,idx,elementArr,splitedArr);
                 if(choosedOp){
                     [elementArr addObject:choosedOp];
                 }else{
@@ -224,7 +224,7 @@ typedef enum EnumCharType{
 + (void)scanRepairSpellByInElements:(NSMutableArray<MSElement*>*)elements
 {
     //修复1：...a(... => ...a*(...
-    NSMutableIndexSet* set = [NSMutableIndexSet indexSet];
+    NSMutableIndexSet* setFor1 = [NSMutableIndexSet indexSet];
     [elements enumerateObjectsUsingBlock:^(MSElement * _Nonnull element, NSUInteger idx, BOOL * _Nonnull stop) {
         
         if([element isKindOfClass:[MSPairOperator class]]&&
@@ -232,20 +232,20 @@ typedef enum EnumCharType{
            idx>0){
             MSElement* beforeElement = elements[idx-1];
             if([beforeElement isKindOfClass:[MSNumber class]]){
-                [set addIndex:idx];
+                [setFor1 addIndex:idx];
             }
         }
     }];
-    if(set.count){
+    if(setFor1.count){
         MSElementTable* elementTab = [MSElementTable defaultTable];
         MSValueOperator* op = (id)[[elementTab elementsFromString:@"*"] firstObject];
         //倒序插入防止越界
-        [set enumerateIndexesWithOptions:NSEnumerationReverse usingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
+        [setFor1 enumerateIndexesWithOptions:NSEnumerationReverse usingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
             [elements insertObject:op atIndex:idx];
         }];
     }
 }
-
+#pragma mark - 工具
 + (void)toolCombineArr:(NSMutableArray<NSString*>*)arr inRanges:(NSArray<NSValue*>*)ranges
 {
     if(!ranges.count)   return;
@@ -257,7 +257,6 @@ typedef enum EnumCharType{
         [strs enumerateObjectsUsingBlock:^(NSString*  _Nonnull str, NSUInteger idx, BOOL * _Nonnull stop) {
             [tempStr appendString:str];
         }];
-        
         [arr replaceObjectsInRange:rangeV.rangeValue withObjectsFromArray:@[tempStr]];
     }];
 }
