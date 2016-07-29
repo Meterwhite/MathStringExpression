@@ -16,7 +16,7 @@ typedef enum EnumElementType{
 
 @interface MSElement : NSObject
 @property (nonatomic,assign,readonly) EnumElementType elementType;
-/** 输入的原始值 */
+/** 来自表达式的原始值 */
 @property (nonatomic,copy) NSString* stringValue;
 
 - (NSString *)description;
