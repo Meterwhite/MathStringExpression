@@ -50,7 +50,7 @@ pi.showName = @"π";//设置表现名
 
 ##重名不同优先级运算符冲突的判定
 ```objc
-//例如解决负号和减号判定的样例
+//例如项目中已实现了的，解决负号和减号判定的样例
 [[MSElementTable defaultTable] handleConflictOperator:@"-"
                   usingBlock:^MSOperator *(NSArray<MSOperator*>* conflictOps,
                                           NSUInteger idx ,
