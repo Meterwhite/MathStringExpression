@@ -1,11 +1,11 @@
-# MathStringExpression
+#MathStringExpression
 ![MathStringExpression icon](http://img5.imgtn.bdimg.com/it/u=1799278720,627955741&fm=21&gp=0.jpg)
 
 ## 简介
 * 为需要开发计算器的开发者提供的一个便捷
 * 计算字符串数学表达式
 * 自定义运算符，计算方式
-* 可将表达式转JavaScript表达式让JavaScript引擎计算
+* 将表达式转JavaScript表达式，让JavaScript引擎实现计算
 * 持续维护
 * A convenience for developers who need to develop calculators.
 * Mathematical expression for calculating string
