@@ -21,4 +21,6 @@
 @property (nonatomic,strong,readonly) NSString* name;
 /** 常数表达式中表现名，默认nil */
 @property (nonatomic,strong) NSString* showName;
+
+- (instancetype)copy;
 @end

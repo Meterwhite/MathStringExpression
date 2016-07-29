@@ -77,13 +77,17 @@
         if((weakSelf.operatorSearchType&EnumOperatorSearchName) == EnumOperatorSearchName){
             
             if([string isEqualToString:opertaor.name]){
-                opertaor.stringValue = string;
-                [re addObject: opertaor];
+                
+                MSOperator* tOP =[opertaor copy];
+                tOP.stringValue = string;
+                [re addObject: tOP];
             }
         }else if ((weakSelf.operatorSearchType&EnumOperatorSearchShowName) == EnumOperatorSearchShowName){
             if([string isEqualToString:opertaor.showName]){
-                opertaor.stringValue = string;
-                [re addObject: opertaor];
+                
+                MSOperator* tOP =[opertaor copy];
+                tOP.stringValue = string;
+                [re addObject: tOP];
             }
         }
     }];
@@ -104,13 +108,17 @@
         if((weakSelf.operatorSearchType&EnumOperatorSearchName) == EnumOperatorSearchName){
             
             if([string isEqualToString:constant.name]){
-                constant.stringValue = string;
-                [re addObject: constant];
+                
+                MSConstant* tConstant = [constant copy];
+                tConstant.stringValue = string;
+                [re addObject: tConstant];
             }
         }else if ((weakSelf.operatorSearchType&EnumOperatorSearchShowName) == EnumOperatorSearchShowName){
             if([string isEqualToString:constant.showName]){
-                constant.stringValue = string;
-                [re addObject: constant];
+                
+                MSConstant* tConstant = [constant copy];
+                tConstant.stringValue = string;
+                [re addObject: tConstant];
             }
         }
     }];

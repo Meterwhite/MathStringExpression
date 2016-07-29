@@ -42,9 +42,12 @@
     if(re){
         [re setValue:self.name forKey:@"name"];
         [re setValue:@(self.opStyle) forKey:@"opStyle"];
+        [re setValue:self.computeBlock forKey:@"computeBlock"];
+        [re setValue:[self valueForKey:@"blockCustomToExpression"] forKey:@"blockCustomToExpression"];
         re.showName = self.showName;
         re.level = self.level;
         re.argsCount = self.argsCount;
+        re.jsTransferOperator = self.jsTransferOperator;
     }
     return re;
 }

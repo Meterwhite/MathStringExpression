@@ -49,6 +49,8 @@
     if(re){
         [re setValue:self.name forKey:@"name"];;
         [re setValue:@(self.opStyle) forKey:@"opStyle"];
+        [re setValue:self.blockCustomToExpression forKey:@"blockCustomToExpression"];
+        re.jsTransferOperator = self.jsTransferOperator;
         re.showName = self.showName;
         re.level = self.level;
     }

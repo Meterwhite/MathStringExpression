@@ -20,4 +20,14 @@
     return re;
 }
 
+- (instancetype)copy
+{
+    MSConstant* re = [MSConstant new];
+    if(re){
+        [re setValue:self.name forKey:@"name"];
+        [re setValue:self.numberValue forKey:@"numberValue"];
+        re.showName = self.showName;
+    }
+    return re;
+}
 @end
