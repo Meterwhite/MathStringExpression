@@ -13,7 +13,7 @@
 * Mathematical expression for calculating string
 * Custom operators and calculation methods
 * JavaScript expression can be transferred to the JavaScript engine to calculate the expression
-* start me,10 times a night
+* start once,ten times a night
 
 ##如何使用
 ```objc
@@ -92,7 +92,7 @@ MSOperator* sqr_js = [MSOperator operatorWithKeyValue:@{@"name":@"Math.pow",@"le
 _sqr.jsTransferOperator = sqr_js;
 ```
 
-##表达式转JavaScript表达式中JavaScript不存在的表达式
+##转为JavaScript中不存在的表达形式
 ```objc
 //承接上例
 //这里自定义如何输出字符串表达式，用于转换到JavaScript表达式
