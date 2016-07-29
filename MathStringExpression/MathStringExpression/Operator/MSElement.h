@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
+/** 元素类型 */
 typedef enum EnumElementType{
     EnumElementTypeUndefine,
     EnumElementTypeNumber,

@@ -9,12 +9,19 @@
 #import "MSOperator.h"
 
 @interface MSOperator ()
-
+/** 自定义转表达式拼接规则block */
+@property (nonatomic,copy) NSString*(^blockCustomToExpression)(NSString* name,NSArray<NSString*>* args);
 @end
 
 @implementation MSOperator
 @synthesize uuid=_uuid;
 @synthesize opStyle = _opStyle;
+
+
+- (void)customToExpressionUsingBlock:(NSString*(^)(NSString* name,NSArray<NSString*>* args))block
+{
+    self.blockCustomToExpression = block;
+}
 
 - (instancetype)init
 {
@@ -40,7 +47,7 @@
 {
     MSOperator* re = [MSOperator new];
     if(re){
-        [re setValue:self.opName forKey:@"opName"];;
+        [re setValue:self.name forKey:@"name"];;
         [re setValue:@(self.opStyle) forKey:@"opStyle"];
         re.showName = self.showName;
         re.level = self.level;
@@ -60,18 +67,18 @@
 
 - (NSString *)description
 {
-    return self.opName;
+    return self.name;
 }
 
 - (NSString *)debugDescription
 {
-    return self.opName;
+    return self.name;
 }
 
 - (NSString *)uuid
 {
     if(!_uuid){
-        _uuid = [NSString stringWithFormat:@"%@%ld",self.opName,(long)self.level];
+        _uuid = [NSString stringWithFormat:@"%@%ld",self.name,(long)self.level];
     }
     return _uuid;
 }

@@ -22,7 +22,7 @@
 {
     MSPairOperator* re = [MSPairOperator new];
     if(re){
-        [re setValue:self.opName forKey:@"opName"];
+        [re setValue:self.name forKey:@"name"];
         [re setValue:@(self.opStyle) forKey:@"opStyle"];
         re.showName = self.showName;
         re.level = self.level;

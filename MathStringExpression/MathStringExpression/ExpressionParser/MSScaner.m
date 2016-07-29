@@ -39,7 +39,7 @@ typedef enum EnumCharType{
         }else{
             
             if([elementInArr firstObject].elementType == EnumElementTypeOperator){
-                NSString* name = ((MSOperator*)[elementInArr firstObject]).opName;
+                NSString* name = ((MSOperator*)[elementInArr firstObject]).name;
                 MSOperator*(^conflictHandleBlock)(NSArray<MSOperator*>* conflictOps, NSUInteger idx ,NSArray<MSElement*>* beforeElements,NSArray<NSString*>* elementStrings)
                 = [[MSElementTable defaultTable] valueForKey:@"conflictOperatorDict"][name];
                 if(!conflictHandleBlock){
@@ -144,7 +144,7 @@ typedef enum EnumCharType{
     [[operatorTable allValues] enumerateObjectsUsingBlock:^(MSOperator * _Nonnull operator, NSUInteger idx, BOOL * _Nonnull stop) {
         
         //需要合并的
-        if(operator.opStyle == EnumOperatorStyleFunction && [originString containsString:operator.opName]){
+        if(operator.opStyle == EnumOperatorStyleFunction && [originString containsString:operator.name]){
             
             NSMutableArray<NSValue*>* rangs = [NSMutableArray new];
             __block NSRange rangeCombine = NSMakeRange(NSNotFound, 0);
@@ -153,15 +153,15 @@ typedef enum EnumCharType{
             [splitedArr enumerateObjectsUsingBlock:^(NSString * _Nonnull aString, NSUInteger idx, BOOL * _Nonnull stop) {
                 
                 if(rangeCombine.length==0){//寻头
-                    if([operator.opName containsString:aString]&&
-                       [operator.opName rangeOfString:aString].location==0){
+                    if([operator.name containsString:aString]&&
+                       [operator.name rangeOfString:aString].location==0){
                         rangeCombine.location = idx;
                         rangeCombine.length = 1;
                         [tempStr appendString:aString];
                     }
                 }else{//验证整体中
                     [tempStr appendString:aString];
-                    if ([operator.opName containsString:tempStr]){//确认部分
+                    if ([operator.name containsString:tempStr]){//确认部分
                         rangeCombine.length++;
                         if(idx == splitedArrLength-1){//如果是最后一个元素确认一次合并
                             [rangs addObject:[NSValue valueWithRange:rangeCombine]];
@@ -228,7 +228,7 @@ typedef enum EnumCharType{
     [elements enumerateObjectsUsingBlock:^(MSElement * _Nonnull element, NSUInteger idx, BOOL * _Nonnull stop) {
         
         if([element isKindOfClass:[MSPairOperator class]]&&
-           [[element valueForKey:@"opName"] isEqualToString:@"("]&&
+           [[element valueForKey:@"name"] isEqualToString:@"("]&&
            idx>0){
             MSElement* beforeElement = elements[idx-1];
             if([beforeElement isKindOfClass:[MSNumber class]]){

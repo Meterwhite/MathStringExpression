@@ -19,7 +19,7 @@ typedef enum EnumOperatorDirection
  */
 @interface MSValueOperator : MSOperator
 /** 初始化可选项：
- opName:原始运算符名
+ name:原始运算符名
  showName:对应的表达式中的可替换成的运算符名
  level:运算符优先级
  argsCount:计算数
