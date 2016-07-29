@@ -8,12 +8,12 @@
 * 自定义运算符，计算方式
 * 将表达式转JavaScript表达式，让JavaScript引擎实现计算
 * 持续维护
+* 为人点赞，日进万贯
 * A convenience for developers who need to develop calculators.
 * Mathematical expression for calculating string
 * Custom operators and calculation methods
 * JavaScript expression can be transferred to the JavaScript engine to calculate the expression
-* u can u bb
-
+* start me,10 times a night
 
 ##如何使用
 ```objc
