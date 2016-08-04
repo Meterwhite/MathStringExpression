@@ -9,7 +9,6 @@
 * 将表达式转JavaScript表达式，让JavaScript引擎实现计算
 * 持续维护
 * 小众需求，谢谢点赞
-
 * A convenience for developers who need to develop calculators.
 * Mathematical expression for calculating string
 * Custom operators and calculation methods
