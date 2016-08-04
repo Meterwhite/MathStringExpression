@@ -3,17 +3,18 @@
 ![alt icon](http://pic.sucaibar.com/pic/201306/22/dbd48ae401_96.png)
 
 ## 简介
-* 为需要开发计算器的开发者提供的一个便捷
+* 为需要开发iOS计算器的开发者提供的一个便捷
 * 计算字符串数学表达式
 * 自定义运算符，计算方式
 * 将表达式转JavaScript表达式，让JavaScript引擎实现计算
 * 持续维护
-* 为人点赞，日进万贯
+* 小众需求，谢谢点赞
+
 * A convenience for developers who need to develop calculators.
 * Mathematical expression for calculating string
 * Custom operators and calculation methods
 * JavaScript expression can be transferred to the JavaScript engine to calculate the expression
-* start once,ten times a night
+* Star once,ten times a night
 
 ##如何使用
 ```objc
