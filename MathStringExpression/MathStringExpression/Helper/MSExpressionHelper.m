@@ -12,10 +12,6 @@
 #import "MSPairOperator.h"
 
 @implementation MSExpressionHelper
-+ (NSString*)helperInPairStringWith:(NSString*)string at:(NSUInteger)at
-{
-    return @"";
-}
 
 + (BOOL)helperCheckExpression:(NSString*)expression usingBlock:(void(^)(NSError* error,NSRange range))block
 {
