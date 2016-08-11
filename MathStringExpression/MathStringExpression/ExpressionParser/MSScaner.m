@@ -21,46 +21,62 @@ typedef enum EnumCharType{
     EnumCharTypeOthers
 }EnumCharType;
 
-
 @implementation MSScaner
 + (void)scanString:(NSString*)string
              error:(NSError*__strong*)error
                block:(void(^)(MSElement* value,NSUInteger idx,BOOL isEnd,BOOL* stop))block
 {
-    if(!block) return;
     NSMutableArray<NSString*>* splitedArr = [self scanSplitString:string];
     NSMutableArray<MSElement*>* elementArr = [NSMutableArray new];
+    __block NSUInteger curstrIdx = 0;
     [splitedArr enumerateObjectsUsingBlock:^(NSString*  _Nonnull elementStr, NSUInteger idx, BOOL * _Nonnull stop) {
         
         NSMutableArray<MSElement*>* elementInArr = [[MSElementTable defaultTable] elementsFromString:elementStr];
         if(elementInArr.count==1){
             //查询到单个元素
-            [elementArr addObject:elementInArr.firstObject];
+            if(elementInArr.firstObject.elementType == EnumElementTypeUndefine){
+                NSString* strVal = ((MSOperator*)[elementInArr firstObject]).stringValue;
+                *error = [NSError errorWithReason:EnumMSErrorUnkownElement
+                                      description:[NSString stringWithFormat:@"未知元素'%@'",strVal]
+                                      elementInfo:elementInArr.firstObject];
+                [(*error) setInfo:[NSValue valueWithRange:NSMakeRange(curstrIdx, elementStr.length)] forKey:@"range"];
+                *stop = YES;
+            }else{
+                elementInArr.firstObject.originIndex = @(curstrIdx);
+                [elementArr addObject:elementInArr.firstObject];
+            }
         }else{
             
+            NSString* name = ((MSOperator*)[elementInArr firstObject]).name;
             if([elementInArr firstObject].elementType == EnumElementTypeOperator){
-                NSString* name = ((MSOperator*)[elementInArr firstObject]).name;
                 MSOperator*(^conflictHandleBlock)(NSArray<MSOperator*>* conflictOps, NSUInteger idx ,NSArray<MSElement*>* beforeElements,NSArray<NSString*>* elementStrings)
                 = [[MSElementTable defaultTable] valueForKey:@"conflictOperatorDict"][name];
                 if(!conflictHandleBlock){
                     *error = [NSError errorWithReason:EnumMSErrorUnclearMeaning
-                                          description:[NSString stringWithFormat:@"未能提供'%@'含义的判定",name]];
+                                          description:[NSString stringWithFormat:@"需要提供'%@'的判定",name]];
+                    [(*error) setInfo:[NSValue valueWithRange:NSMakeRange(curstrIdx, elementStr.length)] forKey:@"range"];
                     *stop = YES;
                 }
                 MSOperator* choosedOp = conflictHandleBlock((id)elementInArr,idx,elementArr,splitedArr);
+                choosedOp.originIndex = @(curstrIdx);
                 if(choosedOp){
                     [elementArr addObject:choosedOp];
                 }else{
                     *error = [NSError errorWithReason:EnumMSErrorUnclearMeaning
-                                          description:[NSString stringWithFormat:@"不能判断'%@'的含义",name]];
+                                          description:[NSString stringWithFormat:@"不能判断'%@'的含义",name]
+                                          elementInfo:choosedOp];
                     *stop = YES;
                 }
-            }else{//未知情况
-                [elementArr addObject:elementInArr.lastObject];
+            }else{//未知元素
+                *error = [NSError errorWithReason:EnumMSErrorUnkownElement
+                                      description:[NSString stringWithFormat:@"未知元素'%@'",name]];
+                [(*error) setInfo:[NSValue valueWithRange:NSMakeRange(curstrIdx, elementStr.length)] forKey:@"range"];
+                *stop = YES;
             }
         }
+        curstrIdx+=elementStr.length;
     }];
-    if(*error) return;
+    if(*error || !block) return;
     [self scanRepairSpellByInElements:elementArr];
     [elementArr enumerateObjectsUsingBlock:^(MSElement * _Nonnull element, NSUInteger idx, BOOL * _Nonnull stop) {
         
@@ -241,6 +257,8 @@ typedef enum EnumCharType{
         MSValueOperator* op = (id)[[elementTab elementsFromString:@"*"] firstObject];
         //倒序插入防止越界
         [setFor1 enumerateIndexesWithOptions:NSEnumerationReverse usingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
+            op.originIndex = elements[idx].originIndex;
+            [op setValue:@(YES) forKey:@"hidden"];
             [elements insertObject:op atIndex:idx];
         }];
     }

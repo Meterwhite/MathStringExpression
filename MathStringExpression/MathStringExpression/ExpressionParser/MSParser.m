@@ -57,7 +57,8 @@
                     if(tempStack.count<valueOp.argsCount){
                         
                         *error = [NSError errorWithReason:EnumMSErrorLackArgs
-                                              description:[NSString stringWithFormat:@"计算时运算符'%@'时没有足够的参数",valueOp.name]];
+                                              description:[NSString stringWithFormat:@"计算时运算符'%@'时没有足够的参数",valueOp.name]
+                                              elementInfo:valueOp];
                         *stop = YES;
                     }
                 }else{
@@ -65,7 +66,8 @@
                     if(valueOp.argsCount>tempStack.count){
                         
                         *error = [NSError errorWithReason:EnumMSErrorLackArgs
-                                              description:[NSString stringWithFormat:@"计算时运算符'%@'时没有足够的参数",valueOp.name]];
+                                              description:[NSString stringWithFormat:@"计算时运算符'%@'时没有足够的参数",valueOp.name]
+                                              elementInfo:valueOp];
                         *stop = YES;
                     }else{
                         
@@ -106,8 +108,10 @@
         return nil;
     }
     if(tempStack.count!=1){
+        MSElement* firstElement = [tempStack peek];
         *error = [NSError errorWithReason:EnumMSErrorComputeFaile
-                              description:[NSString stringWithFormat:@"未能完成计算，剩余元素%@",[tempStack pop]]];
+                              description:[NSString stringWithFormat:@"未能完成计算，剩余元素%@",[tempStack pop]]
+                              elementInfo:firstElement];
         return nil;
     }
     return [tempStack pop];
@@ -132,7 +136,8 @@
                     if(tempStack.count<valueOp.argsCount){
                         
                         *error = [NSError errorWithReason:EnumMSErrorLackArgs
-                                              description:[NSString stringWithFormat:@"运算符'%@'没有足够的参数",valueOp.name]];
+                                              description:[NSString stringWithFormat:@"运算符'%@'没有足够的参数",valueOp.name]
+                                              elementInfo:valueOp];
                         *stop = YES;
                     }
                 }else{
@@ -140,7 +145,8 @@
                     if(valueOp.argsCount>tempStack.count){
                         
                         *error = [NSError errorWithReason:EnumMSErrorLackArgs
-                                              description:[NSString stringWithFormat:@"运算符'%@'时没有足够的参数",valueOp.name]];
+                                              description:[NSString stringWithFormat:@"运算符'%@'时没有足够的参数",valueOp.name]
+                                              elementInfo:valueOp];
                         *stop = YES;
                     }else{
                         //取参数
@@ -185,8 +191,10 @@
         return nil;
     }
     if(tempStack.count!=1){
+        MSElement* firstElement = [tempStack peek];
         *error = [NSError errorWithReason:EnumMSErrorComputeFaile
-                              description:[NSString stringWithFormat:@"未能完成解析为JavaScript表达式，剩余元素%@",tempStack]];
+                              description:[NSString stringWithFormat:@"未能完成解析为JavaScript表达式，剩余元素%@",tempStack]
+                              elementInfo:firstElement];
         return nil;
     }
     return ((NSString*)[tempStack pop]).copy;
@@ -229,7 +237,9 @@
                     }];
                     if(!popedArr){
                         *error = [NSError errorWithReason:EnumMSErrorNotFind
-                                              description:@"运算栈中缺少对应的左括号'('"];
+                                              description:@"运算栈中缺少对应的左括号'('"
+                                  elementInfo:value];
+                        [*error setInfo:[NSValue valueWithRange:NSMakeRange([value.originIndex integerValue], value.stringValue.length)] forKey:@"range"];
                         *stop = YES;
                     }
                     [popedArr removeLastObject];//丢弃最后的左括号
@@ -238,6 +248,7 @@
                     *error = [NSError errorWithReason:EnumMSErrorNotSupport
                                           description:@"暂不支持处理的括号类型"
                                           elementInfo:value];
+                    [*error setInfo:[NSValue valueWithRange:NSMakeRange([value.originIndex integerValue], value.stringValue.length)] forKey:@"range"];
                     *stop = YES;
                 }
             }else{//遇到计算运算符
@@ -270,6 +281,7 @@
             *error = [NSError errorWithReason:EnumMSErrorUnkownElement
                                   description:[NSString stringWithFormat:@"未知的元素%@",value]
                                   elementInfo:value];
+            [*error setInfo:[NSValue valueWithRange:NSMakeRange([value.originIndex integerValue], value.stringValue.length)] forKey:@"range"];
             *stop = YES;
         }
     }];

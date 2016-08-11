@@ -18,7 +18,7 @@ typedef enum EnumElementType{
 @property (nonatomic,assign,readonly) EnumElementType elementType;
 /** 来自表达式的原始值 */
 @property (nonatomic,copy) NSString* stringValue;
-
+@property (nonatomic,strong) NSNumber* originIndex;
 - (NSString *)description;
 - (NSString *)debugDescription;
 @end

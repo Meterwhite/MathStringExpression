@@ -8,6 +8,7 @@
 
 #import "ViewController.h"
 #import "MathStringExpression.h"
+#import "MSExpressionHelper.h"
 
 @interface ViewController ()
 
@@ -17,6 +18,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     //MSElementTable.h中可查默认运算符优先级表和常量表
     MSElementTable* tab = [MSElementTable defaultTable];
     
@@ -82,7 +84,6 @@
      支持数字或常量直接连括号的写法如：PI(2+3),2(3+4)
      支持类似2*-3不规范写法的负号判定
      运算符和函数名可定义形式为字母+数字如：fun1(),fun11(),fun3Q()
-     
      */
 }
 
@@ -92,3 +93,18 @@
 }
 
 @end
+/** 
+ NSString* exp = @"123*5-5(1+PI)";
+ //    BOOL hasError = [MSExpressionHelper helperCheckString:exp usingBlock:^(NSError *error, NSRange range) {
+ //
+ //        if(error){
+ //            NSLog(@"%@",[NSValue valueWithRange:range]);
+ //        }
+ //    }];
+ 
+ NSArray* ranges = [MSExpressionHelper helperElementRangeIn:exp atIndex:13];
+ 
+ NSLog(@"%@",ranges);
+ 
+ return;
+ */

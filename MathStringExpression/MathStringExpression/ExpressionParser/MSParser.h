@@ -19,4 +19,5 @@
  则需要将jsTransferOperator定义为“函数运算符”。其中jsTransferOperator.name为'Math.pow'
  */
 + (NSString*)parserJSExpressionFromString:(NSString*)string error:(NSError*__strong*)error;
+
 @end

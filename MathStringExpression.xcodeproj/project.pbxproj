@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		452337CB1D54937E00C67F7D /* MSExpressionHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 452337CA1D54937E00C67F7D /* MSExpressionHelper.m */; };
 		9F331A231D425902009822C2 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F331A221D425902009822C2 /* main.m */; };
 		9F331A261D425902009822C2 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F331A251D425902009822C2 /* AppDelegate.m */; };
 		9F331A291D425902009822C2 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F331A281D425902009822C2 /* ViewController.m */; };
@@ -29,6 +30,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		452337C91D54937E00C67F7D /* MSExpressionHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSExpressionHelper.h; sourceTree = "<group>"; };
+		452337CA1D54937E00C67F7D /* MSExpressionHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSExpressionHelper.m; sourceTree = "<group>"; };
 		453C5D4F1D4B2B3F00D7C605 /* MathStringExpression.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MathStringExpression.h; sourceTree = "<group>"; };
 		9F331A1E1D425902009822C2 /* MathStringExpression.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MathStringExpression.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9F331A221D425902009822C2 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -78,6 +81,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		452337C81D54932200C67F7D /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				452337C91D54937E00C67F7D /* MSExpressionHelper.h */,
+				452337CA1D54937E00C67F7D /* MSExpressionHelper.m */,
+			);
+			path = Helper;
+			sourceTree = "<group>";
+		};
 		9F331A151D425902009822C2 = {
 			isa = PBXGroup;
 			children = (
@@ -126,6 +138,7 @@
 				453C5D4F1D4B2B3F00D7C605 /* MathStringExpression.h */,
 				9F331A391D42592B009822C2 /* ExpressionParser */,
 				9F331A441D42592B009822C2 /* Operator */,
+				452337C81D54932200C67F7D /* Helper */,
 			);
 			path = MathStringExpression;
 			sourceTree = "<group>";
@@ -254,6 +267,7 @@
 				9F331A5E1D42592B009822C2 /* MSValueOperator.m in Sources */,
 				9F331A231D425902009822C2 /* main.m in Sources */,
 				9F331A571D42592B009822C2 /* NSError+MSExpression.m in Sources */,
+				452337CB1D54937E00C67F7D /* MSExpressionHelper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

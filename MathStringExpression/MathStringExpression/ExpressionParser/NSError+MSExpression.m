@@ -10,8 +10,26 @@
 #import "MSElement.h"
 
 #define _NotNil(val) (val?val:[NSNull null])
+#define ElementKey @"element"
 
 @implementation NSError(MSExpression)
+
+- (id)infoForKey:(NSString*)key
+{
+    return self.userInfo[key];
+}
+
+- (void)setInfo:(id)obj forKey:(NSString*)key
+{
+    NSMutableDictionary* tInfo = [self.userInfo mutableCopy];
+    tInfo[key] = obj;
+    [self setValue:tInfo forKey:@"userInfo"];
+}
+
+- (MSElement *)errorElement
+{
+    return self.userInfo[ElementKey];
+}
 
 + (NSError*)errorWithReason:(EnumMSErrorReasonType)reason
 {
@@ -35,6 +53,10 @@
     userInfo[NSLocalizedFailureReasonErrorKey] = [self errorDescriptionFromReason:reason];
     if(description){
         userInfo[NSLocalizedDescriptionKey] = description;
+    }
+    if(elementInfo){
+        userInfo[ElementKey] = elementInfo;
+        userInfo[@"range"] = [NSValue valueWithRange:NSMakeRange([elementInfo.originIndex integerValue], elementInfo.stringValue.length)];
     }
     
     return [NSError errorWithDomain:domain
