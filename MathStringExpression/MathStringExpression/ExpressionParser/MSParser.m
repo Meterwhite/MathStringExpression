@@ -208,7 +208,7 @@
     MSStack* opStack = [MSStack stack];//运算符栈
     MSStack* tempStack = [MSStack stack];//临时栈
     
-    [MSScaner scanString:inputString
+    [MSScaner scanExpression:inputString
                          error:error
                          block:^(MSElement *value, NSUInteger idx, BOOL isEnd, BOOL *stop) {
         
@@ -363,4 +363,6 @@
     }
     return jsExpression;
 }
+
+
 @end

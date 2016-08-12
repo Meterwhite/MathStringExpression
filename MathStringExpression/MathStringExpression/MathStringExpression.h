@@ -10,4 +10,4 @@
 #import "MSElementTable.h"
 #import "MSValueOperator.h"
 #import "MSFunctionOperator.h"
-
+#import "MSExpressionHelper.h"

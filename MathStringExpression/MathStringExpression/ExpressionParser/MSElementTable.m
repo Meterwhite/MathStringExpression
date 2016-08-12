@@ -348,7 +348,7 @@
     MSConstant* SQRT2 = [MSConstant constantWithKeyValue:@{@"name":@"SQRT2" , @"numberValue":@(M_SQRT2)}];
     [self setElement:SQRT2];
 }
-/** 默认重名运算符处理 */
+/** 默认重名运算符判定 */
 - (void)setDefauleConflictOperator
 {
     [self handleConflictOperator:@"-"

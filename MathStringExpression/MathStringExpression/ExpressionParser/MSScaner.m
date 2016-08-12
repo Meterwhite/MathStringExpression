@@ -22,11 +22,11 @@ typedef enum EnumCharType{
 }EnumCharType;
 
 @implementation MSScaner
-+ (void)scanString:(NSString*)string
++ (void)scanExpression:(NSString*)expression
              error:(NSError*__strong*)error
                block:(void(^)(MSElement* value,NSUInteger idx,BOOL isEnd,BOOL* stop))block
 {
-    NSMutableArray<NSString*>* splitedArr = [self scanSplitString:string];
+    NSMutableArray<NSString*>* splitedArr = [self scanSplitString:expression];
     NSMutableArray<MSElement*>* elementArr = [NSMutableArray new];
     __block NSUInteger curstrIdx = 0;
     [splitedArr enumerateObjectsUsingBlock:^(NSString*  _Nonnull elementStr, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -43,6 +43,9 @@ typedef enum EnumCharType{
                 *stop = YES;
             }else{
                 elementInArr.firstObject.originIndex = @(curstrIdx);
+                if(blockElementsSet){
+                    blockElementsSet(elementInArr.firstObject , idx);
+                }
                 [elementArr addObject:elementInArr.firstObject];
             }
         }else{
@@ -60,6 +63,9 @@ typedef enum EnumCharType{
                 MSOperator* choosedOp = conflictHandleBlock((id)elementInArr,idx,elementArr,splitedArr);
                 choosedOp.originIndex = @(curstrIdx);
                 if(choosedOp){
+                    if(blockElementsSet){
+                        blockElementsSet(elementInArr.firstObject , idx);
+                    }
                     [elementArr addObject:choosedOp];
                 }else{
                     *error = [NSError errorWithReason:EnumMSErrorUnclearMeaning
@@ -263,6 +269,13 @@ typedef enum EnumCharType{
         }];
     }
 }
+
+static void (^blockElementsSet)(MSElement *, NSUInteger);
++ (void)scanElementsUsingBlock:(void (^)(MSElement *element, NSUInteger idx))block
+{
+    blockElementsSet = block;
+}
+
 #pragma mark - 工具
 + (void)toolCombineArr:(NSMutableArray<NSString*>*)arr inRanges:(NSArray<NSValue*>*)ranges
 {

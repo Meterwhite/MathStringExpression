@@ -69,11 +69,6 @@
     return self.stack.count?NO:YES;
 }
 
-- (NSInteger)length
-{
-    return self.stack.count;
-}
-
 - (NSMutableArray *)stack
 {
     if(!_stack){

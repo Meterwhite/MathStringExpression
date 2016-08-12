@@ -7,19 +7,22 @@
 //
 
 #import <Foundation/Foundation.h>
-
+/**
+ *  栈
+ */
 @interface MSStack : NSObject
 + (MSStack*)stack;
 
 - (void)push:(id)obj;
 - (void)pushs:(NSArray*)objs;
+
+- (id)peek;
 - (id)pop;
 - (NSMutableArray*)pops:(NSUInteger)count;
 - (NSMutableArray*)popAll;
+
 - (NSUInteger)count;
-- (id)peek;
 - (BOOL)isEmpty;
-- (NSInteger)length;
 
 /** 遍历栈元素 */
 - (void)stackEnumerateObjectsUsingBlock:(void(^)(id obj,NSUInteger idx,BOOL* stop))block;

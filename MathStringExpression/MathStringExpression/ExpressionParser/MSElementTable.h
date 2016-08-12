@@ -24,16 +24,20 @@ typedef enum EnumOperatorSearchType{
 /**
  *  运算符及常数表（参考JavaScript Math库命名）
  *  默认运算符表
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  level:name[argsCount]
- 0 :),(
- 1 :abs,acos,asin,atan,atan2,ceil,cos,exp,floor,ln,max[2]
- ,min[2],pow[2],random[0],round,sin,sqrt,tan 参数数默认0
- 2 :- 负号
- 3 :*,/,%
- 4 :- 减号,+
- 16:,
+  0 :),(
+  1 :abs , acos , asin , atan , atan2 , ceil , cos , exp , floor , ln ,
+     max[2] , min[2] , pow[2] , random[0] , round , sin , sqrt , tan 
+     (默认参数数量1)
+  2 :- 负号
+  3 :* , / , %
+  4 :- , +
+ 16 :,
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *  默认常数表
  E,PI,LN2,LN10,LOG2E,LOG10E,SQRT1_2,SQRT2
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  */
 @interface MSElementTable : NSObject
 /** 获取表 */

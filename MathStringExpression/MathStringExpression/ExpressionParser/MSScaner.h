@@ -8,11 +8,21 @@
 
 #import <Foundation/Foundation.h>
 #import "MSElement.h"
-
+/**
+ *  表达式扫描器
+ */
 @interface MSScaner : NSObject
-
-+ (void)scanString:(NSString*)string
+/**
+ *  扫描表达式解析为元素
+ *
+ *  @param expression 表达式
+ */
++ (void)scanExpression:(NSString*)expression
              error:(NSError*__strong*)error
              block:(void(^)(MSElement* value,NSUInteger idx,BOOL isEnd,BOOL* stop))block;
 
+/**
+ *  表达式解析为元素时进行更多的处理（全局的）
+ */
++ (void)scanElementsUsingBlock:(void(^)(MSElement* element,NSUInteger idx))block;
 @end

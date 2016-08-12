@@ -37,7 +37,7 @@
     __block BOOL flagFindFirstElmt = NO;
     NSError* error;
     NSMutableArray<MSElement*>* elementArr = [NSMutableArray new];
-    [MSScaner scanString:expression error:&error block:^(MSElement *value, NSUInteger idx, BOOL isEnd, BOOL *stop) {
+    [MSScaner scanExpression:expression error:&error block:^(MSElement *value, NSUInteger idx, BOOL isEnd, BOOL *stop) {
         
         [elementArr addObject:value];
         if(!flagFindFirstElmt){
