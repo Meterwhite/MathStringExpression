@@ -9,13 +9,14 @@
 #import "MSElement.h"
 
 @interface MSElement ()
-/** 是否可见，默认NO */
-@property (nonatomic,assign) BOOL hidden;
+
 @end
 
 @implementation MSElement
 
 @synthesize elementType = _elementType;
+@synthesize stringValue = _stringValue;
+@synthesize hidden = _hidden;
 
 - (instancetype)init
 {
@@ -25,6 +26,25 @@
         _hidden = NO;
     }
     return self;
+}
+
+- (id)copyWithZone:(NSZone *)zone
+{
+    MSElement* copy = [[self.class allocWithZone:zone] init];
+    if(copy){
+        copy->_stringValue = self.stringValue;
+        copy->_userInfo = [self.userInfo mutableCopy];
+        copy->_originIndex = self.originIndex;
+        copy->_elementType = self.elementType;
+        copy->_hidden = self.hidden;
+    }
+    return copy;
+}
+
+- (void)setAppearance
+{
+    _elementType = EnumElementTypeAppearance;
+    _hidden = NO;
 }
 
 - (NSString *)description

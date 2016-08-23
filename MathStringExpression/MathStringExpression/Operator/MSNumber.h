@@ -11,8 +11,11 @@
 /**
  *  数字
  */
-@interface MSNumber : MSElement 
-@property (nonatomic,strong,readonly) NSNumber* numberValue;
+@interface MSNumber : MSElement{
+@protected
+    NSNumber* _numberValue;
+}
+@property (nonatomic,strong) NSNumber* numberValue;
 - (NSString *)description;
 - (NSString *)debugDescription;
 @end

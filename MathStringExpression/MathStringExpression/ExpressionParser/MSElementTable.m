@@ -13,11 +13,14 @@
 #import "MSConstant.h"
 #import "MSOperator.h"
 #import "MSNumber.h"
+#import "NSError+MSExpression.h"
+#import <JavaScriptCore/JavaScriptCore.h>
 
 @interface MSElementTable ()
 @property (nonatomic,strong) NSMutableDictionary<NSString*,MSOperator*>* operatorTable;
 @property (nonatomic,strong) NSMutableDictionary<NSString*,MSConstant*>* constantTable;
 @property (nonatomic,strong) NSMutableDictionary* conflictOperatorDict;
+@property (nonatomic,strong) JSContext* jsContext;
 @end
 
 @implementation MSElementTable
@@ -68,6 +71,16 @@
         MSNumber* num = [MSNumber new];
         num.stringValue = string;
         [re addObject:num];
+    }
+    if(re.count) return re;
+    
+    //空白符
+    NSPredicate* checkWhiteSpace = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",@"\\s"];
+    if([checkWhiteSpace evaluateWithObject:string]){
+        MSElement* appearance = [MSElement new];
+        appearance.stringValue = string;
+        [appearance setAppearance];
+        [re addObject:appearance];
     }
     if(re.count) return re;
     
@@ -140,6 +153,7 @@
  4.+ -
  16.,
  */
+#pragma mark 默认运算符设置
 - (void)setDefauleOperatorTable
 {
     //..括号..//
@@ -159,21 +173,21 @@
     
     MSFunctionOperator* _acos =   [MSFunctionOperator operatorWithKeyValue:@{@"name":@"acos",@"level":@(1),@"argsCount":@(1)}];
     [_acos computeWithBlock:^NSNumber *(NSArray *args) {
-        return @(acosh([args[0] doubleValue]));
+        return @(acos([args[0] doubleValue]));
     }];
     [self.class setDefaultJSFuncTransferOp:_acos];
     [self setElement:_acos];
     
     MSFunctionOperator* _asin =   [MSFunctionOperator operatorWithKeyValue:@{@"name":@"asin",@"level":@(1),@"argsCount":@(1)}];
     [_asin computeWithBlock:^NSNumber *(NSArray *args) {
-        return @(asinh([args[0] doubleValue]));
+        return @(asin([args[0] doubleValue]));
     }];
     [self.class setDefaultJSFuncTransferOp:_asin];
     [self setElement:_asin];
     
     MSFunctionOperator* _atan =   [MSFunctionOperator operatorWithKeyValue:@{@"name":@"atan",@"level":@(1),@"argsCount":@(1)}];
     [_atan computeWithBlock:^NSNumber *(NSArray *args) {
-        return @(atanh([args[0] doubleValue]));
+        return @(atan([args[0] doubleValue]));
     }];
     [self.class setDefaultJSFuncTransferOp:_atan];
     [self setElement:_atan];
@@ -195,7 +209,7 @@
     
     MSFunctionOperator* _cos =   [MSFunctionOperator operatorWithKeyValue:@{@"name":@"cos",@"level":@(1),@"argsCount":@(1)}];
     [_cos computeWithBlock:^NSNumber *(NSArray *args) {
-        return @(cosh([args[0] doubleValue]));
+        return @(cos([args[0] doubleValue]));
     }];
     [self.class setDefaultJSFuncTransferOp:_cos];
     [self setElement:_cos];
@@ -238,7 +252,7 @@
     
     MSFunctionOperator* _pow =   [MSFunctionOperator operatorWithKeyValue:@{@"name":@"pow",@"level":@(1),@"argsCount":@(2)}];
     [_pow computeWithBlock:^NSNumber *(NSArray *args) {
-        return @(powf([args[0] floatValue], [args[1] floatValue]));
+        return @(pow([args[0] floatValue], [args[1] floatValue]));
     }];
     [self.class setDefaultJSFuncTransferOp:_pow];
     [self setElement:_pow];
@@ -259,7 +273,7 @@
     
     MSFunctionOperator* _sin =   [MSFunctionOperator operatorWithKeyValue:@{@"name":@"sin",@"level":@(1),@"argsCount":@(1)}];
     [_sin computeWithBlock:^NSNumber *(NSArray *args) {
-        return @(sinh([args[0] doubleValue]));
+        return @(sin([args[0] doubleValue]));
     }];
     [self.class setDefaultJSFuncTransferOp:_sin];
     [self setElement:_sin];
@@ -279,8 +293,10 @@
     [self setElement:_tan];
     
     //..运算符1..//
-    MSValueOperator* negative = [MSValueOperator operatorWithKeyValue:@{@"name":@"-",@"level":@(2)
-                                                                        ,@"argsCount":@(1)}];
+    MSValueOperator* negative = [MSValueOperator operatorWithKeyValue:@{@"name":@"-",
+                                                                        @"level":@(2),
+                                                                        @"argsCount":@(1),
+                                                                        @"direction":@(EnumOperatorDirectionRightToLeft)}];
     [negative computeWithBlock:^NSNumber *(NSArray *args) {
         return @(-[args[0] doubleValue]);
     }];
@@ -295,6 +311,9 @@
     
     MSValueOperator* division = [MSValueOperator operatorWithKeyValue:@{@"name":@"/",@"level":@(3)}];
     [division computeWithBlock:^NSNumber *(NSArray *args) {
+        if([args[1] isEqualToNumber:@(0)]){
+            return nil;//0不能做除数
+        }
         return @([args[0] doubleValue]/[args[1] doubleValue]);
     }];
     [self setElement:division];
@@ -321,7 +340,7 @@
     [self setElement:comma];
     
 }
-
+#pragma mark 默认常量设置
 - (void)setDefauleConstantTable
 {
     MSConstant* E = [MSConstant constantWithKeyValue:@{@"name":@"E",@"numberValue":@(M_E)}];
@@ -348,7 +367,8 @@
     MSConstant* SQRT2 = [MSConstant constantWithKeyValue:@{@"name":@"SQRT2" , @"numberValue":@(M_SQRT2)}];
     [self setElement:SQRT2];
 }
-/** 默认重名运算符判定 */
+
+#pragma mark 默认重名运算符判定
 - (void)setDefauleConflictOperator
 {
     [self handleConflictOperator:@"-"
@@ -409,6 +429,15 @@
         [self setDefauleConflictOperator];
     }
     return _conflictOperatorDict;
+}
+
+- (JSContext *)jsContext
+{
+    if(!_jsContext){
+        
+        _jsContext = [JSContext new];
+    }
+    return _jsContext;
 }
 
 static MSElementTable * _elementTable;

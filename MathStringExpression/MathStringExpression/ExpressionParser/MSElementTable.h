@@ -10,11 +10,12 @@
 @class MSOperator;
 @class MSConstant;
 @class MSElement;
+@class JSValue;
 
 /** 搜索运算符及常数列表方式 */
 typedef enum EnumOperatorSearchType{
     /** 只搜索原始名 */
-    EnumOperatorSearchName        = 1 << 0,
+    EnumOperatorSearchName          = 1 << 0,
     /** 只搜索展示名 */
     EnumOperatorSearchShowName      = 1 << 1,
     /** 默认值 */

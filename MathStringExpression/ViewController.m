@@ -8,7 +8,6 @@
 
 #import "ViewController.h"
 #import "MathStringExpression.h"
-#import "MSExpressionHelper.h"
 
 @interface ViewController ()
 
@@ -22,7 +21,10 @@
     //MSElementTable.h中可查默认运算符优先级表和常量表
     MSElementTable* tab = [MSElementTable defaultTable];
     
-    //例1
+    
+    /** 
+     *  例1 自定义运算符 
+     */
     //自定义次方算术运算符^，可知优先级与*号相同
     MSValueOperator* _pow = [MSValueOperator operatorWithKeyValue:@{@"name":@"^",
                                                                    @"level":@(3)}];
@@ -41,7 +43,9 @@
     //最后将新运算符设置到表中
     [tab setElement:_pow];
     
-    //例2 自定义对象根号
+    /** 
+     *  例2 自定义对象根号
+     */
     MSValueOperator* _sqr = [MSValueOperator operatorWithKeyValue:@{@"name":@"√",
                                                                     @"level":@(3)}];
     [_sqr computeWithBlock:^NSNumber *(NSArray *args) {
@@ -60,51 +64,67 @@
     }];
     _sqr.jsTransferOperator = sqr_js;
     
-    //测试表达式
-    NSString* jsExpString = @"3√8+2^3";
+    /**
+     *  例3 自定义运算符度°
+     */
+    MSValueOperator* _degrees = [MSValueOperator operatorWithKeyValue:@{@"name":@"°",
+                                                                         @"level":@(3),
+                                                                         @"argsCount":@(1)}];
+    [_degrees computeWithBlock:^NSNumber *(NSArray *args) {
+        return @(M_PI*[args[0] doubleValue]/180.0);
+    }];
+    //不使用jsTransferOperator直接定义原运算符的输出形式
+    [_degrees customToExpressionUsingBlock:^NSString *(NSString *name, NSArray<NSString *> *args) {
+        return [NSString stringWithFormat:@"(PI*%@/360.0)",args[0]];
+    }];
+    [tab setElement:_degrees];
     
-    NSError* error;
-    NSNumber* computeResult = [MSParser parserComputeString:jsExpString error:&error];
-    NSError* errorJS;
-    NSString* jsExpression = [MSParser parserJSExpressionFromString:jsExpString error:&errorJS];
+    /**
+     *  例4 使用JavaScript定义函数
+     */
+    NSError* errorJSFun;
+    MSFunctionOperator* opFunJS = [MSFunctionOperator operatorWithJSFunction:@"function And(a, b){ return a + b; }" error:&errorJSFun];
+    [tab setElement:opFunJS];
     
-    if(error){
+    /**
+     *  例5 使用JavaScript定义常量
+     */
+    MSConstant* opConstantJS = [MSConstant constantWithJSValue:@" var age = 18.00; " error:nil];
+    [tab setElement:opConstantJS];
+    
+    
+    /** *** ** *** ** *** ** *** ** *** ** *** ** *** ** *** ** *** ** *** ** *** ** *** **  */
+    NSString* jsExpString = @"3√8 + 2^3 + age + And(1,1) + sin(180°) ";//2+8+18+2+0=30
+//    NSString* jsExpString = @" 1 / 0 ";//测试报错
+    /** *** ** *** ** *** ** *** ** *** ** *** ** *** ** *** ** *** ** *** ** *** ** *** **  */
+    
+    //表达式预测试
+    BOOL allRight = [MSExpressionHelper helperCheckExpression:jsExpString usingBlock:^(NSError *error, NSRange range) {
         
         NSLog(@"%@",error);
-    } else if(errorJS){
+    }];
+    
+    if(allRight){
         
-        NSLog(@"%@",errorJS);
-    }else{
+        //计算表达式
+        NSNumber* computeResult = [MSParser parserComputeExpression:jsExpString error:nil];
+        NSLog(@"计算结果为：%@",computeResult);
         
-        NSLog(@"%@",computeResult);
-        NSLog(@"%@",jsExpression);
+        //表达式转JS表达式
+        NSString* jsExpression = [MSParser parserJSExpressionFromExpression:jsExpString error:nil];
+        NSLog(@"转JS表达式结果为：%@",jsExpression);
     }
     
-    /** 其他：
-     支持数字或常量直接连括号的写法如：PI(2+3),2(3+4)
-     支持类似2*-3不规范写法的负号判定
-     运算符和函数名可定义形式为字母+数字如：fun1(),fun11(),fun3Q()
+    /**
+     其他：
+     *** ** *** ** *** ** *** ** *** ** *** ** *** ** *** ** *** ** *** ** *** ** *** **
+     *支持数字或常量直连括号如：PI(2+3),2(3+4)
+     *支持数字直连常量如：2PI,3a
+     *支持数字直连函数如：2sin
+     *支持类似2*-3不规范写法的负号判定
+     *运算符和函数名可定义形式为字母+数字如：fun1(),fun11(),fun3Q()
+     *** ** *** ** *** ** *** ** *** ** *** ** *** ** *** ** *** ** *** ** *** ** *** **
      */
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
 @end
-/** 
- NSString* exp = @"123*5-5(1+PI)";
- //    BOOL hasError = [MSExpressionHelper helperCheckString:exp usingBlock:^(NSError *error, NSRange range) {
- //
- //        if(error){
- //            NSLog(@"%@",[NSValue valueWithRange:range]);
- //        }
- //    }];
- 
- NSArray* ranges = [MSExpressionHelper helperElementRangeIn:exp atIndex:13];
- 
- NSLog(@"%@",ranges);
- 
- return;
- */

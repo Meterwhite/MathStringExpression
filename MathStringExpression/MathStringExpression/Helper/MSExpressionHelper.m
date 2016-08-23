@@ -10,13 +10,30 @@
 #import "MSParser.h"
 #import "MSScaner.h"
 #import "MSPairOperator.h"
+#import "NSError+MSExpression.h"
 
 @implementation MSExpressionHelper
 
 + (BOOL)helperCheckExpression:(NSString*)expression usingBlock:(void(^)(NSError* error,NSRange range))block
 {
     NSError* error;
-    [MSParser parserComputeString:expression error:&error];
+    
+    
+    NSRegularExpression* regNum_Space_Num = [NSRegularExpression regularExpressionWithPattern:@"(\\d+\\s+\\d+)"
+                                                                                      options:0
+                                                                                        error:nil];
+    if([regNum_Space_Num matchesInString:expression options:0 range:NSMakeRange(0, expression.length)].count){
+        if(block){
+            
+            error = [NSError errorWithReason:EnumMSErrorNotSupport description:@"不支持的数字拼写"];
+            NSRange range = [[[regNum_Space_Num matchesInString:expression options:0 range:NSMakeRange(0, expression.length)] firstObject] rangeAtIndex:1];//$1
+            [error setInfo:[NSValue valueWithRange:range] forKey:@"range"];
+            block(error , range);
+        }
+        return NO;
+    }
+    
+    [MSParser parserComputeExpression:expression error:&error];
     if(error && block){
         NSValue* rangeVal = error.userInfo[@"range"];
         block(error , [rangeVal rangeValue]);

@@ -15,29 +15,30 @@
 #import "MSValueOperator.h"
 #import "MSNumber.h"
 #import "MSConstant.h"
+#import "MSElementTable.h"
 #import "NSError+MSExpression.h"
+#import <JavaScriptCore/JavaScriptCore.h>
 
 @implementation MSParser
 
-+ (NSNumber*)parserComputeString:(NSString*)string error:(NSError*__strong*)error
++ (NSNumber*)parserComputeExpression:(NSString*)expression error:(NSError*__strong*)error
 {
     //字符串转逆波兰式
-    NSMutableArray<MSElement*>* reversePolishArr = [self parseToReversePolishFromString:string error:error];
-    if(*error) return nil;
+    NSMutableArray<MSElement*>* reversePolishArr = [self parseToReversePolishFromString:expression error:error];
+    if(error && *error) return nil;
     //计算逆波兰式
     return [self parseComputeFromReversePolishArray:reversePolishArr error:error];
 }
 
-+ (NSString*)parserJSExpressionFromString:(NSString*)string error:(NSError*__strong*)error
++ (NSString*)parserJSExpressionFromExpression:(NSString*)jsExpression error:(NSError*__strong*)error
 {
     //字符串转逆波兰式
-    NSMutableArray<MSElement*>* reversePolishArr = [self parseToReversePolishFromString:string error:error];
-    if(*error) return nil;
+    NSMutableArray<MSElement*>* reversePolishArr = [self parseToReversePolishFromString:jsExpression error:error];
+    if(error && *error) return nil;
     //解析逆波兰式为JS表达式
     return [self parseToJSExpressionFromReversePolishArray:reversePolishArr error:error];
 }
-
-/** 计算逆波兰式 */
+#pragma mark 计算逆波兰式
 + (NSNumber*)parseComputeFromReversePolishArray:(NSMutableArray<MSElement*>*)reversePolishArray
                                           error:(NSError*__strong*)error
 {
@@ -55,24 +56,36 @@
                 if([valueOp.name isEqualToString:@","]){
                     //遇到逗号表达式时检查栈内参数，然后跳空
                     if(tempStack.count<valueOp.argsCount){
-                        
-                        *error = [NSError errorWithReason:EnumMSErrorLackArgs
-                                              description:[NSString stringWithFormat:@"计算时运算符'%@'时没有足够的参数",valueOp.name]
-                                              elementInfo:valueOp];
+                        if(error){
+                            *error = [NSError errorWithReason:EnumMSErrorLackArgs
+                                                  description:[NSString stringWithFormat:@"计算时运算符'%@'时没有足够的参数",valueOp.name]
+                                                  elementInfo:valueOp];
+                        }
                         *stop = YES;
                     }
                 }else{
                     //将需要的操作数出栈，并按参数计算顺序排列
                     if(valueOp.argsCount>tempStack.count){
-                        
-                        *error = [NSError errorWithReason:EnumMSErrorLackArgs
-                                              description:[NSString stringWithFormat:@"计算时运算符'%@'时没有足够的参数",valueOp.name]
-                                              elementInfo:valueOp];
+                        if(error){
+                            *error = [NSError errorWithReason:EnumMSErrorLackArgs
+                                                  description:[NSString stringWithFormat:@"计算时运算符'%@'时没有足够的参数",valueOp.name]
+                                                  elementInfo:valueOp];
+                        }
                         *stop = YES;
                     }else{
                         
                         NSArray* nums = [tempStack pops:valueOp.argsCount].reverseObjectEnumerator.allObjects;
-                        [tempStack push:[valueOp computeArgs:nums]];//将计算结果入栈
+                        NSNumber* computeResult = [valueOp computeArgs:nums];
+                        if(!computeResult){
+                            if(error){
+                                *error = [NSError errorWithReason:EnumMSErrorComputeFaile
+                                                      description:[NSString stringWithFormat:@"计算'%@'时错误",valueOp.name]
+                                                      elementInfo:valueOp];
+                            }
+                            *stop = YES;
+                            return;
+                        }
+                        [tempStack push:computeResult];//将计算结果入栈
                     }
                 }
             }else if ([element isKindOfClass:[MSFunctionOperator class]]){
@@ -80,44 +93,61 @@
                 MSFunctionOperator* funcOp = (id)element;
                 //将需要的操作数出栈，并按参数计算顺序排列
                 if(tempStack.count<funcOp.argsCount){
-                    
-                    *error = [NSError errorWithReason:EnumMSErrorLackArgs
-                                          description:[NSString stringWithFormat:@"计算'%@'时缺少必要的参数",element.stringValue]
-                                          elementInfo:funcOp];
+                    if(error){
+                        *error = [NSError errorWithReason:EnumMSErrorLackArgs
+                                              description:[NSString stringWithFormat:@"计算'%@'时缺少必要的参数",element.stringValue]
+                                              elementInfo:funcOp];
+                    }
                     *stop = YES;
                 }else{
                     
                     NSArray* nums = [tempStack pops:funcOp.argsCount].reverseObjectEnumerator.allObjects;
-                    [tempStack push:[funcOp computeArgs:nums]];//将计算结果入栈
+                    NSNumber* computeResult = [funcOp computeArgs:nums];
+                    if(!computeResult){
+                        if(error){
+                            *error = [NSError errorWithReason:EnumMSErrorComputeFaile
+                                                  description:[NSString stringWithFormat:@"计算'%@'时错误",funcOp.name]
+                                                  elementInfo:funcOp];
+                        }
+                        *stop = YES;
+                        return;
+                    }
+                    [tempStack push:computeResult];//将计算结果入栈
                 }
             }else if([element isKindOfClass:[MSPairOperator class]]){
-                
-                *error = [NSError errorWithReason:EnumMSErrorUnexpectedElement
-                                      description:[NSString stringWithFormat:@"计算中预期外的元素%@",element.stringValue]
-                                      elementInfo:element];
+                if(error){
+                    *error = [NSError errorWithReason:EnumMSErrorUnexpectedElement
+                                          description:[NSString stringWithFormat:@"计算中预期外的元素%@",element.stringValue]
+                                          elementInfo:element];
+                }
                 *stop = YES;
             }
         }else if(element.elementType == EnumElementTypeUndefine){
-            *error = [NSError errorWithReason:EnumMSErrorUnkownElement
-                                  description:[NSString stringWithFormat:@"计算中的未知元素%@",element.stringValue]
-                                  elementInfo:element];
+            if(error)
+            {
+                *error = [NSError errorWithReason:EnumMSErrorUnkownElement
+                                      description:[NSString stringWithFormat:@"计算中的未知元素%@",element.stringValue]
+                                      elementInfo:element];
+            }
             *stop = YES;
         }
     }];
-    if(*error){
+    if(error && *error){
         return nil;
     }
     if(tempStack.count!=1){
         MSElement* firstElement = [tempStack peek];
-        *error = [NSError errorWithReason:EnumMSErrorComputeFaile
-                              description:[NSString stringWithFormat:@"未能完成计算，剩余元素%@",[tempStack pop]]
-                              elementInfo:firstElement];
+        if(error){
+            *error = [NSError errorWithReason:EnumMSErrorComputeFaile
+                                  description:[NSString stringWithFormat:@"未能完成计算，剩余元素%@",[tempStack pop]]
+                                  elementInfo:firstElement];
+        }
         return nil;
     }
     return [tempStack pop];
 }
 
-/** 逆波兰式转JavaScript表达式 */
+#pragma mark 逆波兰式转JavaScript表达式
 + (NSString*)parseToJSExpressionFromReversePolishArray:(NSMutableArray<MSElement*>*)reversePolishArray
                                                  error:(NSError*__strong*)error
 {
@@ -134,25 +164,29 @@
                 if([valueOp.name isEqualToString:@","]){
                     //遇到逗号表达式时检查栈内参数，然后跳空
                     if(tempStack.count<valueOp.argsCount){
-                        
-                        *error = [NSError errorWithReason:EnumMSErrorLackArgs
-                                              description:[NSString stringWithFormat:@"运算符'%@'没有足够的参数",valueOp.name]
-                                              elementInfo:valueOp];
+                        if(error){
+                            *error = [NSError errorWithReason:EnumMSErrorLackArgs
+                                                  description:[NSString stringWithFormat:@"运算符'%@'没有足够的参数",valueOp.name]
+                                                  elementInfo:valueOp];
+                        }
                         *stop = YES;
                     }
                 }else{
                     //将需要的操作数出栈，并按参数计算顺序排列
                     if(valueOp.argsCount>tempStack.count){
-                        
-                        *error = [NSError errorWithReason:EnumMSErrorLackArgs
-                                              description:[NSString stringWithFormat:@"运算符'%@'时没有足够的参数",valueOp.name]
-                                              elementInfo:valueOp];
+                        if(error){
+                            *error = [NSError errorWithReason:EnumMSErrorLackArgs
+                                                  description:[NSString stringWithFormat:@"运算符'%@'时没有足够的参数",valueOp.name]
+                                                  elementInfo:valueOp];
+                        }
                         *stop = YES;
                     }else{
                         //取参数
                         NSArray* nums = [tempStack pops:valueOp.argsCount].reverseObjectEnumerator.allObjects;
                         NSMutableString* aJSExp = [self toolJSExpByOperator:valueOp args:nums error:error];
-                        if(*error)  *stop = YES;
+                        if(error && *error){
+                            *stop = YES;
+                        }
                         [tempStack push:aJSExp];//将表达式字符串入栈
                     }
                 }
@@ -161,33 +195,39 @@
                 MSFunctionOperator* funcOp = (id)element;
                 //将需要的操作数出栈，并按参数计算顺序排列
                 if(tempStack.count<funcOp.argsCount){
-                    
-                    *error = [NSError errorWithReason:EnumMSErrorLackArgs
-                                          description:[NSString stringWithFormat:@"计算'%@'时缺少必要的参数",element.stringValue]
-                                          elementInfo:funcOp];
+                    if(error){
+                        *error = [NSError errorWithReason:EnumMSErrorLackArgs
+                                              description:[NSString stringWithFormat:@"计算'%@'时缺少必要的参数",element.stringValue]
+                                              elementInfo:funcOp];
+                    }
                     *stop = YES;
                 }else{
                     
                     NSArray* nums = [tempStack pops:funcOp.argsCount].reverseObjectEnumerator.allObjects;
                     NSMutableString* aJSExp = [self toolJSExpByOperator:funcOp args:nums error:error];
-                    if(*error)  *stop = YES;
+                    if(error && *error){
+                        *stop = YES;
+                    }
                     [tempStack push:aJSExp];//将表达式字符串入栈
                 }
             }else if([element isKindOfClass:[MSPairOperator class]]){
-                
-                *error = [NSError errorWithReason:EnumMSErrorUnexpectedElement
-                                      description:[NSString stringWithFormat:@"计算中预期外的元素%@",element.stringValue]
-                                      elementInfo:element];
+                if(error){
+                    *error = [NSError errorWithReason:EnumMSErrorUnexpectedElement
+                                          description:[NSString stringWithFormat:@"计算中预期外的元素%@",element.stringValue]
+                                          elementInfo:element];
+                }
                 *stop = YES;
             }
         }else if(element.elementType == EnumElementTypeUndefine){
-            *error = [NSError errorWithReason:EnumMSErrorUnkownElement
-                                  description:[NSString stringWithFormat:@"计算中的未知元素%@",element.stringValue]
-                                  elementInfo:element];
+            if(error){
+                *error = [NSError errorWithReason:EnumMSErrorUnkownElement
+                                      description:[NSString stringWithFormat:@"计算中的未知元素%@",element.stringValue]
+                                      elementInfo:element];
+            }
             *stop = YES;
         }
     }];
-    if(*error){
+    if(error && *error){
         return nil;
     }
     if(tempStack.count!=1){
@@ -201,7 +241,10 @@
 }
 
 
-/** 表达式转逆波兰式 */
+#pragma mark 表达式转逆波兰式
+/**
+ *  表达式转逆波兰式;（转换时会丢弃原有的空白符元素）
+ */
 + (NSMutableArray<MSElement*>*)parseToReversePolishFromString:(NSString*)inputString
                                                         error:(NSError*__strong*)error
 {
@@ -236,19 +279,23 @@
                         return NO;
                     }];
                     if(!popedArr){
-                        *error = [NSError errorWithReason:EnumMSErrorNotFind
-                                              description:@"运算栈中缺少对应的左括号'('"
-                                  elementInfo:value];
-                        [*error setInfo:[NSValue valueWithRange:NSMakeRange([value.originIndex integerValue], value.stringValue.length)] forKey:@"range"];
+                        if(error){
+                            *error = [NSError errorWithReason:EnumMSErrorNotFind
+                                                  description:@"运算栈中缺少对应的左括号'('"
+                                                  elementInfo:value];
+                            [*error setInfo:[NSValue valueWithRange:NSMakeRange([value.originIndex integerValue], value.stringValue.length)] forKey:@"range"];
+                        }
                         *stop = YES;
                     }
                     [popedArr removeLastObject];//丢弃最后的左括号
                     [tempStack pushs:popedArr];
                 }else{
-                    *error = [NSError errorWithReason:EnumMSErrorNotSupport
-                                          description:@"暂不支持处理的括号类型"
-                                          elementInfo:value];
-                    [*error setInfo:[NSValue valueWithRange:NSMakeRange([value.originIndex integerValue], value.stringValue.length)] forKey:@"range"];
+                    if(error){
+                        *error = [NSError errorWithReason:EnumMSErrorNotSupport
+                                              description:@"暂不支持处理的括号类型"
+                                              elementInfo:value];
+                        [*error setInfo:[NSValue valueWithRange:NSMakeRange([value.originIndex integerValue], value.stringValue.length)] forKey:@"range"];
+                    }
                     *stop = YES;
                 }
             }else{//遇到计算运算符
@@ -278,14 +325,18 @@
             }
         }else if (value.elementType==EnumElementTypeUndefine){
             //处理未定义元素
-            *error = [NSError errorWithReason:EnumMSErrorUnkownElement
-                                  description:[NSString stringWithFormat:@"未知的元素%@",value]
-                                  elementInfo:value];
-            [*error setInfo:[NSValue valueWithRange:NSMakeRange([value.originIndex integerValue], value.stringValue.length)] forKey:@"range"];
+            if(error){
+                *error = [NSError errorWithReason:EnumMSErrorUnkownElement
+                                      description:[NSString stringWithFormat:@"未知的元素%@",value]
+                                      elementInfo:value];
+                [*error setInfo:[NSValue valueWithRange:NSMakeRange([value.originIndex integerValue], value.stringValue.length)] forKey:@"range"];
+            }
             *stop = YES;
         }
     }];
-    if(*error) return nil;
+    if(error && *error){
+        return nil;
+    }
     //将opStack中剩余的运算符依次弹出并压入tempStack
     [tempStack pushs:[opStack popAll]];
     //逆序输出tempStack即为逆波兰式
@@ -331,21 +382,22 @@
             if(((MSValueOperator*)operator).direction == EnumOperatorDirectionLeftToRight){
                 
                 [jsExpression appendString:[NSString stringWithFormat:@"(%@%@)",
-                                            operator.name,numStrs[0]]];
+                                            numStrs[0],operator.name]];
             }else{
                 
                 [jsExpression appendString:[NSString stringWithFormat:@"(%@%@)",
-                                            numStrs[0],operator.name]];
+                                            operator.name,numStrs[0]]];
             }
         }else if(numStrs.count == 2){
             
             [jsExpression appendString:[NSString stringWithFormat:@"(%@%@%@)",
                                         numStrs[0],operator.name,numStrs[1]]];
         }else{
-            
-            *error = [NSError errorWithReason:EnumMSErrorNotSupport
-                                  description:[NSString stringWithFormat:@"不支持运算符'%@'的参数数量",operator.stringValue]
-                                  elementInfo:operator];
+            if(error){
+                *error = [NSError errorWithReason:EnumMSErrorNotSupport
+                                      description:[NSString stringWithFormat:@"不支持运算符'%@'的参数数量",operator.stringValue]
+                                      elementInfo:operator];
+            }
             return nil;
         }
     }else if ([operator isKindOfClass:[MSFunctionOperator class]]){
@@ -363,6 +415,48 @@
     }
     return jsExpression;
 }
+#pragma mark - For JavaScript
 
++ (NSNumber*)parserComputeExpressionInJavaScript:(NSString*)expression error:(NSError*__strong*)error
+{
+    JSValue* jsNum = [self parserEvalJavaScript:expression error:error];
+    
+    if(error && *error){
+        return nil;
+    }
+    
+    if(!jsNum.isNumber || [jsNum.toString isEqualToString:@"Infinity"]){
+        
+        if(error){
+            *error = [NSError errorWithReason:EnumMSErrorComputeFaile
+                                  description:[NSString stringWithFormat:@"计算表达式：%@时发生错误",expression]];
+        }
+        return nil;
+    }
+    return jsNum.toNumber;
+}
 
++ (JSValue*)parserEvalJavaScript:(NSString*)javaScript error:(NSError* __strong*)error
+{
+    JSContext* jsContext =[[MSElementTable defaultTable] valueForKey:@"jsContext"];
+    
+    __block NSError* __error;
+    jsContext.exceptionHandler = ^(JSContext *context, JSValue *exception){
+        
+        __error = [NSError errorWithReason:EnumMSErrorComputeFaile
+                               description:exception.toString];
+    };
+    
+    JSValue* jsVal = [jsContext evaluateScript:javaScript];
+    
+    if(__error){
+        if(error){
+            *error = __error;
+        }
+        return nil;
+    }
+    
+    jsContext.exceptionHandler = nil;
+    return jsVal;
+}
 @end

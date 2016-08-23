@@ -46,15 +46,15 @@
                 elementInfo:(MSElement*)elementInfo
 {
     NSString* domain = @"MSExpression";
-    if(elementInfo){
-        domain = elementInfo.stringValue;
+    if(elementInfo && [elementInfo isKindOfClass:[MSElement class]]){
+        domain = [NSString stringWithFormat:@"%@.%@.%@",domain,NSStringFromClass([elementInfo class]),elementInfo.stringValue];
     }
     NSMutableDictionary* userInfo = [NSMutableDictionary new];
     userInfo[NSLocalizedFailureReasonErrorKey] = [self errorDescriptionFromReason:reason];
     if(description){
         userInfo[NSLocalizedDescriptionKey] = description;
     }
-    if(elementInfo){
+    if(elementInfo && [elementInfo isKindOfClass:[MSElement class]]){
         userInfo[ElementKey] = elementInfo;
         userInfo[@"range"] = [NSValue valueWithRange:NSMakeRange([elementInfo.originIndex integerValue], elementInfo.stringValue.length)];
     }

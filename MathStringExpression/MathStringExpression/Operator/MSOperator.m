@@ -27,7 +27,7 @@
 {
     self = [super init];
     if (self) {
-        [self setValue:@(EnumElementTypeOperator) forKey:@"elementType"];
+        _elementType = EnumElementTypeOperator;
         _opStyle = EnumOperatorStyleUndefine;
     }
     return self;
@@ -36,25 +36,26 @@
 + (instancetype)operatorWithKeyValue:(NSDictionary*)keyValue
 {
     
-    id re;
-    if((re = [[self.class alloc] init])){
-        [re setValuesForKeysWithDictionary:keyValue];
+    id op;
+    if((op = [[self.class alloc] init])){
+        [op setValuesForKeysWithDictionary:keyValue];
     }
-    return re;
+    return op;
 }
 
-- (instancetype)copy
+- (id)copyWithZone:(NSZone *)zone
 {
-    MSOperator* re = [MSOperator new];
-    if(re){
-        [re setValue:self.name forKey:@"name"];;
-        [re setValue:@(self.opStyle) forKey:@"opStyle"];
-        [re setValue:self.blockCustomToExpression forKey:@"blockCustomToExpression"];
-        re.jsTransferOperator = self.jsTransferOperator;
-        re.showName = self.showName;
-        re.level = self.level;
+    MSOperator* copy = [super copyWithZone:zone];
+    if(copy){
+        copy->_opStyle = self.opStyle;
+        copy->_name = self.name;
+        copy->_showName = self.showName;
+        copy->_level = self.level;
+        copy->_uuid = self.uuid;
+        copy->_jsTransferOperator = [self.jsTransferOperator copy];
+        copy->_blockCustomToExpression = self.blockCustomToExpression;
     }
-    return re;
+    return copy;
 }
 
 - (NSComparisonResult)compareOperator:(MSOperator*)op
@@ -85,13 +86,13 @@
     return _uuid;
 }
 
-- (BOOL)isEqual:(id)object
+- (BOOL)isEqual:(MSOperator*)object
 {
     if(self==object)
         return YES;
     if(![object isKindOfClass:[MSOperator class]])
         return NO;
-    if([self.uuid isEqualToString:((MSOperator*)object).uuid]){
+    if([self.uuid isEqualToString:object.uuid]){
         return YES;
     }
     return NO;

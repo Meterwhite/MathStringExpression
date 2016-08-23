@@ -18,9 +18,9 @@
 {
     self = [super init];
     if (self) {
-        [self setValue:@(EnumOperatorStyleValue) forKey:@"opStyle"];
-        self.direction = EnumOperatorDirectionLeftToRight;
-        self.argsCount = 2;
+        _opStyle = EnumOperatorStyleValue;
+        _direction = EnumOperatorDirectionLeftToRight;
+        _argsCount = 2;
     }
     return self;
 }
@@ -38,19 +38,14 @@
     self.computeBlock = block;
 }
 
-- (instancetype)copy
+- (id)copyWithZone:(NSZone *)zone
 {
-    MSValueOperator* re = [MSValueOperator new];
-    if(re){
-        [re setValue:self.name forKey:@"name"];
-        [re setValue:@(self.opStyle) forKey:@"opStyle"];
-        [re setValue:self.computeBlock forKey:@"computeBlock"];
-        [re setValue:[self valueForKey:@"blockCustomToExpression"] forKey:@"blockCustomToExpression"];
-        re.showName = self.showName;
-        re.level = self.level;
-        re.argsCount = self.argsCount;
-        re.jsTransferOperator = self.jsTransferOperator;
+    MSValueOperator* copy = [super copyWithZone:zone];
+    if(copy){
+        copy->_argsCount = self.argsCount;
+        copy->_direction = self.direction;
+        copy->_computeBlock = self.computeBlock;
     }
-    return re;
+    return copy;
 }
 @end

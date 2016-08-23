@@ -7,7 +7,10 @@
 //
 
 #import "MSParser.h"
+#import "MSOperator.h"
 #import "MSElementTable.h"
 #import "MSValueOperator.h"
 #import "MSFunctionOperator.h"
+#import "MSNumber.h"
+#import "MSConstant.h"
 #import "MSExpressionHelper.h"

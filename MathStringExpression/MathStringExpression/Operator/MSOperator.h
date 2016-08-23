@@ -19,12 +19,17 @@ typedef enum EnumOperatorStyle {
 /**
  *  操作符
  */
-@interface MSOperator : MSElement
+@interface MSOperator : MSElement{
+@protected
+    EnumOperatorStyle _opStyle;
+}
 /** 初始化可选项：
- name:原始运算符名
- showName:对应的表达式中的自定义的运算符名
- level:运算符优先级
- jsTransferOperator:自定义运算符可设置对应的JavaScript表达式运算符，不设置时使用运算符本身
+ *** ** *** ** *** ** *** ** *** ** *** ** *** ** *** ** *** ** *** ** *** ** *** ** *** **
+ *  name:原始运算符名
+ *  showName:对应的表达式中的自定义的运算符名
+ *  level:运算符优先级
+ *  jsTransferOperator:自定义运算符可设置对应的JavaScript表达式运算符，不设置时使用运算符本身
+ *** ** *** ** *** ** *** ** *** ** *** ** *** ** *** ** *** ** *** ** *** ** *** ** *** **
  */
 + (instancetype)operatorWithKeyValue:(NSDictionary*)keyValue;
 #pragma mark - 属性
@@ -48,8 +53,7 @@ typedef enum EnumOperatorStyle {
 - (void)customToExpressionUsingBlock:(NSString*(^)(NSString* name,NSArray<NSString*>* args))block;
 /** 运算符优先级比较 */
 - (NSComparisonResult)compareOperator:(MSOperator*)op;
-- (instancetype)copy;
-- (BOOL)isEqual:(id)object;
+- (BOOL)isEqual:(MSOperator*)object;
 - (NSString *)description;
 - (NSString *)debugDescription;
 @end

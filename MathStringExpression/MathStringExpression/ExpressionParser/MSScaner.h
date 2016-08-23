@@ -22,7 +22,7 @@
              block:(void(^)(MSElement* value,NSUInteger idx,BOOL isEnd,BOOL* stop))block;
 
 /**
- *  表达式解析为元素时进行更多的处理（全局的）
+ *  表达式解析为元素时在此处进行更多的处理（全局）
  */
 + (void)scanElementsUsingBlock:(void(^)(MSElement* element,NSUInteger idx))block;
 @end

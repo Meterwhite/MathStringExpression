@@ -13,22 +13,13 @@
 {
     self = [super init];
     if (self) {
-        [self setValue:@(EnumOperatorStylePair) forKey:@"opStyle"];
+        _opStyle = EnumOperatorStylePair;
     }
     return self;
 }
 
-- (instancetype)copy
+- (id)copyWithZone:(NSZone *)zone
 {
-    MSPairOperator* re = [MSPairOperator new];
-    if(re){
-        [re setValue:self.name forKey:@"name"];
-        [re setValue:@(self.opStyle) forKey:@"opStyle"];
-        [re setValue:[self valueForKey:@"blockCustomToExpression"] forKey:@"blockCustomToExpression"];
-        re.jsTransferOperator = self.jsTransferOperator;
-        re.showName = self.showName;
-        re.level = self.level;
-    }
-    return re;
+    return [super copyWithZone:zone];
 }
 @end

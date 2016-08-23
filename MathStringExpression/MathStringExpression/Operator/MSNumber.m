@@ -8,22 +8,35 @@
 
 #import "MSNumber.h"
 
+@interface MSNumber ()
+
+@end
+
 @implementation MSNumber
-@synthesize numberValue=_numberValue;
 
 - (instancetype)init
 {
     self = [super init];
     if (self) {
-        [self setValue:@(EnumElementTypeNumber) forKey:@"elementType"];
+        _elementType = EnumElementTypeNumber;
     }
     return self;
+}
+
+- (id)copyWithZone:(NSZone *)zone
+{
+    MSNumber* copy = [super copyWithZone:zone];
+    if(copy){
+        copy->_numberValue = self.numberValue;
+    }
+    return copy;
 }
 
 - (NSString *)description
 {
     return self.stringValue;
 }
+
 - (NSString *)debugDescription
 {
     return self.stringValue;
@@ -31,10 +44,8 @@
 
 - (void)setStringValue:(NSString *)stringValue
 {
-    if(stringValue){
-        [super setStringValue:stringValue];
-        _numberValue = @([stringValue doubleValue]);
-    }
+    [super setStringValue:stringValue];
+    _numberValue = @([stringValue doubleValue]);
 }
 
 - (NSNumber *)numberValue
@@ -44,8 +55,6 @@
 
 - (void)setNumberValue:(NSNumber *)numberValue
 {
-    if(_numberValue){
-        _numberValue = numberValue;
-    }
+    _numberValue = numberValue;
 }
 @end
