@@ -8,7 +8,7 @@
 * 自定义运算符，计算方式
 * 将表达式转JavaScript表达式，让JavaScript引擎实现计算
 * 持续维护
-* 小众需求，谢谢点赞
+* 谢谢点赞
 * A convenience for developers who need to develop calculators.
 * Mathematical expression for calculating string
 * Custom operators and calculation methods
@@ -23,7 +23,7 @@
 
 ##计算表达式
 ```objc
-NSNumber* computeResult = [MSParser parserComputeString:@"2(-1*3)+random()" error:nil];
+NSNumber* computeResult = [MSParser parserComputeExpression:@"2(-1*3)+random()" error:nil];
 ```
 ##运算符类图
 ![alt 类图](https://raw.githubusercontent.com/qddnovo/MathStringExpression/master/MathStringExpression/Class.png)
@@ -78,7 +78,7 @@ pi.showName = @"π";//设置表现名
 
 ##表达式转JavaScript表达式
 ```objc
-NSString* jsExpression = [MSParser parserJSExpressionFromString:@"sin(PI)" error:nil];
+NSString* jsExpression = [MSParser parserJSExpressionFromExpression:@"sin(PI)" error:nil];
 //结果为(Math.sin(PI))，可交由JavaScriptCore运算
 ```
 
@@ -104,5 +104,17 @@ _sqr.jsTransferOperator = sqr_js;
     return [NSString stringWithFormat:@"%@(%@,1/%@)",name,args[0],args[1]];
 }];
 ```
+##使用JavaScript定义函数
+```objc
+MSFunctionOperator* opFunJS = [MSFunctionOperator operatorWithJSFunction:@"function And(a,b){return a + b;}" error:nil];
+[tab setElement:opFunJS];
+```
+
+##使用JavaScript定义常量
+```objc
+MSConstant* opConstantJS = [MSConstant constantWithJSValue:@" var age = 18.00; " error:nil];
+[tab setElement:opConstantJS];
+```
+
 ##Mail address quxingyi@outlook.com
 * 一朝做鸟程序员
