@@ -106,14 +106,15 @@ _sqr.jsTransferOperator = sqr_js;
 ```
 ##使用JavaScript定义函数
 ```objc
-MSFunctionOperator* opFunJS = [MSFunctionOperator operatorWithJSFunction:@"function And(a,b){return a + b;}" error:nil];
-[tab setElement:opFunJS];
+MSFunctionOperator* addJS=[MSFunctionOperator operatorWithJSFunction:@"function And(a,b){return a+b;}" 
+                                                                 error:nil];
+[tab setElement:addJS];
 ```
 
 ##使用JavaScript定义常量
 ```objc
-MSConstant* opConstantJS = [MSConstant constantWithJSValue:@" var age = 18.00; " error:nil];
-[tab setElement:opConstantJS];
+MSConstant* ageJS = [MSConstant constantWithJSValue:@" var age = 18.00; " error:nil];
+[tab setElement:ageJS];
 ```
 
 ##Mail address quxingyi@outlook.com
