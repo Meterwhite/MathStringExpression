@@ -344,7 +344,7 @@
 }
 
 #pragma mark - 工具
-/** 运算符及参数转JS表达式 */
+#pragma mark 运算符及参数转JS表达式
 + (NSMutableString*)toolJSExpByOperator:(MSOperator*)operator args:(NSArray*)args error:(NSError*__strong*)error
 {
     
@@ -416,7 +416,7 @@
     return jsExpression;
 }
 #pragma mark - For JavaScript
-
+#pragma mark 计算JS表达式
 + (NSNumber*)parserComputeExpressionInJavaScript:(NSString*)expression error:(NSError*__strong*)error
 {
     JSValue* jsNum = [self parserEvalJavaScript:expression error:error];
@@ -435,7 +435,7 @@
     }
     return jsNum.toNumber;
 }
-
+#pragma mark 执行一段JS代码
 + (JSValue*)parserEvalJavaScript:(NSString*)javaScript error:(NSError* __strong*)error
 {
     JSContext* jsContext =[[MSElementTable defaultTable] valueForKey:@"jsContext"];

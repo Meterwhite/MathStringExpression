@@ -175,7 +175,7 @@ typedef enum EnumCharType{
     return splitedArr;
 }
 
-/** 将被初次切割的字符串中被的常数和函数名合并（贪婪的） */
+#pragma mark 将被初次切割的字符串中被的常数和函数名合并（贪婪的）
 + (void)scanCombineConstantAndFuncBySplited:(NSMutableArray<NSString*>*)splitedArr
                                originString:(NSString*)originString
 {
@@ -262,7 +262,7 @@ typedef enum EnumCharType{
     }];
 }
 
-/** 纠正语法 */
+#pragma mark 纠正语法
 + (void)scanRepairSpellByInElements:(NSMutableArray<MSElement*>*)elements
 {
     MSElementTable* elementTab = [MSElementTable defaultTable];
@@ -276,7 +276,15 @@ typedef enum EnumCharType{
            [[element valueForKey:@"name"] isEqualToString:@"("] &&
            idx>0)
         {
-            MSElement* beforeElement = elements[idx-1];
+            __block MSElement* beforeElement;
+            [[elements subarrayWithRange:NSMakeRange(0, idx)] enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(MSElement * _Nonnull item, NSUInteger idx, BOOL * _Nonnull stop) {
+                
+                if(item.elementType!=EnumElementTypeAppearance){
+                    
+                    beforeElement = item;
+                    *stop = YES;
+                }
+            }];
             if([beforeElement isKindOfClass:[MSNumber class]]){
                 [setFor1 addIndex:idx];
             }
@@ -296,7 +304,17 @@ typedef enum EnumCharType{
     NSMutableIndexSet* setFor2 = [NSMutableIndexSet indexSet];
     [elements enumerateObjectsUsingBlock:^(MSElement * _Nonnull element, NSUInteger idx, BOOL * _Nonnull stop) {
         if([element isKindOfClass:[MSConstant class]] && idx>0){
-            MSElement* beforeElement = elements[idx-1];
+            
+            __block MSElement* beforeElement;
+            
+            [[elements subarrayWithRange:NSMakeRange(0, idx)] enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(MSElement * _Nonnull item, NSUInteger idx, BOOL * _Nonnull stop) {
+                
+                if(item.elementType!=EnumElementTypeAppearance){
+                    
+                    beforeElement = item;
+                    *stop = YES;
+                }
+            }];
             if([beforeElement isMemberOfClass:[MSNumber class]]){
                 [setFor2 addIndex:idx];
             }
@@ -318,7 +336,13 @@ typedef enum EnumCharType{
         
         if([element isKindOfClass:[MSFunctionOperator class]] && idx>0){
             
-            MSElement* beforeElement = elements[idx-1];
+            __block MSElement* beforeElement;
+            [[elements subarrayWithRange:NSMakeRange(0, idx)] enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(MSElement * _Nonnull item, NSUInteger idx, BOOL * _Nonnull stop) {
+                if(item.elementType!=EnumElementTypeAppearance){
+                    beforeElement = item;
+                    *stop = YES;
+                }
+            }];
             if([beforeElement isMemberOfClass:[MSNumber class]]){
                 [setFor3 addIndex:idx];
             }
@@ -344,7 +368,7 @@ static void (^blockElementsSet)(MSElement *, NSUInteger);
 #pragma mark - 工具
 + (void)toolCombineArr:(NSMutableArray<NSString*>*)arr inRanges:(NSArray<NSValue*>*)ranges
 {
-    if(!ranges.count)   return;
+    if(!ranges.count) return;
     //倒序替换防止越界
     [ranges.reverseObjectEnumerator.allObjects enumerateObjectsUsingBlock:^(NSValue * _Nonnull rangeV, NSUInteger idx, BOOL * _Nonnull stop) {
         
