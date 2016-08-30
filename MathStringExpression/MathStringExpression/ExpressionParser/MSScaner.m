@@ -101,6 +101,68 @@ typedef enum EnumCharType{
         block(element , idx , (idx == elementArr.count-1) , stop);
     }];
 }
+#pragma mark 仅仅将表达式转元素数组，但不进行错误检查
++ (NSMutableArray<MSElement*>*)scanElementsFromExpression:(NSString*)expression
+{
+    NSMutableArray<NSString*>* splitedArr = [self scanSplitString:expression];
+    NSMutableArray<MSElement*>* elementArr = [NSMutableArray new];
+    __block NSUInteger curstrIdx = 0;
+    [splitedArr enumerateObjectsUsingBlock:^(NSString*  _Nonnull elementStr, NSUInteger idx, BOOL * _Nonnull stop) {
+        
+        NSMutableArray<MSElement*>* elementInArr = [[MSElementTable defaultTable] elementsFromString:elementStr];
+        if(elementInArr.count==1){
+            //查询到单个元素
+            elementInArr.firstObject.originIndex = @(curstrIdx);
+            if(blockElementsSet){
+                blockElementsSet(elementInArr.firstObject , idx);
+            }
+            [elementArr addObject:elementInArr.firstObject];
+        }else{
+            
+            NSString* name = ((MSOperator*)[elementInArr firstObject]).name;
+            if([elementInArr firstObject].elementType == EnumElementTypeOperator){
+                MSOperator*(^conflictHandleBlock)(NSArray<MSOperator*>* conflictOps, NSUInteger idx ,NSArray<MSElement*>* beforeElements,NSArray<NSString*>* elementStrings)
+                = [[MSElementTable defaultTable] valueForKey:@"conflictOperatorDict"][name];
+                if(!conflictHandleBlock){
+                    elementInArr.firstObject.originIndex = @(curstrIdx);
+                    if(blockElementsSet){
+                        blockElementsSet(elementInArr.firstObject , idx);
+                    }
+                    [elementArr addObject:elementInArr.firstObject];
+                }
+                
+                MSOperator* choosedOp = conflictHandleBlock((id)elementInArr,idx,elementArr,splitedArr);
+                if(choosedOp){
+                    
+                    choosedOp.originIndex = @(curstrIdx);
+                    if(blockElementsSet){
+                        blockElementsSet(elementInArr.firstObject , idx);
+                    }
+                    [elementArr addObject:choosedOp];
+                }else{
+                    
+                    elementInArr.firstObject.originIndex = @(curstrIdx);
+                    if(blockElementsSet){
+                        blockElementsSet(elementInArr.firstObject , idx);
+                    }
+                    [elementArr addObject:elementInArr.firstObject];
+                }
+            }else{//未知元素
+                
+                elementInArr.firstObject.originIndex = @(curstrIdx);
+                if(blockElementsSet){
+                    blockElementsSet(elementInArr.firstObject , idx);
+                }
+                [elementArr addObject:elementInArr.firstObject];
+            }
+        }
+        curstrIdx+=elementStr.length;
+    }];
+    
+    [self scanRepairSpellByInElements:elementArr];
+    
+    return elementArr;
+}
 #pragma mark 切割表达式
 + (NSMutableArray<NSString*>*)scanSplitString:(NSString*)string
 {
@@ -326,6 +388,7 @@ typedef enum EnumCharType{
             MSValueOperator* op = [mulOp copy];
             op.originIndex = elements[idx].originIndex;
             [op setValue:@(YES) forKey:@"hidden"];
+            
             [elements insertObject:op atIndex:idx];
         }];
     }

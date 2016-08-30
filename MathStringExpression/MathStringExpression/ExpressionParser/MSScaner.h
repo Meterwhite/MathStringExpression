@@ -22,6 +22,11 @@
              block:(void(^)(MSElement* value,NSUInteger idx,BOOL isEnd,BOOL* stop))block;
 
 /**
+ *  仅仅将表达式转元素数组，但不进行错误检查
+ */
++ (NSMutableArray<MSElement*>*)scanElementsFromExpression:(NSString*)expression;
+
+/**
  *  表达式解析为元素时在此处进行更多的处理（全局）
  */
 + (void)scanElementsUsingBlock:(void(^)(MSElement* element,NSUInteger idx))block;
