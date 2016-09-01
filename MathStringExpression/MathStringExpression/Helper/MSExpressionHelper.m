@@ -54,23 +54,23 @@
     __block BOOL flagFindFirstElmt = NO;
     NSError* error;
     NSMutableArray<MSElement*>* elementArr = [NSMutableArray new];
-    [MSScaner scanExpression:expression error:&error block:^(MSElement *value, NSUInteger idx, BOOL isEnd, BOOL *stop) {
+    [MSScaner scanExpression:expression error:&error block:^(MSElement *element, NSUInteger idx, BOOL isEnd, BOOL *stop) {
         
-        [elementArr addObject:value];
+        [elementArr addObject:element];
         if(!flagFindFirstElmt){
             
-            NSUInteger start = [value.originIndex integerValue];
-            NSUInteger end = [value.originIndex integerValue] + value.stringValue.length - 1;
-            if(![[value valueForKey:@"hidden"] boolValue]){//可见元素
+            NSUInteger start = [element.originIndex integerValue];
+            NSUInteger end = [element.originIndex integerValue] + element.stringValue.length - 1;
+            if(![[element valueForKey:@"hidden"] boolValue]){//可见元素
                 if(index >= start && index <= end){
                     
-                    range = NSMakeRange([value.originIndex integerValue] , value.stringValue.length);
+                    range = NSMakeRange([element.originIndex integerValue] , element.stringValue.length);
                     [ranges addObject:[NSValue valueWithRange:range]];
                     flagFindFirstElmt = YES;
                     //是否是左括号
-                    if([value isKindOfClass:[MSPairOperator class]]){
+                    if([element isKindOfClass:[MSPairOperator class]]){
                         
-                        if([[value valueForKey:@"name"] isEqualToString:@"("]){
+                        if([[element valueForKey:@"name"] isEqualToString:@"("]){
                             findRightPair = YES;
                         }else{
                             findLeftPair = YES;
