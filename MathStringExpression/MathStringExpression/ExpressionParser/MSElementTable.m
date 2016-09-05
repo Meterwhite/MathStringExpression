@@ -339,6 +339,8 @@
     MSValueOperator* comma =    [MSValueOperator operatorWithKeyValue:@{@"name":@",",@"level":@(16)}];
     [self setElement:comma];
     
+    MSValueOperator* equal =    [MSValueOperator operatorWithKeyValue:@{@"name":@"=",@"level":@(16)}];
+    [self setElement:equal];
 }
 #pragma mark 默认常量设置
 - (void)setDefauleConstantTable
