@@ -87,21 +87,18 @@
     //运算符
     [self.operatorTable enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, MSOperator * _Nonnull opertaor, BOOL * _Nonnull stop) {
         
-        if((weakSelf.operatorSearchType&EnumOperatorSearchName) == EnumOperatorSearchName){
+        if([string isEqualToString:opertaor.name] &&
+           ((weakSelf.operatorSearchType&EnumOperatorSearchName) == EnumOperatorSearchName)){
             
-            if([string isEqualToString:opertaor.name]){
-                
-                MSOperator* tOP =[opertaor copy];
-                tOP.stringValue = string;
-                [re addObject: tOP];
-            }
-        }else if ((weakSelf.operatorSearchType&EnumOperatorSearchShowName) == EnumOperatorSearchShowName){
-            if([string isEqualToString:opertaor.showName]){
-                
-                MSOperator* tOP =[opertaor copy];
-                tOP.stringValue = string;
-                [re addObject: tOP];
-            }
+            MSOperator* tOP =[opertaor copy];
+            tOP.stringValue = string;
+            [re addObject: tOP];
+        }else if ([string isEqualToString:opertaor.showName] &&
+                  ((weakSelf.operatorSearchType&EnumOperatorSearchShowName) == EnumOperatorSearchShowName)){
+            
+            MSOperator* tOP =[opertaor copy];
+            tOP.stringValue = string;
+            [re addObject: tOP];
         }
     }];
     if(re.count){
@@ -118,22 +115,20 @@
     
     [self.constantTable enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull nameT, MSConstant * _Nonnull constant, BOOL * _Nonnull stop) {
         
-        if((weakSelf.operatorSearchType&EnumOperatorSearchName) == EnumOperatorSearchName){
+        if([string isEqualToString:constant.name] &&
+           ((weakSelf.operatorSearchType&EnumOperatorSearchName) == EnumOperatorSearchName)){
             
-            if([string isEqualToString:constant.name]){
-                
-                MSConstant* tConstant = [constant copy];
-                tConstant.stringValue = string;
-                [re addObject: tConstant];
-            }
-        }else if ((weakSelf.operatorSearchType&EnumOperatorSearchShowName) == EnumOperatorSearchShowName){
-            if([string isEqualToString:constant.showName]){
-                
-                MSConstant* tConstant = [constant copy];
-                tConstant.stringValue = string;
-                [re addObject: tConstant];
-            }
+            MSConstant* tConstant = [constant copy];
+            tConstant.stringValue = string;
+            [re addObject: tConstant];
+        }else if ([string isEqualToString:constant.showName] &&
+                  ((weakSelf.operatorSearchType&EnumOperatorSearchShowName) == EnumOperatorSearchShowName)){
+            
+            MSConstant* tConstant = [constant copy];
+            tConstant.stringValue = string;
+            [re addObject: tConstant];
         }
+        
     }];
     if(re.count) return re;
     
