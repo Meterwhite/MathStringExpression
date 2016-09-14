@@ -60,6 +60,23 @@
     return copy;
 }
 
+- (void)encodeWithCoder:(NSCoder *)aCoder
+{
+    [super encodeWithCoder:aCoder];
+    [aCoder encodeObject:self.name forKey:@"name"];
+    [aCoder encodeObject:self.showName forKey:@"showName"];
+    [aCoder encodeBool:self.isFromJS forKey:@"isFromJS"];
+}
+- (nullable instancetype)initWithCoder:(NSCoder *)aDecoder
+{
+    if(self = [super initWithCoder:aDecoder]){
+        self->_name = [aDecoder decodeObjectForKey:@"name"];
+        self->_showName = [aDecoder decodeObjectForKey:@"showName"];
+        self->_isFromJS = [aDecoder decodeBoolForKey:@"isFromJS"];
+    }
+    return self;
+}
+
 + (instancetype)constantWithJSValue:(NSString*)javaScript error:(NSError**)error
 {
     javaScript = [javaScript stringByReplacingOccurrencesOfString:@"\n" withString:@""];

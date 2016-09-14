@@ -35,7 +35,6 @@
 
 + (instancetype)operatorWithKeyValue:(NSDictionary*)keyValue
 {
-    
     id op;
     if((op = [[self.class alloc] init])){
         [op setValuesForKeysWithDictionary:keyValue];
@@ -56,6 +55,31 @@
         copy->_blockCustomToExpression = self.blockCustomToExpression;
     }
     return copy;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder
+{
+    [super encodeWithCoder:aCoder];
+    [aCoder encodeInteger:self.opStyle forKey:@"opStyle"];
+    [aCoder encodeObject:self.name forKey:@"name"];
+    [aCoder encodeObject:self.showName forKey:@"showName"];
+    [aCoder encodeInteger:self.level forKey:@"level"];
+    [aCoder encodeObject:self.uuid forKey:@"uuid"];
+    [aCoder encodeObject:self.jsTransferOperator forKey:@"jsTransferOperator"];
+    [aCoder encodeObject:self.blockCustomToExpression forKey:@"blockCustomToExpression"];
+}
+- (nullable instancetype)initWithCoder:(NSCoder *)aDecoder
+{
+    if(self = [super initWithCoder:aDecoder]){
+        self->_opStyle = (EnumOperatorStyle)[aDecoder decodeIntegerForKey:@"opStyle"];
+        self->_name = [aDecoder decodeObjectForKey:@"name"];
+        self->_showName = [aDecoder decodeObjectForKey:@"showName"];
+        self->_level = [aDecoder decodeIntegerForKey:@"level"];
+        self->_uuid = [aDecoder decodeObjectForKey:@"uuid"];
+        self->_jsTransferOperator = [aDecoder decodeObjectForKey:@"jsTransferOperator"];
+        self->_blockCustomToExpression = [aDecoder decodeObjectForKey:@"blockCustomToExpression"];
+    }
+    return self;
 }
 
 - (NSComparisonResult)compareOperator:(MSOperator*)op

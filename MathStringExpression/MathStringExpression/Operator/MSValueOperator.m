@@ -48,4 +48,20 @@
     }
     return copy;
 }
+- (void)encodeWithCoder:(NSCoder *)aCoder
+{
+    [super encodeWithCoder:aCoder];
+    [aCoder encodeInteger:self.argsCount forKey:@"argsCount"];
+    [aCoder encodeInteger:self.direction forKey:@"direction"];
+    [aCoder encodeObject:self.computeBlock forKey:@"computeBlock"];
+}
+- (nullable instancetype)initWithCoder:(NSCoder *)aDecoder
+{
+    if(self = [super initWithCoder:aDecoder]){
+        self->_argsCount = [aDecoder decodeIntegerForKey:@"argsCount"];
+        self->_direction = (EnumOperatorDirection)[aDecoder decodeIntegerForKey:@"direction"];
+        self->_computeBlock = [aDecoder decodeObjectForKey:@"computeBlock"];
+    }
+    return self;
+}
 @end

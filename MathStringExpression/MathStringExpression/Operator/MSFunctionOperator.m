@@ -117,4 +117,18 @@
     }
     return copy;
 }
+- (void)encodeWithCoder:(NSCoder *)aCoder
+{
+    [super encodeWithCoder:aCoder];
+    [aCoder encodeObject:self.computeBlock forKey:@"computeBlock"];
+    [aCoder encodeInteger:self.argsCount forKey:@"argsCount"];
+}
+- (nullable instancetype)initWithCoder:(NSCoder *)aDecoder
+{
+    if(self = [super initWithCoder:aDecoder]){
+        self->_computeBlock = [aDecoder decodeObjectForKey:@"computeBlock"];
+        self->_argsCount = [aDecoder decodeIntegerForKey:@"argsCount"];
+    }
+    return self;
+}
 @end

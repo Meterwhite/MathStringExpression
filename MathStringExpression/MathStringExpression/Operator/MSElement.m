@@ -41,6 +41,26 @@
     return copy;
 }
 
+- (void)encodeWithCoder:(NSCoder *)aCoder
+{
+    [aCoder encodeObject:self.stringValue forKey:@"stringValue"];
+    [aCoder encodeObject:self.userInfo forKey:@"userInfo"];
+    [aCoder encodeObject:self.originIndex forKey:@"originIndex"];
+    [aCoder encodeInteger:self.elementType forKey:@"elementType"];
+    [aCoder encodeBool:self.hidden forKey:@"hidden"];
+}
+- (nullable instancetype)initWithCoder:(NSCoder *)aDecoder
+{
+    if(self = [super init]){
+        self->_stringValue = [aDecoder decodeObjectForKey:@"stringValue"];
+        self->_userInfo = [aDecoder decodeObjectForKey:@"userInfo"];
+        self->_originIndex = [aDecoder decodeObjectForKey:@"originIndex"];
+        self->_elementType = (EnumElementType)[aDecoder decodeIntegerForKey:@"elementType"];
+        self->_hidden = [aDecoder decodeBoolForKey:@"hidden"];
+    }
+    return self;
+}
+
 - (void)setAppearance
 {
     _elementType = EnumElementTypeAppearance;

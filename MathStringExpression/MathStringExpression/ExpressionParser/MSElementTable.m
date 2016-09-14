@@ -461,6 +461,23 @@ static MSElementTable * _elementTable;
 {
     return _elementTable;
 }
+- (void)encodeWithCoder:(NSCoder *)aCoder
+{
+    [aCoder encodeObject:self.operatorTable forKey:@"operatorTable"];
+    [aCoder encodeObject:self.constantTable forKey:@"constantTable"];
+    [aCoder encodeObject:self.conflictOperatorDict forKey:@"conflictOperatorDict"];
+    [aCoder encodeInteger:self.operatorSearchType forKey:@"operatorSearchType"];
+}
+- (nullable instancetype)initWithCoder:(NSCoder *)aDecoder
+{
+    if(self = [super init]){
+        self.operatorTable = [aDecoder decodeObjectForKey:@"operatorTable"];
+        self.constantTable = [aDecoder decodeObjectForKey:@"constantTable"];
+        self.conflictOperatorDict = [aDecoder decodeObjectForKey:@"conflictOperatorDict"];
+        self.operatorSearchType = (EnumOperatorSearchType)[aDecoder decodeIntegerForKey:@"operatorSearchType"];
+    }
+    return self;
+}
 
 - (NSString *)description
 {

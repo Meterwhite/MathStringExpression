@@ -32,6 +32,19 @@
     return copy;
 }
 
+- (void)encodeWithCoder:(NSCoder *)aCoder
+{
+    [super encodeWithCoder:aCoder];
+    [aCoder encodeObject:self.numberValue forKey:@"numberValue"];
+}
+- (nullable instancetype)initWithCoder:(NSCoder *)aDecoder
+{
+    if(self = [super initWithCoder:aDecoder]){
+        self->_numberValue = [aDecoder decodeObjectForKey:@"numberValue"];
+    }
+    return self;
+}
+
 - (NSString *)description
 {
     return self.stringValue;

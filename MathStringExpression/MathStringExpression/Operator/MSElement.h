@@ -21,6 +21,7 @@ typedef enum EnumElementType{
 
 @interface MSElement : NSObject
 <
+    NSCoding,
     /** 为了省事 '- copy' 实现了对所有MSElement对象及子对象的'深拷贝'而不是'浅拷贝' */
     NSCopying
 >

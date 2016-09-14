@@ -41,6 +41,9 @@ typedef enum EnumOperatorSearchType{
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  */
 @interface MSElementTable : NSObject
+<
+    NSCoding
+>
 /** 获取表 */
 + (MSElementTable*)defaultTable;
 /** 设置一个运算符 */

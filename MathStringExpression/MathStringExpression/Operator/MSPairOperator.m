@@ -22,4 +22,14 @@
 {
     return [super copyWithZone:zone];
 }
+
+- (void)encodeWithCoder:(NSCoder *)aCoder
+{
+    [super encodeWithCoder:aCoder];
+}
+- (nullable instancetype)initWithCoder:(NSCoder *)aDecoder
+{
+    self = [super initWithCoder:aDecoder];
+    return self;
+}
 @end
