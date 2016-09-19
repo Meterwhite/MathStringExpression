@@ -231,14 +231,14 @@
     [self.class setDefaultJSFuncTransferOp:_ln];
     [self setElement:_ln];
     
-    MSFunctionOperator* _max =   [MSFunctionOperator operatorWithKeyValue:@{@"name":@"max",@"level":@(1),@"argsCount":@(1)}];
+    MSFunctionOperator* _max =   [MSFunctionOperator operatorWithKeyValue:@{@"name":@"max",@"level":@(1),@"argsCount":@(2)}];
     [_max computeWithBlock:^NSNumber *(NSArray *args) {
         return @(MAX([args[0] doubleValue] , [args[1] doubleValue]));
     }];
     [self.class setDefaultJSFuncTransferOp:_max];
     [self setElement:_max];
     
-    MSFunctionOperator* _min =   [MSFunctionOperator operatorWithKeyValue:@{@"name":@"min",@"level":@(1),@"argsCount":@(1)}];
+    MSFunctionOperator* _min =   [MSFunctionOperator operatorWithKeyValue:@{@"name":@"min",@"level":@(1),@"argsCount":@(2)}];
     [_min computeWithBlock:^NSNumber *(NSArray *args) {
         return @(MIN([args[0] doubleValue] , [args[1] doubleValue]));
     }];
