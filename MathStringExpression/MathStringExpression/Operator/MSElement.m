@@ -67,6 +67,14 @@
     _hidden = NO;
 }
 
+- (NSMutableDictionary *)userInfo
+{
+    if(!_userInfo){
+        _userInfo = [NSMutableDictionary new];
+    }
+    return _userInfo;
+}
+
 - (NSString *)description
 {
     return self.stringValue;

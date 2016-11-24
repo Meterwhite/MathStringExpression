@@ -38,7 +38,7 @@ typedef enum EnumElementType{
 @property (nonatomic,assign,readonly) BOOL hidden;
 /** 表达式中的起始索引 */
 @property (nonatomic,strong) NSNumber* originIndex;
-/** 用户自定义 */
+/** 用户自定义，懒加载的 */
 @property (nonatomic,strong) NSMutableDictionary* userInfo;
 
 /** 将元素设置为仅用于显示状态 */
