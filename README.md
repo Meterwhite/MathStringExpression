@@ -15,20 +15,20 @@
 * JavaScript expression can be transferred to the JavaScript engine to calculate the expression
 * Star once,ten times a night
 
-##如何使用
+## 如何使用
 ```objc
 //1.将整个文件夹拖入项目
 #import "MathStringExpression.h"
 ```
 
-##计算表达式
+## 计算表达式
 ```objc
 NSNumber* computeResult = [MSParser parserComputeExpression:@"2(-1*3)+random()" error:nil];
 ```
-##运算符类图
+## 运算符类图
 ![alt 类图](https://raw.githubusercontent.com/qddnovo/MathStringExpression/master/MathStringExpression/Class.png)
 
-##自定义运算符
+## 自定义运算符
 ```objc
 //自定义次方算术运算符^，可知优先级与*号相同
 MSValueOperator* _pow = [MSValueOperator operatorWithKeyValue:@{@"name":@"^",@"level":@(3)}];
@@ -38,12 +38,12 @@ MSValueOperator* _pow = [MSValueOperator operatorWithKeyValue:@{@"name":@"^",@"l
 }];
 ```
 
-##导入自定义运算符
+## 导入自定义运算符
 ```objc
 MSElementTable* tab = [MSElementTable defaultTable];
 [tab setElement:_pow];
 ```
-##定义运算符或常量的表现名
+## 定义运算符或常量的表现名
 ```objc
 MSConstant* pi = [[tab elementsFromString:@"PI"] firstObject];//查询元素
 pi.showName = @"π";//设置表现名
@@ -51,7 +51,7 @@ pi.showName = @"π";//设置表现名
 //可解析带有π的表达式
 ```
 
-##重名不同优先级运算符冲突的判定
+## 重名不同优先级运算符冲突的判定
 ```objc
 //例如项目中已实现了的，解决负号和减号判定的样例
 [[MSElementTable defaultTable] handleConflictOperator:@"-"
@@ -76,13 +76,13 @@ pi.showName = @"π";//设置表现名
 }];
 ```
 
-##表达式转JavaScript表达式
+## 表达式转JavaScript表达式
 ```objc
 NSString* jsExpression = [MSParser parserJSExpressionFromExpression:@"sin(PI)" error:nil];
 //结果为(Math.sin(PI))，可交由JavaScriptCore运算
 ```
 
-##表达式转JavaScript表达式中的自定义运算符
+## 表达式转JavaScript表达式中的自定义运算符
 ```objc
 //如果JS表达式与当前命名不同则需定义jsTransferOperator对象，无此需求则忽略该步骤。
 MSValueOperator* _sqr = [MSValueOperator operatorWithKeyValue:@{@"name":@"√", @"level":@(3)}];
@@ -95,7 +95,7 @@ MSOperator* sqr_js = [MSOperator operatorWithKeyValue:@{@"name":@"Math.pow",@"le
 _sqr.jsTransferOperator = sqr_js;
 ```
 
-##转为JavaScript中不存在的表达形式
+## 转为JavaScript中不存在的表达形式
 ```objc
 //承接上例
 //这里自定义如何输出字符串表达式，用于转换到JavaScript表达式
@@ -104,18 +104,18 @@ _sqr.jsTransferOperator = sqr_js;
     return [NSString stringWithFormat:@"%@(%@,1/%@)",name,args[0],args[1]];
 }];
 ```
-##使用JavaScript定义函数
+## 使用JavaScript定义函数
 ```objc
 MSFunctionOperator* addJS=[MSFunctionOperator operatorWithJSFunction:@"function And(a,b){return a+b;}" 
                                                                  error:nil];
 [tab setElement:addJS];
 ```
 
-##使用JavaScript定义常量
+## 使用JavaScript定义常量
 ```objc
 MSConstant* ageJS = [MSConstant constantWithJSValue:@" var age = 18.00; " error:nil];
 [tab setElement:ageJS];
 ```
 
-##Mail address quxingyi@outlook.com
+## Mail address quxingyi@outlook.com
 * 一朝做鸟程序员
