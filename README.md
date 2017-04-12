@@ -5,15 +5,14 @@
 ## 简介
 * 为需要开发iOS计算器的开发者提供的一个便捷
 * 计算字符串数学表达式
-* 自定义运算符，计算方式
-* 将表达式转JavaScript表达式，让JavaScript引擎实现计算
-* 持续维护
-* 谢谢点赞
+* 包括自定义运算符，计算方式。
+* 默认支持JavaScript的Math函数
+* 可在项目表达式和JavaScript表达式之间转换
+* 长期维护
 * A convenience for developers who need to develop calculators.
 * Mathematical expression for calculating string
 * Custom operators and calculation methods
 * JavaScript expression can be transferred to the JavaScript engine to calculate the expression
-* Star once,ten times a night
 
 ## 如何使用
 ```objc
