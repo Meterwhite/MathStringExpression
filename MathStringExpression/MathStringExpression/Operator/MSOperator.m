@@ -110,8 +110,8 @@
     return _uuid;
 }
 
-- (BOOL)isEqual:(MSOperator*)object
-{
+- (BOOL)isEqualToOperator:(MSOperator*)object{
+
     if(self==object)
         return YES;
     if(![object isKindOfClass:[MSOperator class]])

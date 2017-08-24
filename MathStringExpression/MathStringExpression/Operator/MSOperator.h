@@ -53,7 +53,7 @@ typedef enum EnumOperatorStyle {
 - (void)customToExpressionUsingBlock:(NSString*(^)(NSString* name,NSArray<NSString*>* args))block;
 /** 运算符优先级比较 */
 - (NSComparisonResult)compareOperator:(MSOperator*)op;
-- (BOOL)isEqual:(MSOperator*)object;
+- (BOOL)isEqualToOperator:(MSOperator*)object;
 - (NSString *)description;
 - (NSString *)debugDescription;
 @end
