@@ -6,12 +6,13 @@
 * 为需要开发iOS计算器的开发者提供的一个便捷
 * 计算字符串数学表达式
 * 包括自定义运算符，计算方式。
-* 默认支持JavaScript的Math函数
+* 该项目默认使用JavaScript.Math库函数的命名方式
 * 可在项目表达式和JavaScript表达式之间转换
 * 长期维护
 * A convenience for developers who need to develop calculators.
 * Mathematical expression for calculating string
 * Custom operators and calculation methods
+* The project defaults to using JavaScript Math function
 * JavaScript expression can be transferred to the JavaScript engine to calculate the expression
 
 ## 如何使用
@@ -22,7 +23,7 @@
 
 ## 计算表达式
 ```objc
-NSNumber* computeResult = [MSParser parserComputeExpression:@"2(-1*3)+random()" error:nil];
+NSNumber* computeResult = [MSParser parserComputeExpression:@"2(-1*3)+random()" error:nil];//项目默认使用JavaScript.Math库函数命名方式
 ```
 ## 运算符类图
 ![alt 类图](https://raw.githubusercontent.com/qddnovo/MathStringExpression/master/MathStringExpression/Class.png)
