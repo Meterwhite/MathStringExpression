@@ -28,6 +28,12 @@ NSNumber* computeResult = [MSParser parserComputeExpression:@"2(-1*3)+random()" 
 ## 运算符类图
 ![alt 类图](https://raw.githubusercontent.com/qddnovo/MathStringExpression/master/MathStringExpression/Class.png)
 
+## 默认运算符列表
+![alt 类图](https://raw.githubusercontent.com/qddnovo/MathStringExpression/master/MathStringExpression/Operators.png)
+
+## 常量列表
+![alt 类图](https://raw.githubusercontent.com/qddnovo/MathStringExpression/master/MathStringExpression/Const.png)
+
 ## 自定义运算符
 ```objc
 //自定义次方算术运算符^，可知优先级与*号相同

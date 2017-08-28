@@ -92,7 +92,7 @@
                 
                 MSFunctionOperator* funcOp = (id)element;
                 //将需要的操作数出栈，并按参数计算顺序排列
-                if(tempStack.count<funcOp.argsCount){
+                if(tempStack.count < funcOp.argsCount){
                     if(error){
                         *error = [NSError errorWithReason:EnumMSErrorLackArgs
                                               description:[NSString stringWithFormat:@"计算'%@'时缺少必要的参数",element.stringValue]
@@ -123,8 +123,7 @@
                 *stop = YES;
             }
         }else if(element.elementType == EnumElementTypeUndefine){
-            if(error)
-            {
+            if(error){
                 *error = [NSError errorWithReason:EnumMSErrorUnkownElement
                                       description:[NSString stringWithFormat:@"计算中的未知元素%@",element.stringValue]
                                       elementInfo:element];

@@ -19,6 +19,10 @@ typedef enum EnumElementType{
     EnumElementTypeAppearance
 }EnumElementType;
 
+
+/**
+ 基类
+ */
 @interface MSElement : NSObject
 <
     NSCoding,
