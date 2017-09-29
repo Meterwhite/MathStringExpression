@@ -9,6 +9,9 @@
 #import "MSOperator.h"
 
 @interface MSOperator ()
+{
+    BOOL _sys;
+}
 /** 自定义转表达式拼接规则block */
 @property (nonatomic,copy) NSString*(^blockCustomToExpression)(NSString* name,NSArray<NSString*>* args);
 @end
@@ -16,7 +19,6 @@
 @implementation MSOperator
 @synthesize uuid=_uuid;
 @synthesize opStyle = _opStyle;
-
 
 - (void)customToExpressionUsingBlock:(NSString*(^)(NSString* name,NSArray<NSString*>* args))block
 {
@@ -29,6 +31,8 @@
     if (self) {
         _elementType = EnumElementTypeOperator;
         _opStyle = EnumOperatorStyleUndefine;
+        _level = 1;
+        _sys = NO;
     }
     return self;
 }
@@ -53,6 +57,7 @@
         copy->_uuid = self.uuid;
         copy->_jsTransferOperator = [self.jsTransferOperator copy];
         copy->_blockCustomToExpression = self.blockCustomToExpression;
+        copy->_sys = _sys;
     }
     return copy;
 }
@@ -67,6 +72,7 @@
     [aCoder encodeObject:self.uuid forKey:@"uuid"];
     [aCoder encodeObject:self.jsTransferOperator forKey:@"jsTransferOperator"];
     [aCoder encodeObject:self.blockCustomToExpression forKey:@"blockCustomToExpression"];
+    [aCoder encodeBool:_sys forKey:@"_sys"];
 }
 - (nullable instancetype)initWithCoder:(NSCoder *)aDecoder
 {
@@ -78,17 +84,17 @@
         self->_uuid = [aDecoder decodeObjectForKey:@"uuid"];
         self->_jsTransferOperator = [aDecoder decodeObjectForKey:@"jsTransferOperator"];
         self->_blockCustomToExpression = [aDecoder decodeObjectForKey:@"blockCustomToExpression"];
+        self->_sys = [aDecoder decodeBoolForKey:@"_sys"];
     }
     return self;
 }
 
 - (NSComparisonResult)compareOperator:(MSOperator*)op
 {
-    if(self.level<op.level){
+    if(self.level<op.level)
         return NSOrderedDescending;
-    }else if (self.level>op.level){
+    if (self.level>op.level)
         return NSOrderedAscending;
-    }
     return NSOrderedSame;
 }
 

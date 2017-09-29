@@ -20,8 +20,24 @@
 //1.将整个文件夹拖入项目
 #import "MathStringExpression.h"
 ```
+## 【新增】不定参数的支持
+```objc
+MSFunctionOperator* sum = [MSFunctionOperator operatorWithKeyValue:@{@"name":@"sum",@"level":@(1),@"argsCount":@(-1)}];
+[sum computeWithBlock:^NSNumber *(NSArray *args) {
+    double result = 0.0;
+    for (NSNumber* num in args) {
+        result += num.doubleValue;
+    }
+    return @(result);
+}];
+```
+## 【修改】
+```objc
+//注意：系统函数max和min修改为不定参数形式，但转为js依然为2个参数
+//计算结果返回值类型由NSNumber修改为NSString
+```
 
-## 计算表达式
+## 开始使用--计算表达式
 ```objc
 NSNumber* computeResult = [MSParser parserComputeExpression:@"2(-1*3)+random()" error:nil];//项目默认使用JavaScript.Math库函数命名方式
 ```

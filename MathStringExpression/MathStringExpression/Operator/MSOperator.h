@@ -39,9 +39,9 @@ typedef enum EnumOperatorStyle {
 @property (nonatomic,copy,readonly)     NSString* name;
 /** 操作符表达式中表现名，默认nil */
 @property (nonatomic,copy)              NSString* showName;
-/** 优先级 */
+/** 函数优先级默认为1 */
 @property (nonatomic,assign)            NSInteger level;
-/** 在将操作符解析为JavaScript表达式时，
+/** 在将操作符解析为JavaScript表达式时：
  该对象描述当作为JavaScript操作符时具有哪些信息。
  若该对象为nil时，默认用操作符自身来描述这些信息。
  */

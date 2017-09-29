@@ -10,9 +10,10 @@
 #import "MSFunctionOperator.h"
 #import "NSError+MSExpression.h"
 #import "MSElementTable.h"
+#import "MSNumber.h"
 
 @interface MSFunctionOperator ()
-@property (nonatomic,copy) NSNumber* (^computeBlock)(NSArray* args);
+@property (nonatomic,copy) id (^computeBlock)(NSArray* args);
 @end
 
 @implementation MSFunctionOperator
@@ -27,15 +28,15 @@
     return self;
 }
 
-- (NSNumber *)computeArgs:(NSArray *)args
+- (MSValue *)computeArgs:(NSArray *)args
 {
     if(self.computeBlock){
-        return self.computeBlock(args);
+        return [MSValue box:self.computeBlock(args)];
     }
     return nil;
 }
 
-- (void)computeWithBlock:(NSNumber *(^)(NSArray *))block
+- (void)computeWithBlock:(id(^)(NSArray *))block
 {
     self.computeBlock = block;
 }
@@ -88,10 +89,10 @@
             MSFunctionOperator* opFunc = [self operatorWithKeyValue:@{@"name":funcName,
                                                                       @"level":@(1),
                                                                       @"argsCount":@(args.count)}];
-            [opFunc computeWithBlock:^NSNumber *(NSArray *args) {
+            [opFunc computeWithBlock:^id (NSArray *args) {
                 
                 JSContext* _jsContext = [[MSElementTable defaultTable] valueForKey:@"jsContext"];
-                return [_jsContext[funcName] callWithArguments:args].toNumber;
+                return [MSNumber numberWithNumberValue:[_jsContext[funcName] callWithArguments:args].toNumber];
             }];
             return opFunc;
         }else{

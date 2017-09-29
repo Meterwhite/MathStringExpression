@@ -18,14 +18,34 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    //【修改】系统函数max和min修改为不定参数形式，但转为js依然为2个参数
+    
     //MSElementTable.h中可查默认运算符优先级表和常量表
     MSElementTable* tab = [MSElementTable defaultTable];
+    
+    //..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\
+    //..//..//..//..//..//..//..//..//..//..//..//..//..//..//..//..//..//..//
+    //【新增】不定参数的函数的支持；将argsCount赋值为-1；可以计算sum(1,sum(2,3),sum(4,5,6))
+    //【新增】例：
+    MSFunctionOperator* sum = [MSFunctionOperator operatorWithKeyValue:@{@"name":@"sum",
+                                                                         @"level":@(1),
+                                                                         @"argsCount":@(-1)}];
+    [sum computeWithBlock:^NSNumber *(NSArray *args) {
+        double result = 0.0;
+        for (NSNumber* num in args) {
+            result += num.doubleValue;
+        }
+        return @(result);
+    }];
+    [tab setElement:sum];
+    //..//..//..//..//..//..//..//..//..//..//..//..//..//..//..//..//..//..//
+    //..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\
     
     
     /** 
      *  例1 自定义运算符 
      */
-    //自定义次方算术运算符^，可知优先级与*号相同
+    //自定义次方算术运算符^，查表可知优先级与*号相同，为3
     MSValueOperator* _pow = [MSValueOperator operatorWithKeyValue:@{@"name":@"^",
                                                                    @"level":@(3)}];
     //如何计算
@@ -34,7 +54,7 @@
     }];
     //特别的考虑到可以使用JavaScript引擎来计算字符串，支持将项目中表达式转为JavaScript表达式。
     //如果需要则需定义jsTransferOperator对象，无此需求则忽略该步骤。
-    //由于原运算符为算术运算符而js中是函数运算符，所以这里定义一个函数运算符。(不定义该对象默认使用原对象)
+    //由于原运算符为算术运算符而js中是函数运算符，所以这里定义一个同js的函数运算符。(不定义该对象默认使用原对象)
     MSFunctionOperator* pow_js = [MSFunctionOperator operatorWithKeyValue:@{
                                                                             @"name":@"Math.pow",
                                                                             @"level":@(1)
@@ -52,7 +72,7 @@
         return @(pow([args[1] doubleValue], 1.0/[args[0] doubleValue]));
     }];
     [tab setElement:_sqr];
-    MSOperator* sqr_js = [MSOperator operatorWithKeyValue:@{
+    MSValueOperator* sqr_js = [MSValueOperator operatorWithKeyValue:@{
                                                             @"name":@"Math.pow",
                                                             @"level":@(1)
                                                             }];
@@ -94,8 +114,8 @@
     
     
     /** *** ** *** ** *** ** *** ** *** ** *** ** *** ** *** ** *** ** *** ** *** ** *** **  */
-    NSString* jsExpString = @"3√8 + 2^3 + age + And(1,1) + sin(180°) ";//2+8+18+2+0=30
-//    NSString* jsExpString = @" 1 / 0 ";//测试报错
+    NSString* jsExpString = @"3√8 + 2^3 + age + And(1,1) + sin(180°) + max(1,2,3,4,5)";//
+//  jsExpString = @" 1 / 0 ";//测试报错
     /** *** ** *** ** *** ** *** ** *** ** *** ** *** ** *** ** *** ** *** ** *** ** *** **  */
     
     //表达式预测试
@@ -107,7 +127,7 @@
     if(allRight){
         
         //计算表达式
-        NSNumber* computeResult = [MSParser parserComputeExpression:jsExpString error:nil];
+        NSString* computeResult = [MSParser parserComputeExpression:jsExpString error:nil];
         NSLog(@"计算结果为：%@",computeResult);
         
         //表达式转JS表达式

@@ -7,9 +7,11 @@
 //
 
 #import "MSValueOperator.h"
+#import "MSValue.h"
+#import "MSNumber.h"
 
 @interface MSValueOperator ()
-@property (nonatomic,copy) NSNumber* (^computeBlock)(NSArray* args);
+@property (nonatomic,copy) id (^computeBlock)(NSArray* args);
 @end
 
 @implementation MSValueOperator
@@ -25,15 +27,15 @@
     return self;
 }
 
-- (NSNumber *)computeArgs:(NSArray *)args
+- (MSValue *)computeArgs:(NSArray *)args
 {
     if(self.computeBlock){
-        return self.computeBlock(args);
+        return [MSValue box:self.computeBlock(args)];
     }
     return nil;
 }
 
-- (void)computeWithBlock:(NSNumber *(^)(NSArray *))block
+- (void)computeWithBlock:(id(^)(NSArray *))block
 {
     self.computeBlock = block;
 }

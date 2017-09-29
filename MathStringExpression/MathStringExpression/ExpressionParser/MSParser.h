@@ -18,7 +18,7 @@
 *
 *  @return 计算结果；当发生错误时返回nil；
 */
-+ (NSNumber*)parserComputeExpression:(NSString*)expression error:(NSError*__strong*)error;
++ (NSString*)parserComputeExpression:(NSString*)expression error:(NSError*__strong*)error;
 /**
  *  计算JavaScript表达式
  *
@@ -26,7 +26,7 @@
  *
  *  @return 计算结果；当发生错误时返回nil；
  */
-+ (NSNumber*)parserComputeExpressionInJavaScript:(NSString*)jsExpression error:(NSError*__strong*)error;
++ (NSString*)parserComputeExpressionInJavaScript:(NSString*)jsExpression error:(NSError*__strong*)error;
 
 /** 将表达式转为JavaScript表达式
  自定义的运算符可能需要自定义对象MSOperator.jsTransferOperator。

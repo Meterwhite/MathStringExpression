@@ -15,6 +15,7 @@
 #import "MSNumber.h"
 #import "NSError+MSExpression.h"
 #import <JavaScriptCore/JavaScriptCore.h>
+#import "MSNumberGroup.h"
 
 @interface MSElementTable ()
 @property (nonatomic,strong) NSMutableDictionary<NSString*,MSOperator*>* operatorTable;
@@ -68,9 +69,8 @@
     //数字类型
     NSPredicate* checkNumber = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",@"[0-9\\.]+"];
     if([checkNumber evaluateWithObject:string]){
-        MSNumber* num = [MSNumber new];
-        num.stringValue = string;
-        [re addObject:num];
+        
+        [re addObject:[MSNumber numberWithStringValue:string]];
     }
     if(re.count) return re;
     
@@ -79,7 +79,7 @@
     if([checkWhiteSpace evaluateWithObject:string]){
         MSElement* appearance = [MSElement new];
         appearance.stringValue = string;
-        [appearance setAppearance];
+        [appearance makeAppearance];
         [re addObject:appearance];
     }
     if(re.count) return re;
@@ -152,43 +152,55 @@
 - (void)setDefauleOperatorTable
 {
     //..括号..//
-    MSPairOperator* leftPari  = [MSPairOperator operatorWithKeyValue:@{@"name":@"(",@"level":@(0)}];
-    [self setElement:leftPari];
+    MSPairOperator* _leftPari  = [MSPairOperator operatorWithKeyValue:@{@"name":@"(",@"level":@(0)}];
+    [self makeOperatorSystem:_leftPari];
+    [self setElement:_leftPari];
     
-    MSPairOperator* rightPari = [MSPairOperator operatorWithKeyValue:@{@"name":@")",@"level":@(0)}];
-    [self setElement:rightPari];
+    MSPairOperator* _rightPari = [MSPairOperator operatorWithKeyValue:@{@"name":@")",@"level":@(0)}];
+    [self makeOperatorSystem:_rightPari];
+    [self setElement:_rightPari];
     
     //..函数..//
     MSFunctionOperator* _abs =   [MSFunctionOperator operatorWithKeyValue:@{@"name":@"abs",@"level":@(1),@"argsCount":@(1)}];
-    [_abs computeWithBlock:^NSNumber *(NSArray *args) {
+    [self makeOperatorSystem:_abs];
+    [_abs computeWithBlock:^id (NSArray *args) {
+        if(args.count!=1 || ![MSNumber typeIsKindToObjects:args]) return nil;
         return @(ABS([args[0] doubleValue]));
     }];
     [self.class setDefaultJSFuncTransferOp:_abs];
     [self setElement:_abs];
     
     MSFunctionOperator* _acos =   [MSFunctionOperator operatorWithKeyValue:@{@"name":@"acos",@"level":@(1),@"argsCount":@(1)}];
-    [_acos computeWithBlock:^NSNumber *(NSArray *args) {
+    [self makeOperatorSystem:_acos];
+    [_acos computeWithBlock:^id (NSArray *args) {
+        if(args.count!=1 || ![MSNumber typeIsKindToObjects:args]) return nil;
         return @(acos([args[0] doubleValue]));
     }];
     [self.class setDefaultJSFuncTransferOp:_acos];
     [self setElement:_acos];
     
     MSFunctionOperator* _asin =   [MSFunctionOperator operatorWithKeyValue:@{@"name":@"asin",@"level":@(1),@"argsCount":@(1)}];
-    [_asin computeWithBlock:^NSNumber *(NSArray *args) {
+    [self makeOperatorSystem:_asin];
+    [_asin computeWithBlock:^id (NSArray *args) {
+        if(args.count!=1 || ![MSNumber typeIsKindToObjects:args]) return nil;
         return @(asin([args[0] doubleValue]));
     }];
     [self.class setDefaultJSFuncTransferOp:_asin];
     [self setElement:_asin];
     
     MSFunctionOperator* _atan =   [MSFunctionOperator operatorWithKeyValue:@{@"name":@"atan",@"level":@(1),@"argsCount":@(1)}];
-    [_atan computeWithBlock:^NSNumber *(NSArray *args) {
+    [self makeOperatorSystem:_atan];
+    [_atan computeWithBlock:^id (NSArray *args) {
+        if(args.count!=1 || ![MSNumber typeIsKindToObjects:args]) return nil;
         return @(atan([args[0] doubleValue]));
     }];
     [self.class setDefaultJSFuncTransferOp:_atan];
     [self setElement:_atan];
     
     MSFunctionOperator* _atan2 =   [MSFunctionOperator operatorWithKeyValue:@{@"name":@"atan2",@"level":@(1),@"argsCount":@(2)}];
-    [_atan2 computeWithBlock:^NSNumber *(NSArray *args) {
+    [self makeOperatorSystem:_atan2];
+    [_atan2 computeWithBlock:^id (NSArray *args) {
+        if(args.count!=2 || ![MSNumber typeIsKindToObjects:@[args[0],args[1]]]) return nil;
         return @(atan2([args[0] doubleValue], [args[1] doubleValue]));
     }];
     [self.class setDefaultJSFuncTransferOp:_atan2];
@@ -196,21 +208,27 @@
     
     //上舍入
     MSFunctionOperator* _ceil =   [MSFunctionOperator operatorWithKeyValue:@{@"name":@"ceil",@"level":@(1),@"argsCount":@(1)}];
-    [_ceil computeWithBlock:^NSNumber *(NSArray *args) {
+    [self makeOperatorSystem:_ceil];
+    [_ceil computeWithBlock:^id (NSArray *args) {
+        if(args.count!=1 || ![MSNumber typeIsKindTo:args[0]]) return nil;
         return @(ceil([args[0] doubleValue]));
     }];
     [self.class setDefaultJSFuncTransferOp:_ceil];
     [self setElement:_ceil];
     
     MSFunctionOperator* _cos =   [MSFunctionOperator operatorWithKeyValue:@{@"name":@"cos",@"level":@(1),@"argsCount":@(1)}];
-    [_cos computeWithBlock:^NSNumber *(NSArray *args) {
+    [self makeOperatorSystem:_cos];
+    [_cos computeWithBlock:^id (NSArray *args) {
+        if(args.count!=1 || ![MSNumber typeIsKindTo:args[0]]) return nil;
         return @(cos([args[0] doubleValue]));
     }];
     [self.class setDefaultJSFuncTransferOp:_cos];
     [self setElement:_cos];
     
     MSFunctionOperator* _exp =   [MSFunctionOperator operatorWithKeyValue:@{@"name":@"exp",@"level":@(1),@"argsCount":@(1)}];
-    [_exp computeWithBlock:^NSNumber *(NSArray *args) {
+    [self makeOperatorSystem:_exp];
+    [_exp computeWithBlock:^id (NSArray *args) {
+        if(args.count!=1 || ![MSNumber typeIsKindTo:args[0]]) return nil;
         return @(exp([args[0] doubleValue]));
     }];
     [self.class setDefaultJSFuncTransferOp:_exp];
@@ -218,124 +236,294 @@
     
     //下舍入
     MSFunctionOperator* _floor =   [MSFunctionOperator operatorWithKeyValue:@{@"name":@"floor",@"level":@(1),@"argsCount":@(1)}];
-    [_floor computeWithBlock:^NSNumber *(NSArray *args) {
+    [self makeOperatorSystem:_floor];
+    [_floor computeWithBlock:^id (NSArray *args) {
+        if(args.count!=1 || ![MSNumber typeIsKindTo:args[0]]) return nil;
         return @(floor([args[0] doubleValue]));
     }];
     [self.class setDefaultJSFuncTransferOp:_floor];
     [self setElement:_floor];
     
     MSFunctionOperator* _ln =   [MSFunctionOperator operatorWithKeyValue:@{@"name":@"ln",@"level":@(1),@"argsCount":@(1)}];
-    [_ln computeWithBlock:^NSNumber *(NSArray *args) {
+    [self makeOperatorSystem:_ln];
+    [_ln computeWithBlock:^id (NSArray *args) {
+        if(args.count!=1 || ![MSNumber typeIsKindTo:args[0]]) return nil;
         return @(log([args[0] doubleValue]));
     }];
     [self.class setDefaultJSFuncTransferOp:_ln];
     [self setElement:_ln];
     
-    MSFunctionOperator* _max =   [MSFunctionOperator operatorWithKeyValue:@{@"name":@"max",@"level":@(1),@"argsCount":@(2)}];
-    [_max computeWithBlock:^NSNumber *(NSArray *args) {
-        return @(MAX([args[0] doubleValue] , [args[1] doubleValue]));
+    MSFunctionOperator* _max =   [MSFunctionOperator operatorWithKeyValue:@{@"name":@"max",@"level":@(1),@"argsCount":@(-1)}];
+    [self makeOperatorSystem:_max];
+    [_max computeWithBlock:^id (NSArray *args) {
+        if(args.count==0 || ![MSNumber typeIsKindToObjects:args]) return nil;
+        double max = [args.firstObject doubleValue];
+        for (MSNumber* val in args) {
+            max = MAX(val.doubleValue, max);
+        }
+        return @(max);
     }];
-    [self.class setDefaultJSFuncTransferOp:_max];
+    MSFunctionOperator* jsMax = [self.class setDefaultJSFuncTransferOp:_max];
+    jsMax.argsCount = 2;
     [self setElement:_max];
     
-    MSFunctionOperator* _min =   [MSFunctionOperator operatorWithKeyValue:@{@"name":@"min",@"level":@(1),@"argsCount":@(2)}];
-    [_min computeWithBlock:^NSNumber *(NSArray *args) {
-        return @(MIN([args[0] doubleValue] , [args[1] doubleValue]));
+    MSFunctionOperator* _min =   [MSFunctionOperator operatorWithKeyValue:@{@"name":@"min",@"level":@(1),@"argsCount":@(-1)}];
+    [self makeOperatorSystem:_min];
+    [_min computeWithBlock:^id (NSArray *args) {
+        if(args.count==0 || ![MSNumber typeIsKindToObjects:args]) return nil;
+        double min = [args.firstObject doubleValue];
+        for (MSNumber* val in args) {
+            min = MIN(val.doubleValue, min);
+        }
+        return @(min);
     }];
-    [self.class setDefaultJSFuncTransferOp:_min];
+    MSFunctionOperator* jsMin = [self.class setDefaultJSFuncTransferOp:_min];
+    jsMin.argsCount = 2;
     [self setElement:_min];
     
     MSFunctionOperator* _pow =   [MSFunctionOperator operatorWithKeyValue:@{@"name":@"pow",@"level":@(1),@"argsCount":@(2)}];
-    [_pow computeWithBlock:^NSNumber *(NSArray *args) {
+    [self makeOperatorSystem:_pow];
+    [_pow computeWithBlock:^id (NSArray *args) {
+        if(args.count!=2 || ![MSNumber typeIsKindToObjects:args]) return nil;
         return @(pow([args[0] floatValue], [args[1] floatValue]));
     }];
     [self.class setDefaultJSFuncTransferOp:_pow];
     [self setElement:_pow];
     
     MSFunctionOperator* _random =   [MSFunctionOperator operatorWithKeyValue:@{@"name":@"random",@"level":@(1),@"argsCount":@(0)}];
-    [_random computeWithBlock:^NSNumber *(NSArray *args) {
+    [self makeOperatorSystem:_random];
+    [_random computeWithBlock:^id (NSArray *args) {
         return @((double)(1+arc4random()%99)/100.0 );
     }];
     [self.class setDefaultJSFuncTransferOp:_random];
     [self setElement:_random];
     
     MSFunctionOperator* _round =   [MSFunctionOperator operatorWithKeyValue:@{@"name":@"round",@"level":@(1),@"argsCount":@(1)}];
-    [_round computeWithBlock:^NSNumber *(NSArray *args) {
+    [self makeOperatorSystem:_round];
+    [_round computeWithBlock:^id (NSArray *args) {
+        if(args.count!=1 || ![MSNumber typeIsKindToObjects:args]) return nil;
         return @(round([args[0] doubleValue]));
     }];
     [self.class setDefaultJSFuncTransferOp:_round];
     [self setElement:_round];
     
     MSFunctionOperator* _sin =   [MSFunctionOperator operatorWithKeyValue:@{@"name":@"sin",@"level":@(1),@"argsCount":@(1)}];
-    [_sin computeWithBlock:^NSNumber *(NSArray *args) {
+    [self makeOperatorSystem:_sin];
+    [_sin computeWithBlock:^id (NSArray *args) {
+        if(args.count!=1 || ![MSNumber typeIsKindToObjects:args]) return nil;
         return @(sin([args[0] doubleValue]));
     }];
     [self.class setDefaultJSFuncTransferOp:_sin];
     [self setElement:_sin];
     
     MSFunctionOperator* _sqrt =   [MSFunctionOperator operatorWithKeyValue:@{@"name":@"sqrt",@"level":@(1),@"argsCount":@(1)}];
-    [_sqrt computeWithBlock:^NSNumber *(NSArray *args) {
+    [self makeOperatorSystem:_sqrt];
+    [_sqrt computeWithBlock:^id (NSArray *args) {
+        if(args.count!=1 || ![MSNumber typeIsKindToObjects:args]) return nil;
         return @(sqrt([args[0] doubleValue]));
     }];
     [self.class setDefaultJSFuncTransferOp:_sqrt];
     [self setElement:_sqrt];
     
     MSFunctionOperator* _tan =   [MSFunctionOperator operatorWithKeyValue:@{@"name":@"tan",@"level":@(1),@"argsCount":@(1)}];
-    [_tan computeWithBlock:^NSNumber *(NSArray *args) {
+    [self makeOperatorSystem:_tan];
+    [_tan computeWithBlock:^id (NSArray *args) {
+        if(args.count!=1 || ![MSNumber typeIsKindToObjects:args]) return nil;
         return @(tan([args[0] doubleValue]));
     }];
     [self.class setDefaultJSFuncTransferOp:_tan];
     [self setElement:_tan];
     
     //..运算符1..//
-    MSValueOperator* negative = [MSValueOperator operatorWithKeyValue:@{@"name":@"-",
+    //负号
+    MSValueOperator* _negative = [MSValueOperator operatorWithKeyValue:@{@"name":@"-",
                                                                         @"level":@(2),
                                                                         @"argsCount":@(1),
                                                                         @"direction":@(EnumOperatorDirectionRightToLeft)}];
-    [negative computeWithBlock:^NSNumber *(NSArray *args) {
+    [self makeOperatorSystem:_negative];
+    [_negative computeWithBlock:^id (NSArray *args) {
+        if(args.count!=1 || ![MSNumber typeIsKindToObjects:args]) return nil;
         return @(-[args[0] doubleValue]);
     }];
-    [self setElement:negative];
+    [self setElement:_negative];
+    
+    //正号
+    MSValueOperator* _positive = [MSValueOperator operatorWithKeyValue:@{@"name":@"+",
+                                                                        @"level":@(2),
+                                                                        @"argsCount":@(1),
+                                                                        @"direction":@(EnumOperatorDirectionRightToLeft)}];
+    [self makeOperatorSystem:_positive];
+    [_positive computeWithBlock:^id (NSArray *args) {
+        if(args.count!=1 || ![MSNumber typeIsKindToObjects:args]) return nil;
+        return [args.firstObject msNumber];
+    }];
+    [self setElement:_positive];
     
     //..运算符2..//
-    MSValueOperator* multiple = [MSValueOperator operatorWithKeyValue:@{@"name":@"*",@"level":@(3)}];
-    [multiple computeWithBlock:^NSNumber *(NSArray *args) {
-        return @([args[0] doubleValue]*[args[1] doubleValue]);
-    }];
-    [self setElement:multiple];
-    
-    MSValueOperator* division = [MSValueOperator operatorWithKeyValue:@{@"name":@"/",@"level":@(3)}];
-    [division computeWithBlock:^NSNumber *(NSArray *args) {
-        if([args[1] isEqualToNumber:@(0)]){
-            return nil;//0不能做除数
+    MSValueOperator* _multiple = [MSValueOperator operatorWithKeyValue:@{@"name":@"*",@"level":@(3)}];
+    [self makeOperatorSystem:_multiple];
+    [_multiple computeWithBlock:^id (NSArray *args) {
+        
+        if(args.count!=2) return nil;
+        //支持‘两个数字’和“数字与数字组”
+        if([MSNumber typeIsKindToObjects:args]){
+            
+            return @([args[0] doubleValue] * [args[1] doubleValue]);
+        }else if ([MSNumberGroup typeIsKindTo:args[0]] && [MSNumber typeIsKindTo:args[1]]){
+            NSMutableArray<MSNumber*>* nums = [args[0] toParameterizedValues].mutableCopy;
+            MSNumber* num = args[1];
+            for (int i=0; i<nums.count; i++) {
+                nums[i] = [MSNumber numberWithNumberValue:@([nums[i] doubleValue] * num.doubleValue)];
+            }
+            return [MSNumberGroup groupWithArray:nums];
+        }else if ([MSNumber typeIsKindTo:args[0]] && [MSNumberGroup typeIsKindTo:args[1]]){
+            NSMutableArray<MSNumber*>* nums = [args[1] toParameterizedValues].mutableCopy;
+            MSNumber* num = args[0];
+            for (int i=0; i<nums.count; i++) {
+                nums[i] = [MSNumber numberWithNumberValue:@([nums[i] doubleValue] * num.doubleValue)];
+            }
+            return [MSNumberGroup groupWithArray:nums];
         }
-        return @([args[0] doubleValue]/[args[1] doubleValue]);
+        return nil;
     }];
-    [self setElement:division];
+    [self setElement:_multiple];
     
-    MSValueOperator* mod =      [MSValueOperator operatorWithKeyValue:@{@"name":@"%",@"level":@(3)}];
-    [mod computeWithBlock:^NSNumber *(NSArray *args) {
-        return @([args[0] integerValue]%[args[1] integerValue]);
+    MSValueOperator* _division = [MSValueOperator operatorWithKeyValue:@{@"name":@"/",@"level":@(3)}];
+    [self makeOperatorSystem:_division];
+    [_division computeWithBlock:^id (NSArray *args) {
+        
+        if(args.count!=2) return nil;
+        //支持‘两个数字’和“数字与数字组”
+        if([MSNumber typeIsKindToObjects:args]){
+            if([args[1] isEqualToNumber:@(0)]){
+                return nil;//0不能做除数
+            }
+            return @([args[0] doubleValue]/[args[1] doubleValue]);
+        }else if ([MSNumberGroup typeIsKindTo:args[0]] && [MSNumber typeIsKindTo:args[1]]){
+            NSMutableArray<MSNumber*>* nums = [args[0] toParameterizedValues].mutableCopy;
+            MSNumber* num = args[1];
+            if([num.numberValue isEqualToNumber:@(0)]){
+                return nil;//0不能做除数
+            }
+            for (int i=0; i<nums.count; i++) {
+                nums[i] = [MSNumber numberWithNumberValue:@([nums[i] doubleValue] / num.doubleValue)];
+            }
+            return [MSNumberGroup groupWithArray:nums];
+        }else if ([MSNumber typeIsKindTo:args[0]] && [MSNumberGroup typeIsKindTo:args[1]]){
+            NSMutableArray<MSNumber*>* nums = [args[1] toParameterizedValues].mutableCopy;
+            MSNumber* num = args[0];
+            if([num.numberValue isEqualToNumber:@(0)]){
+                return nil;//0不能做除数
+            }
+            for (int i=0; i<nums.count; i++) {
+                nums[i] = [MSNumber numberWithNumberValue:@(num.doubleValue / [nums[i] doubleValue])];
+            }
+            return [MSNumberGroup groupWithArray:nums];
+        }
+        return nil;
     }];
-    [self setElement:mod];
+    [self setElement:_division];
     
-    MSValueOperator* and =      [MSValueOperator operatorWithKeyValue:@{@"name":@"+",@"level":@(4)}];
-    [and computeWithBlock:^NSNumber *(NSArray *args) {
-        return @([args[0] doubleValue]+[args[1] doubleValue]);
+    MSValueOperator* _mod =      [MSValueOperator operatorWithKeyValue:@{@"name":@"%",@"level":@(3)}];
+    [self makeOperatorSystem:_mod];
+    [_mod computeWithBlock:^id (NSArray *args) {
+        
+        if(args.count!=2) return nil;
+        //支持‘两个数字’和“数字与数字组”
+        if([MSNumber typeIsKindToObjects:args]){
+            
+            return @([args[0] integerValue] % [args[1] integerValue]);
+        }else if ([MSNumberGroup typeIsKindTo:args[0]] && [MSNumber typeIsKindTo:args[1]]){
+            NSMutableArray<MSNumber*>* nums = [args[0] toParameterizedValues].mutableCopy;
+            MSNumber* num = args[1];
+            for (int i=0; i<nums.count; i++) {
+                nums[i] = [MSNumber numberWithNumberValue:@([nums[i] integerValue] % num.integerValue)];
+            }
+            return [MSNumberGroup groupWithArray:nums];
+        }else if ([MSNumber typeIsKindTo:args[0]] && [MSNumberGroup typeIsKindTo:args[1]]){
+            NSMutableArray<MSNumber*>* nums = [args[1] toParameterizedValues].mutableCopy;
+            MSNumber* num = args[0];
+            for (int i=0; i<nums.count; i++) {
+                nums[i] = [MSNumber numberWithNumberValue:@(num.integerValue % [nums[i] integerValue])];
+            }
+            return [MSNumberGroup groupWithArray:nums];
+        }
+        return nil;
     }];
-    [self setElement:and];
+    [self setElement:_mod];
     
-    MSValueOperator* minus =    [MSValueOperator operatorWithKeyValue:@{@"name":@"-",@"level":@(4)}];
-    [minus computeWithBlock:^NSNumber *(NSArray *args) {
-        return @([args[0] doubleValue]-[args[1] doubleValue]);
+    MSValueOperator* _and =      [MSValueOperator operatorWithKeyValue:@{@"name":@"+",@"level":@(4)}];
+    [self makeOperatorSystem:_and];
+    [_and computeWithBlock:^id (NSArray *args) {
+        
+        if(args.count!=2) return nil;
+        //支持‘两个数字’和“数字与数字组”
+        if([MSNumber typeIsKindToObjects:args]){
+            
+            return @([args[0] integerValue] + [args[1] integerValue]);
+        }else if ([MSNumberGroup typeIsKindTo:args[0]] && [MSNumber typeIsKindTo:args[1]]){
+            NSMutableArray<MSNumber*>* nums = [args[0] toParameterizedValues].mutableCopy;
+            MSNumber* num = args[1];
+            for (int i=0; i<nums.count; i++) {
+                nums[i] = [MSNumber numberWithNumberValue:@([nums[i] integerValue] + num.integerValue)];
+            }
+            return [MSNumberGroup groupWithArray:nums];
+        }else if ([MSNumber typeIsKindTo:args[0]] && [MSNumberGroup typeIsKindTo:args[1]]){
+            NSMutableArray<MSNumber*>* nums = [args[1] toParameterizedValues].mutableCopy;
+            MSNumber* num = args[0];
+            for (int i=0; i<nums.count; i++) {
+                nums[i] = [MSNumber numberWithNumberValue:@(num.integerValue + [nums[i] integerValue])];
+            }
+            return [MSNumberGroup groupWithArray:nums];
+        }
+        return nil;
     }];
-    [self setElement:minus];
+    [self setElement:_and];
     
-    MSValueOperator* comma =    [MSValueOperator operatorWithKeyValue:@{@"name":@",",@"level":@(16)}];
-    [self setElement:comma];
+    MSValueOperator* _minus =    [MSValueOperator operatorWithKeyValue:@{@"name":@"-",@"level":@(4)}];
+    [self makeOperatorSystem:_minus];
+    [_minus computeWithBlock:^id (NSArray *args) {
+        
+        if(args.count!=2) return nil;
+        //支持‘两个数字’和“数字与数字组”
+        if([MSNumber typeIsKindToObjects:args]){
+            
+            return @([args[0] integerValue] - [args[1] integerValue]);
+        }else if ([MSNumberGroup typeIsKindTo:args[0]] && [MSNumber typeIsKindTo:args[1]]){
+            NSMutableArray<MSNumber*>* nums = [args[0] toParameterizedValues].mutableCopy;
+            MSNumber* num = args[1];
+            for (int i=0; i<nums.count; i++) {
+                nums[i] = [MSNumber numberWithNumberValue:@([nums[i] integerValue] - num.integerValue)];
+            }
+            return [MSNumberGroup groupWithArray:nums];
+        }else if ([MSNumber typeIsKindTo:args[0]] && [MSNumberGroup typeIsKindTo:args[1]]){
+            NSMutableArray<MSNumber*>* nums = [args[1] toParameterizedValues].mutableCopy;
+            MSNumber* num = args[0];
+            for (int i=0; i<nums.count; i++) {
+                nums[i] = [MSNumber numberWithNumberValue:@(num.integerValue - [nums[i] integerValue])];
+            }
+            return [MSNumberGroup groupWithArray:nums];
+        }
+        return nil;
+    }];
+    [self setElement:_minus];
     
-    MSValueOperator* equal =    [MSValueOperator operatorWithKeyValue:@{@"name":@"=",@"level":@(16)}];
-    [self setElement:equal];
+    MSValueOperator* _comma =    [MSValueOperator operatorWithKeyValue:@{@"name":@",",@"level":@(16)}];
+    [self makeOperatorSystem:_comma];
+    //    //目前独立处理
+    //    [_comma computeWithBlock:^NSNumber *(NSArray *args) {
+    //        if(args.count!=2 || ![MSNumber typeIsKindToObjects:args]) return nil;
+    //        return (id)[MSNumberGroup groupWithArray:args];
+    //    }];
+    [self setElement:_comma];
+    
+    MSValueOperator* _equal =    [MSValueOperator operatorWithKeyValue:@{@"name":@"=",@"level":@(16)}];
+    [self makeOperatorSystem:_equal];
+    [self setElement:_equal];
+}
+- (void)makeOperatorSystem:(MSOperator*)opt
+{
+    [opt setValue:@YES forKey:@"_sys"];
 }
 #pragma mark 默认常量设置
 - (void)setDefauleConstantTable
@@ -368,7 +556,29 @@
 #pragma mark 默认重名运算符判定
 - (void)setDefauleConflictOperator
 {
+    //负号 减号
     [self handleConflictOperator:@"-"
+                      usingBlock:^MSOperator *(NSArray<MSOperator*>* conflictOps,
+                                               NSUInteger idx ,
+                                               NSArray<MSElement*>* beforeElements,
+                                               NSArray<NSString*>* elementStrings) {
+                          if(idx == 0){
+                              //前一个元素不存在或者是左括号或优先级小于负号的则为负号
+                              return conflictOps.firstObject;
+                          }else if ([[beforeElements lastObject] isKindOfClass:[MSPairOperator class]]){
+                              if([((MSPairOperator*)[beforeElements lastObject]).name isEqualToString:@"("]){
+                                  return conflictOps.firstObject;
+                              }
+                          }else if([[beforeElements lastObject] isKindOfClass:[MSValueOperator class]]){
+                              if(((MSValueOperator*)[beforeElements lastObject]).level >= 2){
+                                  return conflictOps.firstObject;
+                              }
+                          }
+                          return conflictOps.lastObject;
+                      }];
+    
+    //正号 加号
+    [self handleConflictOperator:@"+"
                       usingBlock:^MSOperator *(NSArray<MSOperator*>* conflictOps,
                                                NSUInteger idx ,
                                                NSArray<MSElement*>* beforeElements,
@@ -391,12 +601,17 @@
 
 #pragma mark - 工具
 
-+ (void)setDefaultJSFuncTransferOp:(MSFunctionOperator*)funcOp
+/**
+ 设置默认js转换运算符
+ @return js转换运算符
+ */
++ (MSFunctionOperator*)setDefaultJSFuncTransferOp:(MSFunctionOperator*)funcOp
 {
     MSFunctionOperator* jsTransferOp = [funcOp copy];
     [jsTransferOp setValue:[NSString stringWithFormat:@"Math.%@",jsTransferOp.name]
                     forKey:@"name"];
     funcOp.jsTransferOperator = jsTransferOp;
+    return jsTransferOp;
 }
 
 #pragma mark - 初始化

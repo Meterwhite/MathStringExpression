@@ -7,6 +7,7 @@
 //
 
 #import "MSOperator.h"
+@class MSValue;
 /** 结合方向 */
 typedef enum EnumOperatorDirection
 {
@@ -39,10 +40,11 @@ typedef enum EnumOperatorDirection
 
 /**
  *  运算符如何计算一组参数，计算一组参数，参数按表达式中从左至右顺序入栈
+ *  参数类型可能为MSNumber和MSNumberGroup，需要做严格的类型检查
  *
- *  @param block 如果block中返回nil则代表计算错误，计算时按NSError处理
+ *  @param block 如果block中返回nil则代表计算错误；返回计算结果，类型可以是NSNumber或者MSValue及其子对象
  */
-- (void)computeWithBlock:(NSNumber* (^)(NSArray* args))block;
+- (void)computeWithBlock:(id (^)(NSArray* args))block;
 
-- (NSNumber*)computeArgs:(NSArray*)args;
+- (MSValue*)computeArgs:(NSArray*)args;
 @end

@@ -47,7 +47,7 @@
 {
     NSString* domain = @"MSExpression";
     if(elementInfo && [elementInfo isKindOfClass:[MSElement class]]){
-        domain = [NSString stringWithFormat:@"%@.%@.%@",domain,NSStringFromClass([elementInfo class]),elementInfo.stringValue];
+        domain = [NSString stringWithFormat:@"%@.%@.%@",domain,NSStringFromClass([elementInfo class]),elementInfo.debugDescription];
     }
     NSMutableDictionary* userInfo = [NSMutableDictionary new];
     userInfo[NSLocalizedFailureReasonErrorKey] = [self errorDescriptionFromReason:reason];
@@ -56,7 +56,7 @@
     }
     if(elementInfo && [elementInfo isKindOfClass:[MSElement class]]){
         userInfo[ElementKey] = elementInfo;
-        userInfo[@"range"] = [NSValue valueWithRange:NSMakeRange([elementInfo.originIndex integerValue], elementInfo.stringValue.length)];
+        userInfo[@"range"] = [NSValue valueWithRange:NSMakeRange([elementInfo.originIndex integerValue], elementInfo.debugDescription.length)];
     }
     
     return [NSError errorWithDomain:domain

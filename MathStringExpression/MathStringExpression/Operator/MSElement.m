@@ -9,7 +9,9 @@
 #import "MSElement.h"
 
 @interface MSElement ()
-
+<
+    NSMutableCopying
+>
 @end
 
 @implementation MSElement
@@ -41,6 +43,11 @@
     return copy;
 }
 
+- (id)mutableCopyWithZone:(NSZone *)zone
+{
+    return [self copyWithZone:zone];
+}
+
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
     [aCoder encodeObject:self.stringValue forKey:@"stringValue"];
@@ -61,7 +68,7 @@
     return self;
 }
 
-- (void)setAppearance
+- (void)makeAppearance
 {
     _elementType = EnumElementTypeAppearance;
     _hidden = NO;

@@ -11,9 +11,9 @@
 typedef enum EnumElementType{
     /** 未定义的 */
     EnumElementTypeUndefine,
-    /** 数字相关的 */
-    EnumElementTypeNumber,
-    /** 计算相关的 */
+    /** 值元素 */
+    EnumElementTypeValue,
+    /** 运算符元素 */
     EnumElementTypeOperator,
     /** 用于显示的无意义字符 */
     EnumElementTypeAppearance
@@ -26,7 +26,6 @@ typedef enum EnumElementType{
 @interface MSElement : NSObject
 <
     NSCoding,
-    /** 为了省事 '- copy' 实现了对所有MSElement对象及子对象的'深拷贝'而不是'浅拷贝' */
     NSCopying
 >
 {
@@ -46,7 +45,7 @@ typedef enum EnumElementType{
 @property (nonatomic,strong) NSMutableDictionary* userInfo;
 
 /** 将元素设置为仅用于显示状态 */
-- (void)setAppearance;
+- (void)makeAppearance;
 - (NSString *)description;
 - (NSString *)debugDescription;
 @end
