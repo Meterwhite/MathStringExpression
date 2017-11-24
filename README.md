@@ -1,6 +1,6 @@
 # MathStringExpression
 
-![alt icon](http://pic.sucaibar.com/pic/201306/22/dbd48ae401_96.png)
+![alt icon](https://raw.githubusercontent.com/qddnovo/MathStringExpression/master/MathStringExpression/cmp.jpg)
 
 ## 简介
 * 为需要开发iOS计算器的开发者提供的一个便捷
@@ -8,12 +8,13 @@
 * 包括自定义运算符，计算方式。
 * 该项目默认使用JavaScript.Math库函数的命名方式
 * 可在项目表达式和JavaScript表达式之间转换
-* 长期维护
+* 长期维护，希望可以获得你的一个赞
 * A convenience for developers who need to develop calculators.
 * Mathematical expression for calculating string
 * Custom operators and calculation methods
 * The project defaults to using JavaScript Math function
 * JavaScript expression can be transferred to the JavaScript engine to calculate the expression
+* Give me five
 
 ## 如何使用
 ```objc
