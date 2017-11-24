@@ -105,7 +105,6 @@
     NSError* errorJSFun;
     MSFunctionOperator* opFunJS = [MSFunctionOperator operatorWithJSFunction:@"function And(a, b){ return a + b; }" error:&errorJSFun];
     [tab setElement:opFunJS];
-    
     /**
      *  例5 使用JavaScript定义常量
      */

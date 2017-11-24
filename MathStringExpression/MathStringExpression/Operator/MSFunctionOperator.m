@@ -91,8 +91,13 @@
                                                                       @"argsCount":@(args.count)}];
             [opFunc computeWithBlock:^id (NSArray *args) {
                 
+                if(!args.count)return nil;
+                NSMutableArray* newArgs = [NSMutableArray new];
+                [args enumerateObjectsUsingBlock:^(MSNumber*  _Nonnull num, NSUInteger idx, BOOL * _Nonnull stop) {
+                    [newArgs addObject:num.numberValue];
+                }];
                 JSContext* _jsContext = [[MSElementTable defaultTable] valueForKey:@"jsContext"];
-                return [MSNumber numberWithNumberValue:[_jsContext[funcName] callWithArguments:args].toNumber];
+                return [MSNumber numberWithNumberValue:[_jsContext[funcName] callWithArguments:newArgs].toNumber];
             }];
             return opFunc;
         }else{
