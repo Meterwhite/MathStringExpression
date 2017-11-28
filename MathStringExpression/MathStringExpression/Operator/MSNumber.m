@@ -197,6 +197,15 @@
 {
     return self.description;
 }
+- (BOOL)isEqualToNumber:(NSNumber *)number
+{
+    return [self.numberValue isEqualToNumber:number];
+}
+
+- (NSComparisonResult)compare:(NSNumber *)otherNumber
+{
+    return [self.numberValue isEqualToNumber:otherNumber];
+}
 @end
 
 @implementation NSNumber (MSExpression_NSNumber)

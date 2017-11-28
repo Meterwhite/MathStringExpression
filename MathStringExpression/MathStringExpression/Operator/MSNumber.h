@@ -40,6 +40,10 @@
 @property (readonly) NSInteger integerValue NS_AVAILABLE(10_5, 2_0);
 @property (readonly) NSUInteger unsignedIntegerValue NS_AVAILABLE(10_5, 2_0);
 
+- (NSComparisonResult)compare:(NSNumber *)otherNumber;
+
+- (BOOL)isEqualToNumber:(NSNumber *)number;
+
 - (NSString *)description;
 - (NSString *)debugDescription;
 - (NSArray *)innerItems;
