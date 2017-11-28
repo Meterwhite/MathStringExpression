@@ -460,19 +460,19 @@
         //支持‘两个数字’和“数字与数字组”
         if([MSNumber typeIsKindToObjects:args]){
             
-            return @([args[0] integerValue] + [args[1] integerValue]);
+            return @([args[0] doubleValue] + [args[1] doubleValue]);
         }else if ([MSNumberGroup typeIsKindTo:args[0]] && [MSNumber typeIsKindTo:args[1]]){
             NSMutableArray<MSNumber*>* nums = [args[0] toParameterizedValues].mutableCopy;
             MSNumber* num = args[1];
             for (int i=0; i<nums.count; i++) {
-                nums[i] = [MSNumber numberWithNumberValue:@([nums[i] integerValue] + num.integerValue)];
+                nums[i] = [MSNumber numberWithNumberValue:@([nums[i] doubleValue] + num.doubleValue)];
             }
             return [MSNumberGroup groupWithArray:nums];
         }else if ([MSNumber typeIsKindTo:args[0]] && [MSNumberGroup typeIsKindTo:args[1]]){
             NSMutableArray<MSNumber*>* nums = [args[1] toParameterizedValues].mutableCopy;
             MSNumber* num = args[0];
             for (int i=0; i<nums.count; i++) {
-                nums[i] = [MSNumber numberWithNumberValue:@(num.integerValue + [nums[i] integerValue])];
+                nums[i] = [MSNumber numberWithNumberValue:@(num.doubleValue + [nums[i] doubleValue])];
             }
             return [MSNumberGroup groupWithArray:nums];
         }
@@ -488,19 +488,19 @@
         //支持‘两个数字’和“数字与数字组”
         if([MSNumber typeIsKindToObjects:args]){
             
-            return @([args[0] integerValue] - [args[1] integerValue]);
+            return @([args[0] doubleValue] - [args[1] doubleValue]);
         }else if ([MSNumberGroup typeIsKindTo:args[0]] && [MSNumber typeIsKindTo:args[1]]){
             NSMutableArray<MSNumber*>* nums = [args[0] toParameterizedValues].mutableCopy;
             MSNumber* num = args[1];
             for (int i=0; i<nums.count; i++) {
-                nums[i] = [MSNumber numberWithNumberValue:@([nums[i] integerValue] - num.integerValue)];
+                nums[i] = [MSNumber numberWithNumberValue:@([nums[i] doubleValue] - num.doubleValue)];
             }
             return [MSNumberGroup groupWithArray:nums];
         }else if ([MSNumber typeIsKindTo:args[0]] && [MSNumberGroup typeIsKindTo:args[1]]){
             NSMutableArray<MSNumber*>* nums = [args[1] toParameterizedValues].mutableCopy;
             MSNumber* num = args[0];
             for (int i=0; i<nums.count; i++) {
-                nums[i] = [MSNumber numberWithNumberValue:@(num.integerValue - [nums[i] integerValue])];
+                nums[i] = [MSNumber numberWithNumberValue:@(num.doubleValue - [nums[i] doubleValue])];
             }
             return [MSNumberGroup groupWithArray:nums];
         }
