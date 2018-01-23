@@ -8,13 +8,13 @@
 * 包括自定义运算符，计算方式。
 * 该项目默认使用JavaScript.Math库函数的命名方式
 * 可在项目表达式和JavaScript表达式之间转换
-* 长期维护，希望可以获得你的一个赞
+* 随手一赞，好运百万
 * A convenience for developers who need to develop calculators.
 * Mathematical expression for calculating string
 * Custom operators and calculation methods
 * The project defaults to using JavaScript Math function
 * JavaScript expression can be transferred to the JavaScript engine to calculate the expression
-* Give me five
+* Once start me,Day day fuck Lynn
 
 ## 如何使用
 ```objc
@@ -40,7 +40,14 @@ MSFunctionOperator* sum = [MSFunctionOperator operatorWithKeyValue:@{@"name":@"s
 
 ## 开始使用--计算表达式
 ```objc
-NSNumber* computeResult = [MSParser parserComputeExpression:@"2(-1*3)+random()" error:nil];//项目默认使用JavaScript.Math库函数命名方式
+NSString* computeResult = [MSParser parserComputeExpression:@"2(-1*3)+random()" error:nil];//项目默认使用JavaScript.Math库函数命名方式
+/*
+1.项目内部将所有值类型以doubel类型对待
+2.结果返回字符串形式是为了统一返回结果的类型(返回对象不一定是数字还可能是数字组)；
+并不希望用户直接使用字符串形式的真实值，用户应当将其转为值类型后再当结果对待。所以需要用户自己控制精度；
+3.可以观察，在控制台打印:NSLog(@"%@",@(0.3-0.2).description);结果输出0.09999999999999998
+所以项目计算"0.3-0.2"时也会输出"0.09999999999999998"。用户想要得到0.1就不应该直接使用字符串的结果。
+*/
 ```
 ## 运算符类图
 ![alt 类图](https://raw.githubusercontent.com/qddnovo/MathStringExpression/master/MathStringExpression/Class.png)
