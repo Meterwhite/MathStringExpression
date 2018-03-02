@@ -27,8 +27,8 @@
 {
     self = [self init];
     if (self) {
-        self.numberValue = numberValue;
-        self.stringValue = numberValue.description;
+        self.numberValue = [NSDecimalNumber decimalNumberWithDecimal:numberValue.decimalValue];
+        self.stringValue = self.numberValue.description;
     }
     return self;
 }
@@ -38,11 +38,15 @@
     self = [self init];
     if (self) {
         self.stringValue = stringValue;
-        self.numberValue = @(stringValue.doubleValue);
+        self.numberValue = [NSDecimalNumber decimalNumberWithString:stringValue];
     }
     return self;
 }
 
+- (NSDecimal)decimalValue
+{
+    return self.numberValue.decimalValue;
+}
 
 + (instancetype)numberWithNumberValue:(NSNumber *)numberValue
 {
@@ -193,6 +197,33 @@
     return self.numberValue.unsignedIntegerValue;
 }
 
+- (NSDecimalNumber *)decimalNumberByAdding:(NSDecimalNumber *)decimalNumber
+{
+    return [self.numberValue decimalNumberByAdding:decimalNumber];
+}
+- (NSDecimalNumber *)decimalNumberBySubtracting:(NSDecimalNumber *)decimalNumber
+{
+    return [self.numberValue decimalNumberBySubtracting:decimalNumber];
+}
+- (NSDecimalNumber *)decimalNumberByMultiplyingBy:(NSDecimalNumber *)decimalNumber
+{
+    return [self.numberValue decimalNumberByMultiplyingBy:decimalNumber];
+}
+- (NSDecimalNumber *)decimalNumberByDividingBy:(NSDecimalNumber *)decimalNumber
+{
+    return [self.numberValue decimalNumberByDividingBy:decimalNumber];
+}
+- (NSDecimalNumber *)decimalNumberByRaisingToPower:(NSUInteger)power
+{
+    return [self.numberValue decimalNumberByRaisingToPower:power];
+}
+- (NSDecimalNumber *)decimalNumberByMultiplyingByPowerOf10:(short)power
+{
+    return [self.numberValue decimalNumberByMultiplyingByPowerOf10:power];
+}
+
+
+
 - (NSString *)valueToString
 {
     return self.description;
@@ -204,7 +235,7 @@
 
 - (NSComparisonResult)compare:(NSNumber *)otherNumber
 {
-    return [self.numberValue isEqualToNumber:otherNumber];
+    return [self.numberValue compare:otherNumber];
 }
 @end
 

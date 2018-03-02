@@ -6,30 +6,46 @@
 //  Copyright © 2016年 NOVO. All rights reserved.
 //
 
-#import "MSParser.h"
 #import "MSStack.h"
-#import "MSScaner.h"
-#import "MSOperator.h"
-#import "MSPairOperator.h"
-#import "MSFunctionOperator.h"
-#import "MSValueOperator.h"
 #import "MSValue.h"
 #import "MSNumber.h"
+#import "MSScaner.h"
+#import "MSParser.h"
+#import "MSOperator.h"
 #import "MSConstant.h"
-#import "MSElementTable.h"
-#import "NSError+MSExpression.h"
 #import "MSNumberGroup.h"
+#import "MSElementTable.h"
+#import "MSPairOperator.h"
+#import "MSValueOperator.h"
+#import "MSFunctionOperator.h"
+#import "NSError+MSExpression.h"
 #import <JavaScriptCore/JavaScriptCore.h>
 
 @implementation MSParser
 
++ (NSDecimalNumber*)parserComputeNumberExpression:(NSString*)expression error:(NSError*__strong*)error
+{
+    MSValue* value = [self.class parserComputeValueExpression:expression error:error];
+    
+    if([MSNumber typeIsKindTo:value]){
+        return ((MSNumber*)value).numberValue;
+    }
+    
+    return nil;
+}
+
 + (NSString*)parserComputeExpression:(NSString*)expression error:(NSError*__strong*)error
+{
+    return [self.class parserComputeValueExpression:expression error:error].valueToString;
+}
+
++ (MSValue*)parserComputeValueExpression:(NSString*)expression error:(NSError*__strong*)error
 {
     //字符串转逆波兰式
     NSMutableArray<MSElement*>* reversePolishArr = [self parseToReversePolishFromString:expression error:error];
     if(error && *error) return nil;
     //计算逆波兰式
-    return [self parseComputeFromReversePolishArray:reversePolishArr error:error].valueToString;
+    return [self parseComputeFromReversePolishArray:reversePolishArr error:error];
 }
 
 + (NSString*)parserJSExpressionFromExpression:(NSString*)jsExpression error:(NSError*__strong*)error

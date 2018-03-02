@@ -33,46 +33,46 @@ typedef enum EnumCharType{
 {
     NSMutableArray<NSString*>* splitedArr = [self scanSplitString:expression];
     NSMutableArray<MSElement*>* elementArr = [NSMutableArray new];
-    __block NSUInteger curstrIdx = 0;
+    __block NSUInteger idxOfCurrentStr = 0;
     [splitedArr enumerateObjectsUsingBlock:^(NSString*  _Nonnull elementStr, NSUInteger idx, BOOL * _Nonnull stop) {
         
-        NSMutableArray<MSElement*>* elementInArr = [[MSElementTable defaultTable] elementsFromString:elementStr];
-        if(elementInArr.count==1){
+        NSMutableArray<MSElement*>* arrOfElement = [[MSElementTable defaultTable] elementsFromString:elementStr];
+        if(arrOfElement.count==1){
             //查询到单个元素
-            if(elementInArr.firstObject.elementType == EnumElementTypeUndefine){
-                NSString* strVal = ((MSOperator*)[elementInArr firstObject]).stringValue;
+            if(arrOfElement.firstObject.elementType == EnumElementTypeUndefine){
+                NSString* strVal = ((MSOperator*)[arrOfElement firstObject]).stringValue;
                 if(error){
                     *error = [NSError errorWithReason:EnumMSErrorUnkownElement
                                           description:[NSString stringWithFormat:@"未知元素'%@'",strVal]
-                                          elementInfo:elementInArr.firstObject];
+                                          elementInfo:arrOfElement.firstObject];
                 }
                 *stop = YES;
             }else{
-                elementInArr.firstObject.originIndex = @(curstrIdx);
+                arrOfElement.firstObject.originIndex = @(idxOfCurrentStr);
                 if(blockElementsSet){
-                    blockElementsSet(elementInArr.firstObject , idx);
+                    blockElementsSet(arrOfElement.firstObject , idx);
                 }
-                [elementArr addObject:elementInArr.firstObject];
+                [elementArr addObject:arrOfElement.firstObject];
             }
         }else{
             
-            NSString* name = ((MSOperator*)[elementInArr firstObject]).name;
-            if([elementInArr firstObject].elementType == EnumElementTypeOperator){
+            NSString* name = ((MSOperator*)[arrOfElement firstObject]).name;
+            if([arrOfElement firstObject].elementType == EnumElementTypeOperator){
                 MSOperator*(^conflictHandleBlock)(NSArray<MSOperator*>* conflictOps, NSUInteger idx ,NSArray<MSElement*>* beforeElements,NSArray<NSString*>* elementStrings)
                 = [[MSElementTable defaultTable] valueForKey:@"conflictOperatorDict"][name];
                 if(!conflictHandleBlock){
                     if(error){
                         *error = [NSError errorWithReason:EnumMSErrorUnclearMeaning
                                               description:[NSString stringWithFormat:@"需要提供'%@'的判定",name]];
-                        [(*error) setInfo:[NSValue valueWithRange:NSMakeRange(curstrIdx, elementStr.length)] forKey:@"range"];
+                        [(*error) setInfo:[NSValue valueWithRange:NSMakeRange(idxOfCurrentStr, elementStr.length)] forKey:@"range"];
                     }
                     *stop = YES;
                 }
-                MSOperator* choosedOp = conflictHandleBlock((id)elementInArr,idx,elementArr,splitedArr);
-                choosedOp.originIndex = @(curstrIdx);
+                MSOperator* choosedOp = conflictHandleBlock((id)arrOfElement,idx,elementArr,splitedArr);
+                choosedOp.originIndex = @(idxOfCurrentStr);
                 if(choosedOp){
                     if(blockElementsSet){
-                        blockElementsSet(elementInArr.firstObject , idx);
+                        blockElementsSet(arrOfElement.firstObject , idx);
                     }
                     [elementArr addObject:choosedOp];
                 }else{
@@ -87,12 +87,12 @@ typedef enum EnumCharType{
                 if(error){
                     *error = [NSError errorWithReason:EnumMSErrorUnkownElement
                                           description:[NSString stringWithFormat:@"未知元素'%@'",name]];
-                    [*error setInfo:[NSValue valueWithRange:NSMakeRange(curstrIdx, elementStr.length)] forKey:@"range"];
+                    [*error setInfo:[NSValue valueWithRange:NSMakeRange(idxOfCurrentStr, elementStr.length)] forKey:@"range"];
                 }
                 *stop = YES;
             }
         }
-        curstrIdx+=elementStr.length;
+        idxOfCurrentStr+=elementStr.length;
     }];
     if((error && *error) || !block) return;
     [self scanRepairSpellByInElements:elementArr];

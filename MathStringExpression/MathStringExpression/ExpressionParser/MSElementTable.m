@@ -165,8 +165,9 @@
     [self makeOperatorSystem:_abs];
     [_abs computeWithBlock:^id (NSArray *args) {
         if(args.count!=1 || ![MSNumber typeIsKindToObjects:args]) return nil;
-        return @(ABS([args[0] doubleValue]));
+        return [NSDecimalNumber numberWithDouble:ABS([args[0] doubleValue])];
     }];
+    
     [self.class setDefaultJSFuncTransferOp:_abs];
     [self setElement:_abs];
     
@@ -174,7 +175,7 @@
     [self makeOperatorSystem:_acos];
     [_acos computeWithBlock:^id (NSArray *args) {
         if(args.count!=1 || ![MSNumber typeIsKindToObjects:args]) return nil;
-        return @(acos([args[0] doubleValue]));
+        return [NSDecimalNumber numberWithDouble:acos([args[0] doubleValue])];
     }];
     [self.class setDefaultJSFuncTransferOp:_acos];
     [self setElement:_acos];
@@ -183,7 +184,7 @@
     [self makeOperatorSystem:_asin];
     [_asin computeWithBlock:^id (NSArray *args) {
         if(args.count!=1 || ![MSNumber typeIsKindToObjects:args]) return nil;
-        return @(asin([args[0] doubleValue]));
+        return [NSDecimalNumber numberWithDouble:asin([args[0] doubleValue])];
     }];
     [self.class setDefaultJSFuncTransferOp:_asin];
     [self setElement:_asin];
@@ -192,7 +193,7 @@
     [self makeOperatorSystem:_atan];
     [_atan computeWithBlock:^id (NSArray *args) {
         if(args.count!=1 || ![MSNumber typeIsKindToObjects:args]) return nil;
-        return @(atan([args[0] doubleValue]));
+        return [NSDecimalNumber numberWithDouble:atan([args[0] doubleValue])];
     }];
     [self.class setDefaultJSFuncTransferOp:_atan];
     [self setElement:_atan];
@@ -201,7 +202,7 @@
     [self makeOperatorSystem:_atan2];
     [_atan2 computeWithBlock:^id (NSArray *args) {
         if(args.count!=2 || ![MSNumber typeIsKindToObjects:@[args[0],args[1]]]) return nil;
-        return @(atan2([args[0] doubleValue], [args[1] doubleValue]));
+        return [NSDecimalNumber numberWithDouble:atan2([args[0] doubleValue], [args[1] doubleValue])];
     }];
     [self.class setDefaultJSFuncTransferOp:_atan2];
     [self setElement:_atan2];
@@ -211,7 +212,7 @@
     [self makeOperatorSystem:_ceil];
     [_ceil computeWithBlock:^id (NSArray *args) {
         if(args.count!=1 || ![MSNumber typeIsKindTo:args[0]]) return nil;
-        return @(ceil([args[0] doubleValue]));
+        return [NSDecimalNumber numberWithDouble:ceil([args[0] doubleValue])];
     }];
     [self.class setDefaultJSFuncTransferOp:_ceil];
     [self setElement:_ceil];
@@ -220,7 +221,7 @@
     [self makeOperatorSystem:_cos];
     [_cos computeWithBlock:^id (NSArray *args) {
         if(args.count!=1 || ![MSNumber typeIsKindTo:args[0]]) return nil;
-        return @(cos([args[0] doubleValue]));
+        return [NSDecimalNumber numberWithDouble:cos([args[0] doubleValue])];
     }];
     [self.class setDefaultJSFuncTransferOp:_cos];
     [self setElement:_cos];
@@ -229,7 +230,7 @@
     [self makeOperatorSystem:_exp];
     [_exp computeWithBlock:^id (NSArray *args) {
         if(args.count!=1 || ![MSNumber typeIsKindTo:args[0]]) return nil;
-        return @(exp([args[0] doubleValue]));
+        return [NSDecimalNumber numberWithDouble:exp([args[0] doubleValue])];
     }];
     [self.class setDefaultJSFuncTransferOp:_exp];
     [self setElement:_exp];
@@ -239,7 +240,7 @@
     [self makeOperatorSystem:_floor];
     [_floor computeWithBlock:^id (NSArray *args) {
         if(args.count!=1 || ![MSNumber typeIsKindTo:args[0]]) return nil;
-        return @(floor([args[0] doubleValue]));
+        return [NSDecimalNumber numberWithDouble:floor([args[0] doubleValue])];
     }];
     [self.class setDefaultJSFuncTransferOp:_floor];
     [self setElement:_floor];
@@ -248,7 +249,7 @@
     [self makeOperatorSystem:_ln];
     [_ln computeWithBlock:^id (NSArray *args) {
         if(args.count!=1 || ![MSNumber typeIsKindTo:args[0]]) return nil;
-        return @(log([args[0] doubleValue]));
+        return [NSDecimalNumber numberWithDouble:log([args[0] doubleValue])];
     }];
     [self.class setDefaultJSFuncTransferOp:_ln];
     [self setElement:_ln];
@@ -261,7 +262,7 @@
         for (MSNumber* val in args) {
             max = MAX(val.doubleValue, max);
         }
-        return @(max);
+        return [NSDecimalNumber numberWithDouble:max];
     }];
     MSFunctionOperator* jsMax = [self.class setDefaultJSFuncTransferOp:_max];
     jsMax.argsCount = 2;
@@ -275,7 +276,7 @@
         for (MSNumber* val in args) {
             min = MIN(val.doubleValue, min);
         }
-        return @(min);
+        return [NSDecimalNumber numberWithDouble:min];
     }];
     MSFunctionOperator* jsMin = [self.class setDefaultJSFuncTransferOp:_min];
     jsMin.argsCount = 2;
@@ -285,7 +286,7 @@
     [self makeOperatorSystem:_pow];
     [_pow computeWithBlock:^id (NSArray *args) {
         if(args.count!=2 || ![MSNumber typeIsKindToObjects:args]) return nil;
-        return @(pow([args[0] floatValue], [args[1] floatValue]));
+        return [NSDecimalNumber numberWithDouble:pow([args[0] floatValue], [args[1] floatValue])];
     }];
     [self.class setDefaultJSFuncTransferOp:_pow];
     [self setElement:_pow];
@@ -293,7 +294,7 @@
     MSFunctionOperator* _random =   [MSFunctionOperator operatorWithKeyValue:@{@"name":@"random",@"level":@(1),@"argsCount":@(0)}];
     [self makeOperatorSystem:_random];
     [_random computeWithBlock:^id (NSArray *args) {
-        return @((double)(1+arc4random()%99)/100.0 );
+        return [NSDecimalNumber numberWithDouble:(double)(1+arc4random()%99)/100.0 ];
     }];
     [self.class setDefaultJSFuncTransferOp:_random];
     [self setElement:_random];
@@ -302,7 +303,7 @@
     [self makeOperatorSystem:_round];
     [_round computeWithBlock:^id (NSArray *args) {
         if(args.count!=1 || ![MSNumber typeIsKindToObjects:args]) return nil;
-        return @(round([args[0] doubleValue]));
+        return [NSDecimalNumber numberWithDouble:round([args[0] doubleValue])];
     }];
     [self.class setDefaultJSFuncTransferOp:_round];
     [self setElement:_round];
@@ -311,7 +312,7 @@
     [self makeOperatorSystem:_sin];
     [_sin computeWithBlock:^id (NSArray *args) {
         if(args.count!=1 || ![MSNumber typeIsKindToObjects:args]) return nil;
-        return @(sin([args[0] doubleValue]));
+        return [NSDecimalNumber numberWithDouble:sin([args[0] doubleValue])];
     }];
     [self.class setDefaultJSFuncTransferOp:_sin];
     [self setElement:_sin];
@@ -320,7 +321,7 @@
     [self makeOperatorSystem:_sqrt];
     [_sqrt computeWithBlock:^id (NSArray *args) {
         if(args.count!=1 || ![MSNumber typeIsKindToObjects:args]) return nil;
-        return @(sqrt([args[0] doubleValue]));
+        return [NSDecimalNumber numberWithDouble:sqrt([args[0] doubleValue])];
     }];
     [self.class setDefaultJSFuncTransferOp:_sqrt];
     [self setElement:_sqrt];
@@ -329,7 +330,7 @@
     [self makeOperatorSystem:_tan];
     [_tan computeWithBlock:^id (NSArray *args) {
         if(args.count!=1 || ![MSNumber typeIsKindToObjects:args]) return nil;
-        return @(tan([args[0] doubleValue]));
+        return [NSDecimalNumber numberWithDouble:tan([args[0] doubleValue])];
     }];
     [self.class setDefaultJSFuncTransferOp:_tan];
     [self setElement:_tan];
@@ -343,7 +344,7 @@
     [self makeOperatorSystem:_negative];
     [_negative computeWithBlock:^id (NSArray *args) {
         if(args.count!=1 || ![MSNumber typeIsKindToObjects:args]) return nil;
-        return @(-[args[0] doubleValue]);
+        return [NSDecimalNumber numberWithDouble:-[args[0] doubleValue]];
     }];
     [self setElement:_negative];
     
@@ -368,19 +369,20 @@
         //支持‘两个数字’和“数字与数字组”
         if([MSNumber typeIsKindToObjects:args]){
             
-            return @([args[0] doubleValue] * [args[1] doubleValue]);
+            return [NSDecimalNumber numberWithDouble:[args[0] doubleValue] * [args[1] doubleValue]];
         }else if ([MSNumberGroup typeIsKindTo:args[0]] && [MSNumber typeIsKindTo:args[1]]){
             NSMutableArray<MSNumber*>* nums = [args[0] toParameterizedValues].mutableCopy;
             MSNumber* num = args[1];
             for (int i=0; i<nums.count; i++) {
-                nums[i] = [MSNumber numberWithNumberValue:@([nums[i] doubleValue] * num.doubleValue)];
+                
+                nums[i] = [MSNumber numberWithNumberValue:[nums[i] decimalNumberByMultiplyingBy:num.numberValue]];
             }
             return [MSNumberGroup groupWithArray:nums];
         }else if ([MSNumber typeIsKindTo:args[0]] && [MSNumberGroup typeIsKindTo:args[1]]){
             NSMutableArray<MSNumber*>* nums = [args[1] toParameterizedValues].mutableCopy;
             MSNumber* num = args[0];
             for (int i=0; i<nums.count; i++) {
-                nums[i] = [MSNumber numberWithNumberValue:@([nums[i] doubleValue] * num.doubleValue)];
+                nums[i] = [MSNumber numberWithNumberValue:[nums[i] decimalNumberByMultiplyingBy:num.numberValue]];
             }
             return [MSNumberGroup groupWithArray:nums];
         }
@@ -398,7 +400,7 @@
             if([args[1] isEqualToNumber:@(0)]){
                 return nil;//0不能做除数
             }
-            return @([args[0] doubleValue]/[args[1] doubleValue]);
+            return [args[0] decimalNumberByDividingBy:[args[1] numberValue]];
         }else if ([MSNumberGroup typeIsKindTo:args[0]] && [MSNumber typeIsKindTo:args[1]]){
             NSMutableArray<MSNumber*>* nums = [args[0] toParameterizedValues].mutableCopy;
             MSNumber* num = args[1];
@@ -406,7 +408,8 @@
                 return nil;//0不能做除数
             }
             for (int i=0; i<nums.count; i++) {
-                nums[i] = [MSNumber numberWithNumberValue:@([nums[i] doubleValue] / num.doubleValue)];
+                
+                nums[i] = [MSNumber numberWithNumberValue:[nums[i] decimalNumberByDividingBy:num.numberValue]];
             }
             return [MSNumberGroup groupWithArray:nums];
         }else if ([MSNumber typeIsKindTo:args[0]] && [MSNumberGroup typeIsKindTo:args[1]]){
@@ -416,7 +419,7 @@
                 return nil;//0不能做除数
             }
             for (int i=0; i<nums.count; i++) {
-                nums[i] = [MSNumber numberWithNumberValue:@(num.doubleValue / [nums[i] doubleValue])];
+                nums[i] = [MSNumber numberWithNumberValue:[num decimalNumberByDividingBy:[nums[i] numberValue]]];
             }
             return [MSNumberGroup groupWithArray:nums];
         }
@@ -432,7 +435,7 @@
         //支持‘两个数字’和“数字与数字组”
         if([MSNumber typeIsKindToObjects:args]){
             
-            return @([args[0] integerValue] % [args[1] integerValue]);
+            return [NSDecimalNumber numberWithInteger:[args[0] integerValue] % [args[1] integerValue]];
         }else if ([MSNumberGroup typeIsKindTo:args[0]] && [MSNumber typeIsKindTo:args[1]]){
             NSMutableArray<MSNumber*>* nums = [args[0] toParameterizedValues].mutableCopy;
             MSNumber* num = args[1];
@@ -460,19 +463,19 @@
         //支持‘两个数字’和“数字与数字组”
         if([MSNumber typeIsKindToObjects:args]){
             
-            return @([args[0] doubleValue] + [args[1] doubleValue]);
+            return [args[0] decimalNumberByAdding:[args[1] numberValue]];
         }else if ([MSNumberGroup typeIsKindTo:args[0]] && [MSNumber typeIsKindTo:args[1]]){
             NSMutableArray<MSNumber*>* nums = [args[0] toParameterizedValues].mutableCopy;
             MSNumber* num = args[1];
             for (int i=0; i<nums.count; i++) {
-                nums[i] = [MSNumber numberWithNumberValue:@([nums[i] doubleValue] + num.doubleValue)];
+                nums[i] = [MSNumber numberWithNumberValue:[nums[i] decimalNumberByAdding:num.numberValue]];
             }
             return [MSNumberGroup groupWithArray:nums];
         }else if ([MSNumber typeIsKindTo:args[0]] && [MSNumberGroup typeIsKindTo:args[1]]){
             NSMutableArray<MSNumber*>* nums = [args[1] toParameterizedValues].mutableCopy;
             MSNumber* num = args[0];
             for (int i=0; i<nums.count; i++) {
-                nums[i] = [MSNumber numberWithNumberValue:@(num.doubleValue + [nums[i] doubleValue])];
+                nums[i] = [MSNumber numberWithNumberValue:[num decimalNumberByAdding:nums[i].numberValue]];
             }
             return [MSNumberGroup groupWithArray:nums];
         }
@@ -488,19 +491,19 @@
         //支持‘两个数字’和“数字与数字组”
         if([MSNumber typeIsKindToObjects:args]){
             
-            return @([args[0] doubleValue] - [args[1] doubleValue]);
+            return [args[0] decimalNumberBySubtracting:[args[1] numberValue]];
         }else if ([MSNumberGroup typeIsKindTo:args[0]] && [MSNumber typeIsKindTo:args[1]]){
             NSMutableArray<MSNumber*>* nums = [args[0] toParameterizedValues].mutableCopy;
             MSNumber* num = args[1];
             for (int i=0; i<nums.count; i++) {
-                nums[i] = [MSNumber numberWithNumberValue:@([nums[i] doubleValue] - num.doubleValue)];
+                nums[i] = [MSNumber numberWithNumberValue:[nums[i] decimalNumberBySubtracting:num.numberValue]];
             }
             return [MSNumberGroup groupWithArray:nums];
         }else if ([MSNumber typeIsKindTo:args[0]] && [MSNumberGroup typeIsKindTo:args[1]]){
             NSMutableArray<MSNumber*>* nums = [args[1] toParameterizedValues].mutableCopy;
             MSNumber* num = args[0];
             for (int i=0; i<nums.count; i++) {
-                nums[i] = [MSNumber numberWithNumberValue:@(num.doubleValue - [nums[i] doubleValue])];
+                nums[i] = [MSNumber numberWithNumberValue:[num decimalNumberBySubtracting:nums[i].numberValue]];
             }
             return [MSNumberGroup groupWithArray:nums];
         }

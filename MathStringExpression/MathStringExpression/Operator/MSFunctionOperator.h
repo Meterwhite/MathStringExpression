@@ -32,6 +32,7 @@
 + (instancetype)operatorWithJSFunction:(NSString*)javaScript error:(NSError**)error;
 /**
  *  运算符如何计算一组参数，计算一组参数，参数按表达式中从左至右顺序入栈
+ *  数组内参数类型大部分情况下是MSNumber，也可以是MSNumberGroup，这种情况需要做类型的检查
  *
  *  @param block 如果block中返回nil则代表计算错误；返回计算结果，类型可以是NSNumber或者MSValue及其子对象
  */

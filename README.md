@@ -24,12 +24,12 @@
 ## 【新增】不定参数的支持
 ```objc
 MSFunctionOperator* sum = [MSFunctionOperator operatorWithKeyValue:@{@"name":@"sum",@"level":@(1),@"argsCount":@(-1)}];
-[sum computeWithBlock:^NSNumber *(NSArray *args) {
+[sum computeWithBlock:^id (NSArray *args) {
     double result = 0.0;
     for (NSNumber* num in args) {
         result += num.doubleValue;
     }
-    return @(result);
+    return [NSDecimalNumber numberWithDouble:result];
 }];
 ```
 ## 【修改】
@@ -40,13 +40,11 @@ MSFunctionOperator* sum = [MSFunctionOperator operatorWithKeyValue:@{@"name":@"s
 
 ## 开始使用--计算表达式
 ```objc
-NSString* computeResult = [MSParser parserComputeExpression:@"2(-1*3)+random()" error:nil];//项目默认使用JavaScript.Math库函数命名方式
+NSString* computeResult = [MSParser parserComputeExpression:@"2(-1*3)+random()" error:nil];
 /*
-1.项目内部将所有值类型以doubel类型对待
-2.结果返回字符串形式是为了统一返回结果的类型(返回对象不一定是数字还可能是数字组)；
-并不希望用户直接使用字符串形式的真实值，用户应当将其转为值类型后再当结果对待。所以需要用户自己控制精度；
-3.可以观察，在控制台打印:NSLog(@"%@",@(0.3-0.2).description);结果输出0.09999999999999998
-所以项目计算"0.3-0.2"时也会输出"0.09999999999999998"。用户想要得到0.1就不应该直接使用字符串的结果。
+ *  重要的：
+ *  1.项目默认使用JavaScript.Math库函数命名方式
+ *  2.需要控制小数点精度的情况使用[parserComputeNumberExpression:error:]
 */
 ```
 ## 运算符类图
@@ -63,8 +61,13 @@ NSString* computeResult = [MSParser parserComputeExpression:@"2(-1*3)+random()" 
 //自定义次方算术运算符^，可知优先级与*号相同
 MSValueOperator* _pow = [MSValueOperator operatorWithKeyValue:@{@"name":@"^",@"level":@(3)}];
 //定义如何计算
-[_pow computeWithBlock:^NSNumber *(NSArray *args) {
-    return @(pow([args[0] doubleValue], [args[1] doubleValue]));
+[_pow computeWithBlock:^id (NSArray *args) {
+
+    //1.返回值的类型可以是MSValue的所有派生类型和NSNumber的所有派生类型
+    //2.计算结果的精度和返回值的精度有关，越精确越好
+    return [NSDecimalNumber numberWithDouble:pow([args[0] doubleValue], [args[1] doubleValue])];//推荐
+    //return @(pow([args[0] doubleValue], [args[1] doubleValue]));//这种方式0.3-0.2打印出来是0.99999...，而使用NSDecimalNumber则不会有问题；但是NSDecimalNumber可能会出现小数点后面十几个0的情况，就需要控制小数点位数了。比如π参加运算的时候会造成小数点位数特别多。
+    
 }];
 ```
 
@@ -116,8 +119,8 @@ NSString* jsExpression = [MSParser parserJSExpressionFromExpression:@"sin(PI)" e
 ```objc
 //如果JS表达式与当前命名不同则需定义jsTransferOperator对象，无此需求则忽略该步骤。
 MSValueOperator* _sqr = [MSValueOperator operatorWithKeyValue:@{@"name":@"√", @"level":@(3)}];
-[_sqr computeWithBlock:^NSNumber *(NSArray *args) {
-        return @(pow([args[1] doubleValue], 1.0/[args[0] doubleValue]));
+[_sqr computeWithBlock:^id (NSArray *args) {
+        return [NSDecimalNumber numberWithDouble:pow([args[1] doubleValue], 1.0/[args[0] doubleValue])];
 }];
 [tab setElement:_sqr];
 //由于原运算符为算术运算符而js中是函数运算符，所以这里定义一个函数运算符。(不定义该对象默认使用原对象)
@@ -148,4 +151,4 @@ MSConstant* ageJS = [MSConstant constantWithJSValue:@" var age = 18.00; " error:
 ```
 
 ## Mail address quxingyi@outlook.com
-* 一朝做鸟程序员
+* 穷啊啊啊

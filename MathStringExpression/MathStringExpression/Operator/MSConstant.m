@@ -40,11 +40,11 @@
     _stringValue = stringValue;
 }
 
-- (NSNumber *)numberValue
+- (NSDecimalNumber *)numberValue
 {
     if(self.isFromJS){
         JSContext* jsContext = [[MSElementTable defaultTable] valueForKey:@"jsContext"];
-        return jsContext[self.name].toNumber;
+        return [NSDecimalNumber decimalNumberWithDecimal:jsContext[self.name].toNumber.decimalValue];
     }
     return _numberValue;
 }

@@ -10,16 +10,29 @@
 @class MSElement;
 @class JSValue;
 
+
+/**
+ 框架内所有数字再解析时按NSDecimalNumber类型解析
+ */
 @interface MSParser : NSObject
 /**
-*  计算表达式
-*  结果返回字符串形式是为了统一返回结果的类型；并不希望用户直接使用字符串，用户应当将其转为值类型后再当结果对待，用自己控制的精度来；
+ *  计算表达式（如果要控制小数点位数请使用[parserComputeNumberExpression:error:]）
 *
 *  @param expression 表达式
 *
 *  @return 计算结果；当发生错误时返回nil；
 */
 + (NSString*)parserComputeExpression:(NSString*)expression error:(NSError*__strong*)error;
+
+/**
+ *  计算表达式（提供控制小数位数的功能）
+ *
+ *  @param expression 表达式
+ *
+ *  @return 计算结果；当发生错误时返回nil；
+ */
++ (NSDecimalNumber*)parserComputeNumberExpression:(NSString*)expression error:(NSError*__strong*)error;
+
 /**
  *  计算JavaScript表达式
  *

@@ -17,12 +17,15 @@
 >
 {
 @protected
-    NSNumber* _numberValue;
+    NSDecimalNumber* _numberValue;
 }
 
 + (instancetype)numberWithNumberValue:(NSNumber*)numberValue;
 + (instancetype)numberWithStringValue:(NSString*)stringValue;
-@property (nonatomic,strong) NSNumber* numberValue;
+@property (nonatomic,strong) NSDecimalNumber* numberValue;
+
+#pragma mark - NSNumber and NSDecimalNumber
+@property (readonly) NSDecimal decimalValue;
 
 @property (readonly) char charValue;
 @property (readonly) unsigned char unsignedCharValue;
@@ -39,6 +42,12 @@
 @property (readonly) BOOL boolValue;
 @property (readonly) NSInteger integerValue NS_AVAILABLE(10_5, 2_0);
 @property (readonly) NSUInteger unsignedIntegerValue NS_AVAILABLE(10_5, 2_0);
+- (NSDecimalNumber *)decimalNumberByAdding:(NSDecimalNumber *)decimalNumber;
+- (NSDecimalNumber *)decimalNumberBySubtracting:(NSDecimalNumber *)decimalNumber;
+- (NSDecimalNumber *)decimalNumberByMultiplyingBy:(NSDecimalNumber *)decimalNumber;
+- (NSDecimalNumber *)decimalNumberByDividingBy:(NSDecimalNumber *)decimalNumber;
+- (NSDecimalNumber *)decimalNumberByRaisingToPower:(NSUInteger)power;
+- (NSDecimalNumber *)decimalNumberByMultiplyingByPowerOf10:(short)power;
 
 - (NSComparisonResult)compare:(NSNumber *)otherNumber;
 

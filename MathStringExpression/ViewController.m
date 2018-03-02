@@ -35,7 +35,7 @@
         for (NSNumber* num in args) {
             result += num.doubleValue;
         }
-        return @(result);
+        return [NSDecimalNumber numberWithDouble:result];
     }];
     [tab setElement:sum];
     //..//..//..//..//..//..//..//..//..//..//..//..//..//..//..//..//..//..//
@@ -50,7 +50,7 @@
                                                                    @"level":@(3)}];
     //如何计算
     [_pow computeWithBlock:^NSNumber *(NSArray *args) {
-        return @(pow([args[0] doubleValue], [args[1] doubleValue]));
+        return [NSDecimalNumber numberWithDouble:pow([args[0] doubleValue], [args[1] doubleValue])];
     }];
     //特别的考虑到可以使用JavaScript引擎来计算字符串，支持将项目中表达式转为JavaScript表达式。
     //如果需要则需定义jsTransferOperator对象，无此需求则忽略该步骤。
@@ -69,7 +69,7 @@
     MSValueOperator* _sqr = [MSValueOperator operatorWithKeyValue:@{@"name":@"√",
                                                                     @"level":@(3)}];
     [_sqr computeWithBlock:^NSNumber *(NSArray *args) {
-        return @(pow([args[1] doubleValue], 1.0/[args[0] doubleValue]));
+        return [NSDecimalNumber numberWithDouble:pow([args[1] doubleValue], 1.0/[args[0] doubleValue])];
     }];
     [tab setElement:_sqr];
     MSValueOperator* sqr_js = [MSValueOperator operatorWithKeyValue:@{
@@ -91,7 +91,8 @@
                                                                          @"level":@(3),
                                                                          @"argsCount":@(1)}];
     [_degrees computeWithBlock:^NSNumber *(NSArray *args) {
-        return @(M_PI*[args[0] doubleValue]/180.0);
+        
+        return [NSDecimalNumber numberWithDouble:M_PI*[args[0] doubleValue]/180.0];
     }];
     //不使用jsTransferOperator直接定义原运算符的输出形式
     [_degrees customToExpressionUsingBlock:^NSString *(NSString *name, NSArray<NSString *> *args) {
@@ -126,8 +127,11 @@
     if(allRight){
         
         //计算表达式
-        NSString* computeResult = [MSParser parserComputeExpression:jsExpString error:nil];
-        NSLog(@"计算结果为：%@",computeResult);
+        NSDecimalNumber* computeResult = [MSParser parserComputeNumberExpression:jsExpString error:nil];
+        NSDecimal decimal = computeResult.decimalValue;
+        NSDecimal desDecimal;
+        NSDecimalRound(&desDecimal, &decimal , 3, NSRoundPlain);
+        NSLog(@"保留3位小数计算结果为：%@",[NSDecimalNumber decimalNumberWithDecimal:desDecimal]);
         
         //表达式转JS表达式
         NSString* jsExpression = [MSParser parserJSExpressionFromExpression:jsExpString error:nil];
