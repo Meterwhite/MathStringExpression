@@ -2,7 +2,10 @@
 
 ![alt icon](https://raw.githubusercontent.com/qddnovo/MathStringExpression/master/MathStringExpression/cmp.jpg)
 
-## 简介
+> [扩展XIB,Storyboard的编辑功能，强力推荐！](https://github.com/Meterwhite/XICommand)
+>> [Expand XIB, Storyboard editing functions, highly recommended!](https://github.com/Meterwhite/XICommand)
+
+## Introduction 简介
 * 为需要开发iOS计算器的开发者提供的一个便捷
 * 计算字符串数学表达式
 * 包括自定义运算符，计算方式。
@@ -16,12 +19,12 @@
 * JavaScript expression can be transferred to the JavaScript engine to calculate the expression
 * Once start me,Day day fuck Lynn
 
-## 如何使用
+## Ussage 如何使用
 ```objc
 //1.将整个文件夹拖入项目
 #import "MathStringExpression.h"
 ```
-## 【新增】不定参数的支持
+## New!【新增】不定参数的支持
 ```objc
 MSFunctionOperator* sum = [MSFunctionOperator operatorWithKeyValue:@{@"name":@"sum",@"level":@(1),@"argsCount":@(-1)}];
 [sum computeWithBlock:^id (NSArray *args) {
@@ -32,13 +35,13 @@ MSFunctionOperator* sum = [MSFunctionOperator operatorWithKeyValue:@{@"name":@"s
     return [NSDecimalNumber numberWithDouble:result];
 }];
 ```
-## 【修改】
+## Changed【修改】
 ```objc
 //注意：系统函数max和min修改为不定参数形式，但转为js依然为2个参数
 //计算结果返回值类型由NSNumber修改为NSString
 ```
 
-## 开始使用--计算表达式
+## Start 开始使用--计算表达式
 ```objc
 NSString* computeResult = [MSParser parserComputeExpression:@"2(-1*3)+random()" error:nil];
 /*
