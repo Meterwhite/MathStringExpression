@@ -2,8 +2,8 @@
 
 ![alt icon](https://raw.githubusercontent.com/qddnovo/MathStringExpression/master/MathStringExpression/cmp.jpg)
 
-> [扩展XIB,Storyboard的编辑功能，强力推荐！](https://github.com/Meterwhite/XICommand)
->> [Expand XIB, Storyboard editing functions, highly recommended!](https://github.com/Meterwhite/XICommand)
+> [XIB执行命令行！](https://github.com/Meterwhite/XICommand)
+>> [Let XIB execute the command line!](https://github.com/Meterwhite/XICommand)
 
 ## Introduction 简介
 * 为需要开发iOS计算器的开发者提供的一个便捷
