@@ -1,6 +1,6 @@
 # MathStringExpression
 
-![alt icon](https://raw.githubusercontent.com/qddnovo/MathStringExpression/master/MathStringExpression/cmp.jpg)
+![alt icon](https://raw.githubusercontent.com/Meterwhite/MathStringExpression/master/MathStringExpression/cmp.jpg)
 
 > [XIB执行命令行！](https://github.com/Meterwhite/XICommand)
 >> [Let XIB execute the command line!](https://github.com/Meterwhite/XICommand)
@@ -51,13 +51,13 @@ NSString* computeResult = [MSParser parserComputeExpression:@"2(-1*3)+random()" 
 */
 ```
 ## 运算符类图
-![alt 类图](https://raw.githubusercontent.com/qddnovo/MathStringExpression/master/MathStringExpression/Class.png)
+![alt 类图](https://raw.githubusercontent.com/Meterwhite/MathStringExpression/master/MathStringExpression/Class.png)
 
 ## 默认运算符列表
-![alt 类图](https://raw.githubusercontent.com/qddnovo/MathStringExpression/master/MathStringExpression/Operators.png)
+![alt 类图](https://raw.githubusercontent.com/Meterwhite/MathStringExpression/master/MathStringExpression/Operators.png)
 
 ## 常量列表
-![alt 类图](https://raw.githubusercontent.com/qddnovo/MathStringExpression/master/MathStringExpression/Const.png)
+![alt 类图](https://raw.githubusercontent.com/Meterwhite/MathStringExpression/master/MathStringExpression/Const.png)
 
 ## 自定义运算符
 ```objc
